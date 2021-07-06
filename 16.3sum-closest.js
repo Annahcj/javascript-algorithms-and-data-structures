@@ -27,6 +27,6 @@ var threeSumClosest = function(nums, target) {
     }
     return target - diff;
   };
-  // Two test cases to test function on
+  // Two test cases to run function on
   console.log(threeSumClosest([-1,2,1,-4], 1)) // 2
   console.log(threeSumClosest([-1,2,1,-4,1], 1)) // 1
