@@ -2,6 +2,7 @@
 // Given an array arr of 4 digits, find the latest 24-hour time that can be made using each digit exactly once.
 
 // Solution 1: Generate Permutations
+
 // Three for loops (and simple calculation for the fourth index) to generate every possible permutation.
 // We don't consider the permutation if any indexes are duplicates.
 // If the time is valid; hour is less than 24 and minutes are less than 60,

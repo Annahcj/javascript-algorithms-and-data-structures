@@ -1,6 +1,8 @@
 // 50. Pow(x, n)
 // Implement pow(x, n), which calculates x raised to the power n (i.e., xn).
 
+// Solution 1: Fast Power Recursive
+
 // Recursively multiply x by n / 2
 
 // Time Complexity: O(logn) 76 ms
