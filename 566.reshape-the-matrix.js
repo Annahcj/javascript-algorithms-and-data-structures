@@ -34,7 +34,7 @@ var matrixReshape = function(mat, r, c) {
     return newMat;
   };
 
-  
+
 // Solution 2: Replacing Without Storing
 
 // Loop through matrix row by row column by column and put them into new matrix with new sizes.
@@ -56,7 +56,6 @@ var matrixReshape = function(mat, r, c) {
     }
     return newMat;
   };
-
   // Two test cases to run function on
   console.log(matrixReshape([[1,2],[3,4]], 1, 4)) // [[1,2,3,4]]
   console.log(matrixReshape([[1,2],[3,4]], 2, 4)) // [[1,2],[3,4]]

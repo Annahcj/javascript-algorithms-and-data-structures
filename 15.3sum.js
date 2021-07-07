@@ -1,5 +1,5 @@
 // 15. 3Sum
-// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0
 
 // Solution 1: Two Pointers
 
@@ -9,7 +9,7 @@
 // Extra info: Two while loops handle duplicate values, incrementing until different number is found.
 
 // Time Complexity: O(n^2) 136 ms
-// Space Complexity: O(logn) (built-in sorting algo) 49.3 MB
+// Space Complexity: O(logn) (built-in sorting algo) 49.3 MB 
 
 var threeSum = function(nums) {
     let result = [];
