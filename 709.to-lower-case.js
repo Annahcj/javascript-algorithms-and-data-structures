@@ -5,8 +5,8 @@
 // Solution 1: Using ASCII values
 
 // For each of the characters in the string, we get the character code
-// ASCII values: 65 - 96 = uppercase alphabet, 97 - 122 = lowercase alphabet.
-// If the char code is between 65 and 95, 
+// ASCII values: 65 - 90 = uppercase alphabet, 97 - 122 = lowercase alphabet.
+// If the char code is between 65 and 90, 
 // we simply add 32 to the character code and get the lowercase letter using the 'fromCharCode' function
 
 // Time Complexity: O(n) 76 ms
