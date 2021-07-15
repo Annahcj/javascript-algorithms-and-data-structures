@@ -4,9 +4,9 @@
 
 // Solution 1: Recursive 'DFS'
 
-// Loop through entire grid, when 1 is found, we calculate the size of the island (findIslandSize) and compare it with current biggest island.
+// Loop through entire grid, when 1 is found, calculate size of the island (findIslandSize) and compare with current biggest island size.
 
-// findIslandSize: accepts two params, (i, j) => indicating the position in the matrix
+// findIslandSize: accepts two params, (i, j) => the position in the matrix.
 // If either i or j is out of bounds (not within size of the matrix), return 0.
 // Set grid[i][j] to zero so we avoid checking the same point again
 // Return 1 (current point) + recursive calls on findIslandSize for all four directions: (i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1).
