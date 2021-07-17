@@ -19,7 +19,6 @@ var eliminateMaximum = function(dist, speed) {
     for (var i = 0; i < dist.length; i++) {
       heap.add(Math.ceil(dist[i] / speed[i]));
     }
-    console.log(heap)
     while (heap.values.length) {
       if (heap.values[0] > currentTime) {
         count++;
