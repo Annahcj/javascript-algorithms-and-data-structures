@@ -30,6 +30,7 @@ var eliminateMaximum = function(dist, speed) {
     }
     return count;
   };
+  
     class MinHeap {
       constructor() {
         this.values = [];
