@@ -16,8 +16,8 @@
 //   When target is reached, return rungsAdded.
   
 
-// Time Complexity: O(n) 84ms (Faster than 100% of JS solutions)
-// Space Complexity: O(1) 49MB (Less than 100% of JS solutions)
+// Time Complexity: O(n) 84ms 
+// Space Complexity: O(1) 49MB 
 
 var addRungs = function(rungs, dist) {
     let maxRung = dist, prev = 0, target = rungs[rungs.length - 1];
