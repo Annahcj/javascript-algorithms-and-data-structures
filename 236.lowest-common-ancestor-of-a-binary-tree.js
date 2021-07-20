@@ -6,7 +6,7 @@
 
 // Create a recursive dfs function.
 // dfs: 
-// Searches through the tree in a post-order manner, depth first all the way down to the left before going right.
+// Searches through the tree depth first all the way down to the left before going right.
 // If we have found either p or q, we return true in the function. This acts as a flag so we know one of the nodes are inside whatever node we are on.
 // When both left and right is true, this means that both p and q are children of the current node, so the first time we see this, we should save the reference to this node and return true.
 // Note: Since a node can be an ancestor to itself, we will need to deal with the edge cases: if a node is equal to either p or q and contains the other (p or q).
