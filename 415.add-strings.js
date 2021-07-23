@@ -5,7 +5,7 @@
 
 // Solution 1: Elementary Math 
 
-// Approach: Add the numbers just as you would on paper, add each digit from back to front, keeping carry if needed.
+// Approach: Add the numbers just as you would on paper, add each digit from back to front, keeping carry if necessary.
 
 // Set pointers i and j to be num1.length - 1 and num2.length - 1.
 // Loop while either i or j is bigger than or equal to zero
