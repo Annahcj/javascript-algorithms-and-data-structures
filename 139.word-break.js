@@ -18,7 +18,7 @@
 // If there is nothing left in the queue and we have got to the end, return false.
 
 // Time Complexity: O(n^2) 96ms
-// Space Complexity: O(wordDict + n)41.3MB
+// Space Complexity: O(wordDict + n) 41.3MB
   var wordBreak = function(s, wordDict) {
     let words = new Set(wordDict);
     let visited = {};
@@ -38,6 +38,87 @@
       visited[curr] = true;
     }
     return false;
+  };
+
+
+// Solution 2: Dynamic Programming
+
+// Thoughts:
+// Use an array to keep track of substrings that match words in wordDict (true or false).
+// Generate substrings of every length from every letter in s.
+
+// e.g.
+// s: 'leetcode'
+// wordDict: ['leet', 'code']
+//
+// end = 1 start = 0 l
+// dp = [true, false, false, false, false, false, false, false, false]
+// end = 2 start = 0 le
+// end = 2 start = 1  e
+// dp = [true, false, false, false, false, false, false, false, false]
+// end = 3 start = 0 lee
+// end = 3 start = 1  ee
+// end = 3 start = 2   e
+// dp = [true, false, false, false, false, false, false, false, false]
+// end = 4 start = 0 leet
+// has a match
+// dp = [true, false, false, false, true, false, false, false, false]
+//
+// end = 5 start = 0 leetc
+// end = 5 start = 1  eetc
+// end = 5 start = 2   etc
+// end = 5 start = 3    tc
+// end = 5 start = 4     c
+// dp = [true, false, false, false, true, false, false, false, false]
+// end = 6 start = 0 leetco
+// end = 6 start = 1  eetco
+// end = 6 start = 2   etco
+// end = 6 start = 3    tco
+// end = 6 start = 4     co
+// end = 6 start = 5      o
+// dp = [true, false, false, false, true, false, false, false, false]
+// end = 7 start = 0 leetcod
+// end = 7 start = 1  eetcod
+// end = 7 start = 2   etcod
+// end = 7 start = 3    tcod
+// end = 7 start = 4     cod
+// end = 7 start = 5      od
+// end = 7 start = 6       d
+// dp = [true, false, false, false, true, false, false, false, false]
+// end = 8 start = 0 leetcode
+// end = 8 start = 1  eetcode
+// end = 8 start = 2   etcode
+// end = 8 start = 3    tcode
+// end = 8 start = 4     code
+// has a match
+// dp = [true, false, false, false, true, false, false, false, true]
+
+// Algorithm:
+// Turn wordDict into a set (for efficient lookup)
+// Initialize a dp array (length of s + 1) and fill it up with false.
+// Initialize the first item of dp to be true (since we will always be checking whether dp[start] is true)
+// Loop through s from [1, ..., s.length - 1] (pointer = end)
+  // Loop through s from [0, ..., end] (pointer = start)
+    // Check if dp[start] is true (the substring from beginning of s to 'start' consists of perfect segments of words in wordDict) AND the new substring from start to end is a word in wordDict
+      // If so, set dp[end] to true 
+      // break 
+// Return the last item of dp  
+
+// Time Complexity: O(n^2) 80ms
+// Space Complexity: O(n) 40.9MB
+  var wordBreak = function(s, wordDict) {
+    let words = new Set(wordDict);
+    let dp = Array(s.length + 1).fill(false);
+    dp[0] = true;
+    for (var end = 1; end <= s.length; end++) {
+      for (var start = 0; start < end; start++) {
+        if (dp[start] && words.has(s.slice(start, end))) {
+          dp[end] = true;
+          break;
+        }
+      }
+    }
+    return dp[dp.length - 1];
   };
   
   // Four test cases to run function on
