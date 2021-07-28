@@ -6,6 +6,7 @@
     this.val = (val===undefined ? 0 : val)
     this.next = (next===undefined ? null : next)
   }
+
   // Function which makes a singly linked list from an arr (solely for testing purposes)
   function makeList(arr) {
     if (!arr.length) return null;
@@ -22,7 +23,10 @@
   
   // Thoughts: 
   // Basically pointing each node's pointers to each node's previous nodes (flipping the pointers)
-  // Keep track of each previous node, and each node's next node.
+  // e.g: list: 1 -> 2 -> 3
+  // from this to 
+  // 1 <- 2 <- 3
+  // then return the last node (3)
   
   // Algorithm:
   // Keep a prevNode, set to null at first since the next pointer of the first item of the list should be set to null.
