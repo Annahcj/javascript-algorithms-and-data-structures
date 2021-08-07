@@ -60,8 +60,8 @@
   };
   
   // Five test cases to run function on
-  console.log(minWindow("abcaba", "aa"))
-  console.log(minWindow("bba", "ab"))
+  console.log(minWindow("abcaba", "aa")) // "aba"
+  console.log(minWindow("bba", "ab")) // "ba"
   console.log(minWindow("ADOBECODEBANC", "ABC")) // "BANC"
   console.log(minWindow("a", "a")) // "a"
   console.log(minWindow("a", "aa")) // ""
