@@ -20,7 +20,8 @@
 // Time Complexity: O(max(n1.length, n2.length)) 80ms
 // Space Complexity: O(max(n1.length, n2.length)) 41.7MB 
 
-var addStrings = function(num1, num2) {
+ // Version 1:
+  var addStrings = function(num1, num2) {
     let i = num1.length - 1, j = num2.length - 1;
     let carry = 0, ans = [];
     while (i >= 0 || j >= 0) {
@@ -33,6 +34,21 @@ var addStrings = function(num1, num2) {
     }
     if (carry > 0) ans.push(carry);
     return ans.reverse().join("");
+  };
+
+  // Version 2:
+  var addStrings = function(num1, num2) {
+    let ans = '', carry = 0;
+    let i = num1.length - 1, j = num2.length - 1;
+    while (i >= 0 || j >= 0) {
+      let digit1 = +num1[i] || 0, digit2 = +num2[j] || 0;
+      let keep = digit1 + digit2 + carry;
+      ans = keep % 10 + ans;
+      carry = Math.floor(keep / 10);
+      i--, j--;
+    } 
+    if (carry > 0) ans = carry + ans;
+    return ans;
   };
   
   // Three test cases to run function on
