@@ -11,7 +11,7 @@
 // Time Complexity: O(n·klogk) 156ms
 // Space Complexity: O(nk) 51MB
 
-var groupAnagrams = function(strs) {
+  var groupAnagrams = function(strs) {
     let result = {};
     for (var i = 0; i < strs.length; i++) {
       let sorted = strs[i].split("").sort();
@@ -33,13 +33,13 @@ var groupAnagrams = function(strs) {
 
 var groupAnagrams = function(strs) {
   let result = {};
-  for (var i = 0; i < strs.length; i++) {
+  for (var str of strs) {
     let charCount = Array(26).fill(0);
-    for (var j = 0; j < strs[i].length; j++) {
-      charCount[strs[i][j].charCodeAt() - 97]++;
+    for (var char of str) {
+      charCount[char.charCodeAt() - 97]++;
     }
-    if (!result[charCount]) result[charCount] = [strs[i]];
-    else result[charCount].push(strs[i]);
+    if (!result[charCount]) result[charCount] = [str];
+    else result[charCount].push(str);
   }
   return Object.values(result);
 };
