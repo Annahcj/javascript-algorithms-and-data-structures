@@ -16,12 +16,12 @@
 // Time Complexity: O(n) 160ms
 // Space Complexity: O(log n) (length of stack) 59.4MB
 var goodNodes = function(root) {
-    let stack = [[root, root.val]], count = 0;
-    while (stack.length) {
-      let [curr, currMax] = stack.pop();
-      if (currMax <= curr.val) count++;
-      if (curr.right) stack.push([curr.right, Math.max(currMax, curr.right.val)]);
-      if (curr.left) stack.push([curr.left, Math.max(currMax, curr.left.val)]);
-    }
-    return count;
-  };
+  let stack = [[root, root.val]], count = 0;
+  while (stack.length) {
+    let [node, currMax] = stack.pop();
+    if (node.val >= currMax) count++;
+    if (node.left) stack.push([node.left, Math.max(currMax, node.left.val)]);
+    if (node.right) stack.push([node.right, Math.max(currMax, node.right.val)]);  
+  }
+  return count;
+};
