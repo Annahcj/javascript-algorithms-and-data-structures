@@ -27,7 +27,7 @@
     return heap.values.length;
   };
   
-  class MinHeap {
+   class MinHeap {
     constructor() {
       this.values = [];
     }
