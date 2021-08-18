@@ -14,7 +14,7 @@
 // Time Complexity: O(n logn) 88ms
 // Space Complexity: O(n) 42.1MB
 
-var minMeetingRooms = function(intervals) {
+  var minMeetingRooms = function(intervals) {
     let heap = new MinHeap();
     intervals = intervals.sort((a, b) => a[0] - b[0]);
     heap.add(intervals[0]);
