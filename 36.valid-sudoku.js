@@ -69,8 +69,8 @@
       // Otherwise, set boxes[box] to 1
 // If end of loops are reached, return true.
 
-// Time Complexity: O(n^2) 100ms
-// Space Complexity: O(n) 42ms
+// Time Complexity: O(n^2) 96ms
+// Space Complexity: O(n) 40.9MB
   var isValidSudoku = function(board) {
     let length = board.length;
     for (var i = 0; i < length; i++) {
