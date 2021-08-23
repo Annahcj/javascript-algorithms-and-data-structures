@@ -6,7 +6,7 @@
 
 // Solution: Monotonic Decreasing Stack
 
-// Traverse heights from right-left (pointer = i)
+// Traverse heights from right-left (pointer = i) *
   // keep track of count of popped elements, save heights[i] in variable height (we will be modifying heights)
   // Loop while stack is not empty AND last element of stack is smaller than height **
     // Pop from the stack
