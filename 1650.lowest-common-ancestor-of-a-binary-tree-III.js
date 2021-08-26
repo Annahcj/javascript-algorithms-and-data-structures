@@ -2,7 +2,7 @@
 // Given two nodes of a binary tree p and q, return their lowest common ancestor (LCA).
 
 
-// Solution: Find Depths, Move Level by Level
+// Solution 1: Find Depths, Move Level by Level
 
 // 1. Find depths of nodes p and q (keep going up the tree by .parent until root is reached)
 // 2. Move the node with a greater depth up the tree until both nodes are on the same level.
