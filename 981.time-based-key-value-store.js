@@ -26,6 +26,9 @@
   // Set: O(1)
   // Get: O(n) n = timestamp
 
+// Space Complexity: 
+  // O(n) n = num of entries
+  
 var TimeMap = function() {
   this.map = {};  
 };
@@ -67,6 +70,9 @@ TimeMap.prototype.get = function(key, timestamp) {
 // Time Complexity: 
   // Set: O(1)
   // Get: O(log(n))
+
+// Space Complexity: 
+  // O(n) n = num of entries
 
 var TimeMap = function() {
   this.map = {};  
