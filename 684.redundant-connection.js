@@ -41,25 +41,24 @@
   // find(1) = find(2) = find(3) = find(4) = 4, find(4) = 4.
   // find(1) === find(4), so return edge ([1, 4])
 
-// Time Complexity: O(n) 88ms
-// Space Complexity: O(n) 41.8MB
-  var findRedundantConnection = function(edges) {
-    let uf = {};
-    for (var edge of edges) {
-      let [a, b] = edge;
-      if (find(a) === find(b)) return edge;
-      union(a, b);
-    }
-    function union(x, y) {
-      uf[find(x)] = uf[find(y)];
-    }
-    function find(x) {
-      if (!uf[x]) uf[x] = x;
-      if (uf[x] === x) return x;
-      return find(uf[x]);
-    }
-  };
+// Time Complexity: O(n) 76ms
+// Space Complexity: O(n) 41.9MB
+var findRedundantConnection = function(edges) {
+  let uf = {};
+  for (var [a, b] of edges) {
+    if (find(a) === find(b)) return [a, b];
+    union(a, b);
+  }
+  function union(x, y) {
+    uf[find(x)] = uf[find(y)];
+  }
+  function find(x) {
+    if (!uf[x]) uf[x] = x;
+    if (uf[x] === x) return x;
+    return find(uf[x]);
+  }
+};
   
-  // Two test cases to run function on
-  console.log(findRedundantConnection([[1,2],[1,3],[2,3]])) // [2,3]
-  console.log(findRedundantConnection([[1,2],[2,3],[3,4],[1,4],[1,5]])) // [1,4]
+// Two test cases to run function on
+console.log(findRedundantConnection([[1,2],[1,3],[2,3]])) // [2,3]
+console.log(findRedundantConnection([[1,2],[2,3],[3,4],[1,4],[1,5]])) // [1,4]
