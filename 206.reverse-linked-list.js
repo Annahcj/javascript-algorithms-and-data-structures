@@ -49,6 +49,19 @@
     }
     return prevNode;  
   };
+
+  
+// Solution 2: Recursive
+
+// Time Complexity: O(n) 76ms
+// Space Complexity: O(n) 41.1MB
+var reverseList = function(head) {
+  if (!head || !head.next) return head;
+  let p = reverseList(head.next);
+  head.next.next = head;
+  head.next = null;
+  return p;
+};
   
   // Three test cases to run function on
   console.log(reverseList(makeList([1,2,3,4,5]))) // [5,4,3,2,1]
