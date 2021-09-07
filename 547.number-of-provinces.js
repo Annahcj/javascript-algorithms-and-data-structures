@@ -1,4 +1,5 @@
 // 547. Number of Provinces
+// Frequency: 68.32%
 // There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
 // A province is a group of directly or indirectly connected cities and no other cities outside of the group.
 // You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.
@@ -85,8 +86,8 @@ var findCircleNum = function(isConnected) {
 
 
 // n = length of isConnected / number of cities
-// Time Complexity: O(n)
-// Space Complexity: O(n)
+// Time Complexity: O(n) 84ms
+// Space Complexity: O(n) 42.5MB
 
 var findCircleNum = function(isConnected) {
   let n = isConnected.length;
