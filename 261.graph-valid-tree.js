@@ -96,6 +96,60 @@ var validTree = function(n, edges) {
   return seen.size === n;
 };
 
+
+// Solution 3: Advanced Graph Theory w/ Optimized Union Find
+
+// There must be n - 1 edges, otherwise it is bound to be invalid.
+// UnionFind:
+  // Union: (x, y)
+    // If x and y are already connected, return false.
+    // Otherwise, perform union and return true.
+
+// Time Complexity: O(n * α(n)) 80ms
+// Space Complexity: O(n) 40.4MB
+var validTree = function(n, edges) {
+  if (edges.length !== n - 1) return false;
+  let uf = new UnionFind(n);
+  for (var [x, y] of edges) {
+    if (!uf.union(x, y)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+class UnionFind {
+  constructor(size) {
+    this.root = Array(size);
+    this.rank = Array(size);
+    for (var i = 0; i < size; i++) {
+      this.root[i] = i;
+      this.rank[i] = 1;
+    }
+  }
+  find(x) {
+    if (this.root[x] === x) return x;
+    return this.root[x] = this.find(this.root[x]);
+  }
+  union(x, y) {
+    let rootX = this.find(x);
+    let rootY = this.find(y);
+    if (rootX !== rootY) {
+      if (this.rank[rootX] > this.rank[rootY]) {
+        this.root[rootY] = rootX;
+      } else if (this.rank[rootX] < this.rank[rootY]) {
+        this.root[rootX] = rootY;
+      } else {
+        this.root[rootY] = rootX;
+        this.rank[rootX] += this.rank[rootY];
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
+}
+
 // Three test cases to run function on
 console.log(validTree(4, [[0,1],[2,3]])) // false
 console.log(validTree(5, [[0,1],[0,2],[0,3],[1,4]])) // true
