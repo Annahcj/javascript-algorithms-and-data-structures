@@ -5,7 +5,7 @@
 // Return the total number of provinces.
 
 
-// Solution: BFS
+// Solution 1: BFS
 
 // Logic:
 // We loop through isConnected, if we haven't been there before, bfs through isConnected[i] and ALL its connections and all their connections.
@@ -31,38 +31,113 @@
     // update queue to be next
   // *
 
-// n = length of isConnected
+// n = length of isConnected / number of cities
 // Time Complexity: O(n^2) 80ms
 // Space Complexity: O(n) 41.3MB
-  var findCircleNum = function(isConnected) {
-    let provinces = 0, visited = {};
-    for (var i = 0; i < isConnected.length; i++) {
-      if (!visited[i]) {
-        bfs(i);
-        provinces++;
-      }
+
+var findCircleNum = function(isConnected) {
+  let provinces = 0, visited = {};
+  for (var i = 0; i < isConnected.length; i++) {
+    if (!visited[i]) {
+      bfs(i);
+      provinces++;
     }
-    return provinces;
-    function bfs(idx) {
-      let queue = [idx];
+  }
+  return provinces;
+  function bfs(idx) {
+    let queue = [idx];
+    while (queue.length) {
+      let next = [];
       while (queue.length) {
-        let next = [];
-        while (queue.length) {
-          let curr = queue.pop();
-          visited[curr] = true;
-          for (var i = 0; i < isConnected[curr].length; i++) {
-            let cell = isConnected[curr][i];
-            if (cell === 1 && !visited[i]) {
-              next.push(i);
-            }
+        let curr = queue.pop();
+        visited[curr] = true;
+        for (var i = 0; i < isConnected[curr].length; i++) {
+          let cell = isConnected[curr][i];
+          if (cell === 1 && !visited[i]) {
+            next.push(i);
           }
         }
-        queue = next;
+      }
+      queue = next;
+    }
+  }
+};
+  
+
+// Solution 2: Union Find
+
+// UnionFind:
+// (Using union by rank and path compression)
+// Initially set a 'count' variable equal to size (the amount of cities)
+
+// union: (x, y)
+// If x is not equal to y (meaning we are connecting two cities), decrement count by one.
+
+// getCount:
+  // Return this.count
+
+// initiate a new unionfind -> uf, with the size of isConnected.length
+// Loop through each cell in the matrix (i,j)
+  // if isConnected[i][j] is 1 (an edge)
+    // call uf.union(i, j) 
+
+  // return uf.getCount
+
+
+// n = length of isConnected / number of cities
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+
+var findCircleNum = function(isConnected) {
+  let n = isConnected.length;
+  let uf = new UnionFind(n);
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < n; j++) {
+      if (isConnected[i][j] === 1) {
+        uf.union(i, j);
       }
     }
-  };
-  
-  // Three test cases to run function on
-  console.log(findCircleNum([[1,0,0,1],[0,1,1,0],[0,1,1,1],[1,0,1,1]])) // 1
-  console.log(findCircleNum([[1,1,0],[1,1,0],[0,0,1]])) // 2
-  console.log(findCircleNum([[1,0,0],[0,1,0],[0,0,1]])) // 3
+  }
+  return uf.getCount();
+};
+
+class UnionFind {
+  constructor(size) {
+    this.root = Array(size);
+    this.rank = Array(size);
+    this.count = size;
+    for (var i = 0; i < size; i++) {
+      this.root[i] = i;
+      this.rank[i] = 1;
+    }
+  }
+  find(x) {
+    if (this.root[x] === x) {
+      return x;
+    }
+    return this.root[x] = this.find(this.root[x]);
+  }
+  union(x, y) {
+    let rootX = this.find(x);
+    let rootY = this.find(y);
+    if (rootX !== rootY) {
+      if (this.rank[rootX] > this.rank[rootY]) {
+        this.root[rootY] = rootX;
+      } else if (this.rank[rootX] < this.rank[rootY]) {
+        this.root[rootX] = rootY;
+      } else {
+        this.root[rootY] = rootX;
+        this.rank[rootX]++;
+      }
+      this.count--;
+    }
+  }
+  getCount() {
+    return this.count;
+  }
+}
+
+// Three test cases to run function on
+console.log(findCircleNum([[1,0,0,1],[0,1,1,0],[0,1,1,1],[1,0,1,1]])) // 1
+console.log(findCircleNum([[1,1,0],[1,1,0],[0,0,1]])) // 2
+console.log(findCircleNum([[1,0,0],[0,1,0],[0,0,1]])) // 3
