@@ -129,6 +129,11 @@ class MinHeap {
 
 // Solution 2: Prim's Algorithm
 
+// 1. Pick a starting vertex (0, can be anything but 0 just for simplicity)
+// 2. Find the vertice with the minimum weight out of all edges going to non-visited vertices
+// 3. From the optimal edge we just picked, repeat step 2.
+// Repeat steps 2 & 3 until we have constructed a minimum spanning tree (or found n - 1 vertices)
+
 // Time Complexity: O(n * n log(n * n)) 712ms
 // Space Complexity: O(n * n) 89.7MB
 var minCostConnectPoints = function(points) {
