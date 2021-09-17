@@ -2,41 +2,62 @@
 // Given an m x n matrix, return all elements of the matrix in spiral order.
 
 
-// Solution 1: Calculate Ring by Ring
+// Solution: Row & Column Boundaries
 
-// Ring = The numbers on each wall of the matrix (the top row, right column, bottom row, and left column)
+// Keep track of the boundary of the matrix
+// Set rowStart to 0, rowEnd to the height of matrix - 1
+// set colStart to 0, colEnd to the width of matrix - 1
 
-// Keep variable 'startIdx' which indicates which ring we are on,
-// Declare width and height variables which we would set at the original width and height at first, then decrement by two each time we finish with a ring.
+// loop while colStart is smaller than or equal to colEnd AND rowStart is smaller than or equal to rowEnd
+  // (compute top row left to right)
+  // loop through from colStart to colEnd (pointer = j)
+    // push matrix[rowStart][j] to res
+  // (compute right row top down)
+  // loop through from rowStart to rowEnd (pointer = i)
+    // push matrix[i][colEnd] to res
+  // (compute bottom row right to left)
+  // only compute bottom row if rowStart is not equal to rowEnd (to avoid computing duplicates)
+    // loop through from colEnd to colStart (pointer = j)
+      // push matrix[rowEnd][j] to res
+  // (compute left row bottom up)
+  // compute only if colStart is not equal to colEnd
+    // loop through from rowEnd to rowStart (pointer = i)
+      // push matrix[i][rowStart] to res
+  // increment rowStart and colStart by one and decrement rowEnd and colEnd by one
+// return res
 
-// TOP (left to right): Start at [startIdx][startIdx] and move across for the current length of 'width', while pushing into our result array.
-// RIGHT (top down): Move down for the current length of 'height', while pushing into result.
-// BOTTOM (right to left): Move left until we reach startIdx (ONLY if height is bigger than 1, otherwise we would be recording the same numbers twice)
-// LEFT (ground up): Move up until startIdx - 1 is reached (since we've already recorded the first) (ONLY if width is bigger than 1, preventing overlaps again)
-
-// Time Complexity: O(n) (size of matrix) 68ms
-// Space Complexity: O(1) 38.5MB
-
+// Time Complexity: O(mn) (width * height) 70ms
+// Space Complexity: O(1) 38MB
 var spiralOrder = function(matrix) {
-    let width = matrix[0].length, height = matrix.length;
-    let startIdx = 0;
-    let result = [];
-    while (width > 0 && height > 0) {
-      let i = startIdx, j = startIdx;
-      result.push(matrix[i][j]);
-      while (j < width + startIdx - 1) j++, result.push(matrix[i][j]);
-      while (i < height + startIdx - 1) i++, result.push(matrix[i][j]);
-      while (j > startIdx && height > 1) j--, result.push(matrix[i][j]);
-      while (i > startIdx + 1 && width > 1) i--, result.push(matrix[i][j]);
-      width -= 2, height -= 2;
-      startIdx++;
+  let width = matrix[0].length, height = matrix.length;
+  let res = [];
+  let rowStart = 0, rowEnd = height - 1;
+  let colStart = 0, colEnd = width - 1;
+  while (colStart <= colEnd && rowStart <= rowEnd) {
+    for (var j = colStart; j <= colEnd; j++) {
+      res.push(matrix[rowStart][j]);
     }
-    return result;
-  };
-  
-  // Five test cases to run function on
-  console.log(spiralOrder([[1],[2],[3]])) // [1,2,3]
-  console.log(spiralOrder([[1,2,3,4], [5,6,7,8]])) // [1,2,3,4,8,7,6,5]
-  console.log(spiralOrder([[1,2,3], [4,5,6], [7,8,9], [10,11,12]])) // [1,2,3,6,9,12,11,10,7,4,5,8]
-  console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]])) // [1,2,3,6,9,8,7,4,5]
-  console.log(spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]])) // [1,2,3,4,8,12,11,10,9,5,6,7]
+    for (var i = rowStart + 1; i <= rowEnd; i++) {
+      res.push(matrix[i][colEnd]);
+    }
+    if (rowStart !== rowEnd) {
+      for (j = colEnd - 1; j >= colStart; j--) {
+        res.push(matrix[rowEnd][j]);
+      }
+    }
+    if (colStart !== colEnd) {
+      for (i = rowEnd - 1; i > rowStart; i--) {
+        res.push(matrix[i][colStart]);
+      }
+    }
+    rowStart++, rowEnd--, colStart++, colEnd--;
+  }
+  return res;
+};
+
+// Five test cases to run function on
+console.log(spiralOrder([[1],[2],[3]])) // [1,2,3]
+console.log(spiralOrder([[1,2,3,4], [5,6,7,8]])) // [1,2,3,4,8,7,6,5]
+console.log(spiralOrder([[1,2,3], [4,5,6], [7,8,9], [10,11,12]])) // [1,2,3,6,9,12,11,10,7,4,5,8]
+console.log(spiralOrder([[1,2,3],[4,5,6],[7,8,9]])) // [1,2,3,6,9,8,7,4,5]
+console.log(spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]])) // [1,2,3,4,8,12,11,10,9,5,6,7]
