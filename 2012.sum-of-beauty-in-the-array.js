@@ -18,8 +18,8 @@
   // else if nums[i] is bigger than nums[i - 1] AND nums[i] is smaller than nums[i + 1], increment count by 1.
 // return count.
 
-// Time Complexity: O(n) 
-// Space Complexity: O(n)
+// Time Complexity: O(n) 154ms
+// Space Complexity: O(n) 58MB
 var sumOfBeauties = function(nums) {
   let count = 0, n = nums.length;
   let left = Array(n), max = 0;
