@@ -19,11 +19,11 @@
 var sortArrayByParityII = function(nums) {
   let evenNums = [], oddNums = [];
   for (var i = 0; i < nums.length; i++) {
+    // even number, odd index
     if (nums[i] % 2 === 0 && i % 2 !== 0) {
-      // even num, odd i
       evenNums.push(i);
+    // odd number, even index
     } else if (nums[i] % 2 === 1 && i % 2 === 0) {
-      // odd num, even i
       oddNums.push(i);
     }
   } 
