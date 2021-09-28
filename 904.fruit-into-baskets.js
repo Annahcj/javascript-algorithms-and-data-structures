@@ -7,7 +7,7 @@
 // Given the integer array fruits, return the maximum number of fruits you can pick.
 
 
-// Solution: Hashmap
+// Solution: Sliding Window
 
 // Use a hashmap to keep the last occurance indexes
 // set two variables fruit1 and fruit2
