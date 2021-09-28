@@ -18,15 +18,17 @@
     // set max to Math.max(max, i - start)
     // if fruits[i - 1] is equal to fruit1
       // set start to the last index of fruit2 + 1 (that is the first valid index of fruit2)
+      // delete lastIdx[fruit2] to save space
       // set fruit2 to fruit
     // otherwise 
       // set start to the last index of fruit1 + 1
+      // delete lastIdx[fruit1] to save space
       // set fruit1 to fruit
   // set max to Math.max(max, i - start)
   // return max
 
 // Time Complexity: O(n) 124ms
-// Space Complexity: O(n) 49.4MB
+// Space Complexity: O(1) 49.4MB
 var totalFruit = function(fruits) {
   let lastIdx = {};
   let fruit1, fruit2;
