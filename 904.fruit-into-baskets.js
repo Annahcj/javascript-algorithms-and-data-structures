@@ -7,7 +7,7 @@
 // Given the integer array fruits, return the maximum number of fruits you can pick.
 
 
-// Solution: Sliding Window
+// Solution 1: 
 
 // Use a hashmap to keep the last occurance indexes
 // set two variables fruit1 and fruit2
@@ -48,6 +48,28 @@ var totalFruit = function(fruits) {
     }
   }
   max = Math.max(max, i - start);
+  return max;
+};
+
+// Solution 2: Sliding Window
+
+// k = unique fruits
+// Time Complexity: O(n) 160ms
+// Space Complexity: O(k) 49.7MB
+var totalFruit = function(fruits) {
+  let count = {}, max = 0;
+  let left = 0;
+  let unique = 0;
+  for (var right = 0; right < fruits.length; right++) {
+    if (!count[fruits[right]]) unique++;
+    count[fruits[right]] = (count[fruits[right]] || 0) + 1;
+    while (unique > 2) {
+      count[fruits[left]]--;
+      if (count[fruits[left]] === 0) unique--;
+      left++;
+    } 
+    max = Math.max(max, right - left + 1);
+  }
   return max;
 };
 
