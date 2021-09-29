@@ -10,7 +10,7 @@ function ListNode(val, next) {
   this.next = (next===undefined ? null : next)
 }
 
-// Function which turns an array into a linked list - PURELY FOR TESTING PURPOSES!
+// Function which turns an array into a linked list - FOR TESTING PURPOSES ONLY!
 function makeLL(arr) {
   let head = new ListNode(), node = head;
   for (var num of arr) {
