@@ -78,7 +78,7 @@ var longestCommonSubsequence = function(text1, text2) {
   return dp[0][0];
 };
 
-// Three tets cases to run function on
+// Three test cases to run function on
 console.log(longestCommonSubsequence("abcde", "ace")) // 3
 console.log(longestCommonSubsequence("abc", "abc")) // 3
 console.log(longestCommonSubsequence("abc", "def")) // 0
