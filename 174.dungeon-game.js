@@ -28,6 +28,7 @@
 
 
 // We loop through backwards from bottom up,
+  // (we set dp[i][j] to the minimum hp we would need for this position. (right or down) - dungeon[i][j], if we have more than enough, set it to 1, since that is the minimum we would need)
   // choosing the best option 'minHP' (minimum of either right -> dp[i][j + 1], or down -> dp[i + 1][j])
   // subtract this best option with the current cell's value, dungeon[i][j]
   // set dp[i][j] to Math.max(minHP, 1)
