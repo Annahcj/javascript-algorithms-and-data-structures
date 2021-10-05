@@ -2,7 +2,7 @@
 // Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0
 
 
-// Solution: Sorting 
+// Solution 1: Sorting 
 
 // First sort the numbers in ascending order. 
 // Loop through nums (pointer = i)
@@ -43,6 +43,40 @@ var threeSum = function(nums) {
     }
   }  
   return res;
+};
+
+// Solution 2: No Sorting
+
+// Time Complexity: O(n^2) 581ms
+// Space Complexity: O(n) 59.4MB
+var threeSum = function(nums) {
+  let res = {};
+  let ans = [];
+  let dups = new Set();
+  let seen = new Map();
+  for (var i = 0; i < nums.length; i++) {
+    // skip over duplicates for the first number 
+    if (!dups.has(nums[i])) {
+      dups.add(nums[i]);
+      for (var j = i + 1; j < nums.length; j++) {
+        // target is the value that nums[i] + nums[j] + target = 0
+        let target = -nums[i] - nums[j];
+        // if seen contains target and the 'can use for' of target is i (meaning we can use it for this iteration of i)
+        if (seen.has(target) && seen.get(target) === i) {
+          let triplet = [nums[i], nums[j], target];
+          // sort the triplets and mark it as used so we can avoid duplicates
+          triplet.sort((a, b) => a - b);
+          if (!res[triplet]) {
+            res[triplet] = true;
+            ans.push(triplet);
+          }
+        }
+        // set seen of nums[j] to be i, saying 'we can use this one for i'
+        seen.set(nums[j], i);
+      }
+    }
+  }
+  return ans;
 };
 
 // Five test cases to run function on
