@@ -6,7 +6,7 @@
 // For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C's strstr() and Java's indexOf().
 
 
-// Solution: Brute Force
+// Solution 1: Brute Force
 
 // Try to find needle from every position in haystack
 // Optimization: change outer loop to i < haystack.length - needle.length + 1, so that we don't loop unnecessarily when needle.length is longer than the remaining haystack.length
@@ -23,6 +23,55 @@ var strStr = function(haystack, needle) {
     }
   }
   return -1;
+};
+
+// Solution 2: KMP Algorithm
+
+// Time Complexity: O(n + m) 72ms
+// Space Complexity: O(m) 40.3MB
+var strStr = function(haystack, needle) {
+  let n = haystack.length, m = needle.length;
+  if (m === 0) return 0;
+  // lps[i] = last best index at which to start matching again
+  let lps = computeLPS(needle);
+  let i = 0, j = 0;
+  while (i < n) {
+    if (haystack[i] === needle[j]) {
+      // if they match, move both pointers forward
+      i++, j++;
+      if (j === m) return i - m;
+    } else {
+      // if j is not 0, set j to the last best index -> lps[j - 1]
+      if (j > 0) j = lps[j - 1];
+      // otherwise move i forward
+      else i++;
+    }
+  }
+  return -1;
+
+  function computeLPS(str) {
+    // initiate lps (longest prefix substring) with 0's 
+    let lps = Array(str.length).fill(0);
+    let pre = 0, suff = 1;
+    while (suff < str.length) {
+      if (str[pre] === str[suff]) {
+        // if they match, set lps[suff] to pre (will always be one more than pre since that is the index at which we start to match again)
+        // move both pointers forward
+        pre++;
+        lps[suff] = pre;
+        suff++;
+      } else {
+        if (pre !== 0) {
+          // try to match at the last best, viable position
+          pre = lps[pre - 1];
+        } else {
+          // otherwise both suff forward
+          suff++;
+        }
+      }
+    }
+    return lps;
+  }
 };
 
 // Four test cases to run function on
