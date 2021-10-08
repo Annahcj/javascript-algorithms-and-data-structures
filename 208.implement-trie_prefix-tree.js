@@ -5,13 +5,15 @@
 // boolean search(String word) Returns true if the string word is in the trie (i.e., was inserted before), and false otherwise.
 // boolean startsWith(String prefix) Returns true if there is a previously inserted string word that has the prefix prefix, and false otherwise.
 
-// Runtime on LeetCode: 200ms
+// Runtime on LeetCode: 192ms
 // Memory Usage on LeetCode: 54MB
-var Trie = function() {
-    this.root = {};
-  };
   
-  // Insert Method
+
+var Trie = function() {
+  this.root = {};  
+};
+
+// Insert Method
   // Create a variable 'curr' which we will use to move down the trie starting from the root.
   // Loop through each character of word, if curr[character] doesn't exist, set it equal to an object
     // Keeping moving to the next character (curr = curr[character])
@@ -19,51 +21,54 @@ var Trie = function() {
   
   // Time Complexity: O(m) (length of word)
   // Space Complexity: O(m) 
-  Trie.prototype.insert = function(word) {
-    let curr = this.root;
-    for (var char of word) {
-      if (!curr[char]) {
-        curr[char] = {};
-      }
-      curr = curr[char];
+
+Trie.prototype.insert = function(word) {
+  let curr = this.root;
+  for (var i = 0; i < word.length; i++) {
+    if (!curr[word[i]]) {
+      curr[word[i]] = {};
     }
-    curr.isWord = true;
-  };
-  
+    curr = curr[word[i]];
+  }  
+  curr.isWord = true;
+};
+
   // Loop through each character in word, if character exists in curr, move on to the next character, else return false (not found)
   // When iteration is done, return true if 'isWord' is true, otherwise false.
   
   // Time Complexity: O(m)
   // Space Complexity: O(1)
-  Trie.prototype.search = function(word) {
-    let curr = this.root;
-    for (var char of word) {
-      if (curr[char]) curr = curr[char];
-      else return false;
-    }
-    if (curr.isWord) return true;
-    return false;
-  };
-  
+
+Trie.prototype.search = function(word) {
+  let curr = this.root;
+  for (var i = 0; i < word.length; i++) {
+    if (!curr[word[i]]) return false;
+    curr = curr[word[i]];
+   }  
+   if (curr.isWord) return true;
+   return false;
+};
+
   // Loop through each character in prefix, if character exists in curr, move on to the next character, else return false (not found)
   // When iteration is done, return true.
   
   // Time Complexity: O(m)
   // Space Complexity: O(1)
-  Trie.prototype.startsWith = function(prefix) {
-    let curr = this.root;
-    for (var char of prefix) {
-      if (curr[char]) curr = curr[char];
-      else return false;
-    }
-    return true;
-  };
-  
-  // A few test cases 
-  let trie = new Trie();
-  trie.insert('apple');
-  console.log(trie.search('app')) // false
-  console.log(trie.search('apple')) // true
-  console.log(trie.startsWith('app')) // true
-  trie.insert('app');
-  console.log(trie.search('app')) // true
+
+Trie.prototype.startsWith = function(prefix) {
+  let curr = this.root;
+  for (var i = 0; i < prefix.length; i++) {
+    if (!curr[prefix[i]]) return false;
+    curr = curr[prefix[i]];
+  }  
+  return true;
+};
+
+
+let trie = new Trie();
+trie.insert('apple');
+console.log(trie.search('app')) // false
+console.log(trie.search('apple')) // true
+console.log(trie.startsWith('app')) // true
+trie.insert('app');
+console.log(trie.search('app')) // true
