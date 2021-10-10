@@ -12,8 +12,8 @@
 
 // n = nums1.length + nums2.length + nums3.length
 // k = unique letters in all three num arrays
-// Time Complexity: O(n) 
-// Space Complexity: O(k)
+// Time Complexity: O(n) 132ms
+// Space Complexity: O(k) 44.3MB
 var twoOutOfThree = function(nums1, nums2, nums3) {
   let uni1 = {}, uni2 = {}, uni3 = {};
   let uni = {};
