@@ -21,7 +21,7 @@
 
 // Solution 1: Min Heap
 
-// Runtime on LeetCode: 380ms
+// Runtime on LeetCode: 376ms
 // Memory Usage on LeetCode: 52.9MB
 
 class MinHeap {
@@ -60,7 +60,7 @@ class MinHeap {
       [this.values[idx], this.values[childIdx]] = [this.values[childIdx], this.values[idx]];
       idx = childIdx;
       leftIdx = idx * 2 + 1, rightIdx = idx * 2 + 2;
-      childIdx = getChild(this.values, leftIdx, rightIdx);
+      childIdx = getChild(this.values, leftIdx, rightIdx, this.comparator);
     }
     return value;
   }
