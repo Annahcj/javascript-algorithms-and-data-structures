@@ -13,6 +13,8 @@
   // a. even length of arr -> find both lower median (Math.floor(arr.length / 2) - 1) and higher median (Math.floor(arr.length / 2)), and take the one with smaller amount of moves.
   // b. odd length of arr -> only one median (Math.floor(arr.length / 2)): get the number of moves to turn all nums in arr
 
+// Time Complexity: O(nm) 410ms
+// Space Complexity: O(nm) 72.2MB
 var minOperations = function(grid, x) {
   let arr = [];
   for (var i = 0; i < grid.length; i++) {
