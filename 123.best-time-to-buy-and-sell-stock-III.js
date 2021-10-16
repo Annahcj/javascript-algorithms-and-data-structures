@@ -8,10 +8,18 @@
 
 // loop through prices ->
   // we have four states:
-  // buy1 -> first buy
-  // sell1 -> first sell
-  // buy2 -> second buy based on profit after sell1
-  // sell2 -> second sell based on buy2
+  // buy1 -> 
+    // 1. maintain profit/ do nothing
+    // 2. buy at prices[i]
+  // sell1 ->
+    // 1. maintain profit/ do nothing
+    // 2. sell bought stock at today's price
+  // buy2 ->
+    // 1. maintain profit/ do nothing
+    // 2. sell stock yesterday, buy stock today
+  // sell2 -> 
+    // 1. maintain profit/ do nothing
+    // 2. sell second bought stock at today's price
 
 // Time Complexity: O(n) 100ms
 // Space Complexity: O(1) 49.5MB
@@ -27,5 +35,6 @@ var maxProfit = function(prices) {
   return sell2;
 };
 
-// A test case to run function on
+// Two test cases to run function on
 console.log(maxProfit([3,3,5,0,0,3,1,4])) // 6
+console.log(maxProfit([1,2,3,4,5])) // 4
