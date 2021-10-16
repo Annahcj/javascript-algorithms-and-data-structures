@@ -9,17 +9,20 @@
 
 // Keep two arrays of states -> sold and held
 
-// held -> holds stock which we buy, we can only buy after the cooldown is over
-// sold -> buys stock from held
+// note: both arrays record profit on a certain day, sold is the profit after selling, held is profit after buying (will be lower than sold because we are buying and not gaining anything)
+// sold -> sells stock from held
+// held -> holds stock which we will buy later, we can only buy after the cooldown is over
 
 // sold[i] = Math.max(sold[i - 1], held[i - 1] + prices[i]) -> hold on to prev profit, or sell from held for today's price
-// held[i] = Math.max(held[i - 1], (sold[i - 2] || 0) - prices[i]) -> hold on to what we bought before, or sell prevPrev stock (after cooldown) and buy today's stock
+// held[i] = Math.max(held[i - 1], (sold[i - 2] || 0) - prices[i]) -> hold on to whatever we have, or sell prevPrev stock (after cooldown) and buy today's stock
 
 // Time Complexity: O(n) 83ms
 // Space Complexity: O(n) 40.3MB
 var maxProfit = function(prices) {
   let n = prices.length;
+  // initial state -> 0 since we can't sell anything on day 0
   let sold = [0];
+  // initial state -> -prices[0] since we bought day 0 stock, we now have a loss.
   let held = [-prices[0]];
   for (var i = 1; i < prices.length; i++) {
     sold[i] = Math.max(sold[i - 1], held[i - 1] + prices[i]);
