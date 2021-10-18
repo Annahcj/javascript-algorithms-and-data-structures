@@ -30,7 +30,6 @@ function TreeNode(val, left, right) {
   // if node has right child, call find(node.right, depth + 1, node)
 
 
-
 // Time Complexity: O(n) 68ms
 // Space Complexity: O(n) (call stack) 40.7MB
 var isCousins = function(root, x, y) {
