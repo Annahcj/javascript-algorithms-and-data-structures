@@ -6,7 +6,7 @@
 // Both the left and right subtrees must also be binary search trees.
 
 
-// Solution: Iterative DFS w/ Lower/Upper Bound
+// Solution 1: Iterative DFS w/ Lower/Upper Bound
 
 // For each node, keep a lower and upper bound that its value can be.
 // For the root node, the lower bound will be -Infinity and upper bound will be Infinity.
@@ -27,6 +27,28 @@ var isValidBST = function(root) {
     if (node.left) stack.push([node.left, lowerBound, node.val]);
     // right node's boundaries are node.val to upperBound
     if (node.right) stack.push([node.right, node.val, upperBound]);
+  }
+  return true;
+};
+
+// Solution 2: In-order Traversal 
+
+// Do an in-order traversal of root, push all values (in-order) to an array.
+// loop through the array, if it is not in ascending order, return false.
+// otherwise return true.
+
+// Time Complexity: O(n) 88ms
+// Space Complexity: O(n) (call stack & arr space) 43.9MB
+var isValidBST = function(root) {
+  let arr = [];
+  dfs(root);
+  function dfs(node) {
+    if (node.left) dfs(node.left);
+    arr.push(node.val);
+    if (node.right) dfs(node.right);
+  }
+  for (var i = 1; i < arr.length; i++) {
+    if (arr[i] >= arr[i - 1]) return false;
   }
   return true;
 };
