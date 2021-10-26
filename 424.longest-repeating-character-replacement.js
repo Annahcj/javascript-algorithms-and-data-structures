@@ -3,7 +3,35 @@
 // Return the length of the longest substring containing the same letter you can get after performing the above operations.
 
 
-// Solution: Sliding Window
+// Solution 1: Sliding Window
+
+// Time Complexity: O(26n) 84ms
+// Space Complexity: O(1) 39.6MB
+var characterReplacement = function(s, k) {
+  let freq = Array(26).fill(0);
+  let start = 0, longest = 0, max = 0;
+  for (var end = 0; end < s.length; end++) {
+    let idx = s.charCodeAt(end) - 65;
+    // most frequency character from start to this point
+    longest = Math.max(longest, ++freq[idx]);
+    // while more than k characters are missing from the substring from start to end, move start up
+    while (end - start + 1 - longest > k) {
+      freq[s.charCodeAt(start) - 65]--;
+      // update longest since frequency of s[start] has been decremented
+      longest = 0;
+      for (var i = 0; i < 26; i++) longest = Math.max(longest, freq[i]);
+      start++;
+    }
+    // update max if new longest is found
+    max = Math.max(max, end - start + 1);
+  }
+  return max;
+};
+
+
+// Solution 2: Optimized Sliding Window 
+
+// It turns out that there is no need to update the 'longest' variable each time.
 
 // Time Complexity: O(n) 121ms
 // Space Complexity: O(1) 39MB
