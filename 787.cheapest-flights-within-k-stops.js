@@ -24,20 +24,14 @@
 // Time Complexity: O(k * e) 158ms
 // Space Complexity: O(n) 44.7MB
 var findCheapestPrice = function(n, flights, src, dst, k) {
-  // edge case which isn't necessary for this problem
-  if (src === dst) return 0; 
-  let prev = Array(n);
-  let curr = Array(n);
-  for (var i = 0; i < n; i++) {
-    prev[i] = Infinity;
-    curr[i] = Infinity;
-  }
+  let prev = Array(n).fill(Infinity);
   prev[src] = 0;
-  for (var i = 1; i < k + 2; i++) {
-    curr[src] = 0;
-    for (var [source, dest, weight] of flights) {
-      if (prev[source] < Infinity) {
-        curr[dest] = Math.min(curr[dest], prev[source] + weight);
+  let curr = Array(n).fill(Infinity);
+  curr[src] = 0;
+  for (var i = 0; i <= k; i++) {
+    for (var [source, targ, weight] of flights) {
+      if (prev[source] !== Infinity) {
+        curr[targ] = Math.min(curr[targ], prev[source] + weight);
       }
     }
     prev = [...curr];
