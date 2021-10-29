@@ -9,75 +9,66 @@
 
 // Solution: BFS
 
-// Count the number of empty cells, and the total number of rotten cells. Keep checking to see whether all fresh oranges have become rotten. ([all cells - empty cells === rotten cells] means all rotten)
-// Use a queue to turn adjacent cells into rotten
-
 // Algorithm:
 
-// (keep a minutes counter, initially set to 0)
 // Loop through each cell in grid, 
   // If cell is rotten (2), increment rotten count, and push cell's coordinates into queue.
-  // If cell is empty (0), increment the emptyCells count.
+  // If cell is empty (0), increment the empty count.
 
-// allRotten equals true: if total (all cells) - emptyCells equals rotten (rotten cells), otherwise false.
+// allRotten = total number of cells - empty cells (this is the number of cells that should become rotten in the end)
 
-// Loop while queue is not empty AND allRotten is false ~
+// Loop while queue is not empty ~
   // Set next (next level of rotten cells) to an empty array
-  // Increment minutes (total minutes until all rotten)
   // Loop while queue is not empty ~~
-    // Pop the last item off queue, let x and y be the coordinates.
-    // Loop through each move in moves (all four directions)
-      // let nx (newX) be x + move[0], ny (newY) be y + move[1]
-      // If nx is not out of bounds AND ny is not out of bounds, 
-        // turn grid[nx, ny] into a rotten orange (2) (this is so that we don't change the same cell more than once)
+    // Pop the last item off queue, let row and col be the coordinates.
+    // Loop through each [x, y] in directions 
+      // let newX be row + x, newY be col + y
+      // if newX is out of bounds or newY is out of bounds, continue. 
+      // if grid[newX][newY] is a fresh cell (1),
+        // push [newX, newY] into next
+        // turn grid[newX][newY] into a rotten orange (2) (this is so that we don't visit the same cell more than once)
         // increment rotten by one
-        // push [nx, ny] into next
   // ~~ When a minute is over and the queue is empty, set queue to next.
-  // Update allRotten
+  // if queue is not empty, increment minutes by 1
 // ~
-// If allRotten is true, return minutes
-// Otherwise, return -1 (impossible be all rotten)
+// If rotten is equal to allRotten (target reached), return minutes, otherwise return -1 (impossible be all rotten)
 
-// Time Complexity: O(n) 84ms
-// Space Complexity: O(n) 41.5MB
-  var orangesRotting = function(grid) {
-    let minutes = 0, queue = [];
-    let moves = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-    let width = grid[0].length, length = grid.length;
-    let emptyCells = 0, total = grid.length * grid[0].length, rotten = 0;
-    let allRotten = false;
-    for (var i = 0; i < length; i++) {
-      for (var j = 0; j < width; j++) {
-        if (grid[i][j] === 2) {
-          queue.push([i, j]);
-          rotten++;
-        } else if (grid[i][j] === 0) {
-          emptyCells++;
-        }
-      }
-    }  
-    allRotten = (rotten === total - emptyCells) ? true : false;
-    while (queue.length && !allRotten) {
-      let next = [];
-      minutes++;
-      while (queue.length) {
-        let [x, y] = queue.pop();
-        for (var move of moves) {
-          let nx = x + move[0], ny = y + move[1];
-          if (nx > -1 && nx < length && ny > -1 && ny < width && grid[nx][ny] === 1) {
-            grid[nx][ny] = 2;
-            rotten++;
-            next.push([nx, ny]);
-          }
-        }
-      }
-      queue = next;
-      allRotten = (rotten === total - emptyCells) ? true : false;
+// Time Complexity: O(n) 80ms
+// Space Complexity: O(n) 41.2MB
+var orangesRotting = function(grid) {
+  let queue = [], empty = 0, rotten = 0;  
+  for (var i = 0; i < grid.length; i++) {
+    for (var j = 0; j < grid[0].length; j++) {
+      if (grid[i][j] === 2) {
+        queue.push([i, j]);
+        rotten++;
+      } else if (grid[i][j] === 0) empty++;
     }
-    return allRotten ? minutes : -1;
-  };
-  
-  // Three test cases to run function on
-  console.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]])) // 4
-  console.log(orangesRotting([[2,1,1],[0,1,1],[1,0,1]])) // -1
-  console.log(orangesRotting([[0,2]])) // 0
+  }
+  let allRotten = grid.length * grid[0].length - empty;
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+  let mins = 0;
+  while (queue.length) {
+    let next = [];
+    while (queue.length) {
+      let [row, col] = queue.pop();
+      for (var [x, y] of directions) {
+        let newX = row + x, newY = col + y;
+        if (newX < 0 || newX >= grid.length || newY < 0 || newY >= grid[0].length) continue;
+        if (grid[newX][newY] === 1) {
+          next.push([newX, newY]);
+          grid[newX][newY] = 2;
+          rotten++;
+        }
+      }
+    }
+    queue = next;
+    if (queue.length) mins++;
+  }
+  return rotten === allRotten ? mins : -1;
+};
+
+// Three test cases to run function on
+console.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]])) // 4
+console.log(orangesRotting([[2,1,1],[0,1,1],[1,0,1]])) // -1
+console.log(orangesRotting([[0,2]])) // 0
