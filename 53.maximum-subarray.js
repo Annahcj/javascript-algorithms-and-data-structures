@@ -8,14 +8,14 @@
 // Time Complexity: O(n) 100ms
 // Space Complexity: O(1) 40.2MB
 var maxSubArray = function(nums) {
-    let max = -Infinity, tempMax = -Infinity;
-    for (var i = 0; i < nums.length; i++) {
-      tempMax = Math.max(nums[i], tempMax + nums[i]);
-      max = Math.max(max, tempMax);
-    }
-    return max;
-  };
-  
-  // Two test cases to run function on
-  console.log(maxSubArray([-2,1,-3,4,-1,2,1,-5,4])) // 6
-  console.log(maxSubArray([5,4,-1,7,8])) // 23
+  let max = nums[0];
+  let tempMax = nums[0];
+  for (var i = 1; i < nums.length; i++) {
+    tempMax = Math.max(tempMax + nums[i], nums[i]);
+    max = Math.max(max, tempMax);
+  }
+  return max;
+};
+// Two test cases to run function on
+console.log(maxSubArray([-2,1,-3,4,-1,2,1,-5,4])) // 6
+console.log(maxSubArray([5,4,-1,7,8])) // 23
