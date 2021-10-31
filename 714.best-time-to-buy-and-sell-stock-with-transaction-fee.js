@@ -32,6 +32,22 @@ var maxProfit = function(prices, fee) {
   return sell[prices.length - 1];
 };
 
+// Solution 2: Optimized Space
+
+// Instead of using arrays, we can just keep track of two variables buy and sell, since we were only comparing with previous values.
+
+// Time Complexity: O(n) 96ms
+// Space Complexity: O(1) 47.2MB
+var maxProfit = function(prices, fee) {
+  let buy = -prices[0];
+  let sell = 0;
+  for (var i = 1; i < prices.length; i++) {
+    sell = Math.max(sell, buy + prices[i] - fee);
+    buy = Math.max(buy, sell - prices[i]);
+  }  
+  return sell;
+};
+
 // Two test cases to run function on
 console.log(maxProfit([1,3,2,8,4,9], 2)) // 8
 console.log(maxProfit([1,3,7,5,10,3], 3)) // 6
