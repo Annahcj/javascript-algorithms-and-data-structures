@@ -19,26 +19,26 @@
 
 // Time Complexity: O(n^2) 96ms
 // Space Complexity: O(wordDict + n) 41.3MB
-  var wordBreak = function(s, wordDict) {
-    let words = new Set(wordDict);
-    let visited = {};
-    let queue = [0];
-    while (queue.length) {
-      let curr = queue.shift();
-      if (!visited[curr]) {
-        let word = "";
-        for (var i = curr; i < s.length; i++) {
-          word += s[i];
-          if (words.has(word)) {
-            if (i === s.length - 1) return true;
-            queue.push(i + 1);
-          }
+var wordBreak = function(s, wordDict) {
+  let words = new Set(wordDict);
+  let visited = {};
+  let queue = [0];
+  while (queue.length) {
+    let curr = queue.shift();
+    if (!visited[curr]) {
+      let word = "";
+      for (var i = curr; i < s.length; i++) {
+        word += s[i];
+        if (words.has(word)) {
+          if (i === s.length - 1) return true;
+          queue.push(i + 1);
         }
       }
-      visited[curr] = true;
     }
-    return false;
-  };
+    visited[curr] = true;
+  }
+  return false;
+};
 
 
 // Solution 2: Dynamic Programming
@@ -106,23 +106,74 @@
 
 // Time Complexity: O(n^2) 80ms
 // Space Complexity: O(n) 40.9MB
-  var wordBreak = function(s, wordDict) {
-    let words = new Set(wordDict);
-    let dp = Array(s.length + 1).fill(false);
-    dp[0] = true;
-    for (var end = 1; end <= s.length; end++) {
-      for (var start = 0; start < end; start++) {
-        if (dp[start] && words.has(s.slice(start, end))) {
-          dp[end] = true;
-          break;
-        }
+var wordBreak = function(s, wordDict) {
+  let words = new Set(wordDict);
+  let dp = Array(s.length + 1).fill(false);
+  dp[0] = true;
+  for (var end = 1; end <= s.length; end++) {
+    for (var start = 0; start < end; start++) {
+      if (dp[start] && words.has(s.slice(start, end))) {
+        dp[end] = true;
+        break;
       }
     }
-    return dp[dp.length - 1];
-  };
+  }
+  return dp[dp.length - 1];
+};
   
-  // Four test cases to run function on
-  console.log(wordBreak("abaabbbbbbbbbbbbaaa", ["a","b"])) // true
-  console.log(wordBreak("leetcode", ["leet","code"])) // true
-  console.log(wordBreak("applepenapple", ["apple","pen"])) // true
-  console.log(wordBreak("catsandog", ["cats","dog","sand","and","cat"])) // false
+// Solution 3: Trie w/ Recursion & Memoization
+
+var wordBreak = function(s, wordDict) {
+  let trie = new Trie(wordDict);
+  let memo = Array(s.length);
+  return recurse(0);
+
+  function recurse(idx) {
+    if (memo[idx] !== undefined) return memo[idx];
+    if (idx === s.length) return true;
+    let node = trie.root.children;
+    // dfs to find all words that match from idx
+    let ans = false;
+    let i = idx;
+    while (node[s[i]]) {
+      node = node[s[i]];
+      // if node is a word, recurse at index + 1 (next index to start searching again)
+      if (node.wordEnd) {
+        // if recurse(i + 1) returns true, set ans to true
+        if (recurse(i + 1)) ans = true;
+      }
+      node = node.children;
+      i++;
+    }
+    // memoize ans and return it for earlier calls
+    memo[idx] = ans;
+    return ans;
+  }
+};
+class TrieNode {
+  constructor() {
+    this.children = {};
+    this.wordEnd = false;
+  }
+}
+class Trie {
+  constructor(words) {
+    this.root = new TrieNode();
+    for (var word of words) {
+      let node = this.root;
+      for (var char of word) {
+        node = node.children;
+        if (!node[char]) node[char] = new TrieNode();
+        node = node[char];
+      }
+      node.wordEnd = true;
+    }
+  }
+}
+
+
+// Four test cases to run function on
+console.log(wordBreak("abaabbbbbbbbbbbbaaa", ["a","b"])) // true
+console.log(wordBreak("leetcode", ["leet","code"])) // true
+console.log(wordBreak("applepenapple", ["apple","pen"])) // true
+console.log(wordBreak("catsandog", ["cats","dog","sand","and","cat"])) // false
