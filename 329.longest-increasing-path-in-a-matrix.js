@@ -3,7 +3,7 @@
 // From each cell, you can either move in four directions: left, right, up, or down. You may not move diagonally or move outside the boundary (i.e., wrap-around is not allowed).
 
 
-// Solution: DFS w/ DP
+// Solution: Recursion w/ Memoization
 
 // Note:
 // Keep in mind that we won't have to worry about traversing the path we came from since we are looking for a strictly increaasing path (will never go to cells with smaller values)
@@ -19,45 +19,46 @@
 
 
 // dfs: (i, j) (recursively finds the longest increasing path)
-  // set max to 1
-  // if dp[i][j] is not undefined (longest increasing path already calculated for matrix[i][j]), return dp[i][j]
+  // set ans to 1
+  // if memo[i][j] is not undefined (longest increasing path already calculated for matrix[i][j]), return memo[i][j]
   // loop through [x, y] in directions (up, right, down, left) *
     // let newX (new x coordinate) be i + x
     // let newY (new y coordinate) be j + y
     // if newX and newY is in bounds AND matrix[newX][newY] is bigger than matrix[i][j]
-      // set max to Math.max(max, dfs(newX, newY) + 1)
+      // set ans to Math.max(max, dfs(newX, newY) + 1)
   // *
-  // cache the result -> set dp[i][j] to max
-  // return max
+  // cache the result -> set memo[i][j] to ans
+  // return ans
 
 // Time Complexity: O(nm) 92ms
 // Space Complexity: O(nm) 42.7MB
 var longestIncreasingPath = function(matrix) {
   const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-  const width = matrix[0].length, length = matrix.length;
-  let dp = Array(length);
-  for (var i = 0; i < length; i++) {
-    dp[i] = Array(width);
-  }
+  const n = matrix.length, m = matrix[0].length;
+  let memo = Array(n);
+  for (var i = 0; i < n; i++) memo[i] = Array(m);
+
   let max = 0;
-  for (var row = 0; row < length; row++) {
-    for (var col = 0; col < width; col++) {
-      max = Math.max(max, dfs(row, col));
+  for (i = 0; i < n; i++) {
+    for (var j = 0; j < m; j++) {
+      max = Math.max(max, dfs(i, j));
     }
   }
   return max;
-  function dfs(i, j) {
-    let max = 1;
-    if (dp[i][j]) return dp[i][j]; 
+
+  function dfs(row, col) {
+    if (memo[row][col] !== undefined) return memo[row][col];
+    let ans = 1;
     for (var [x, y] of directions) {
-      let newX = i + x;
-      let newY = j + y;
-      if (newX > -1 && newX < length && newY > -1 && newY < width && matrix[i][j] < matrix[newX][newY]) {
-        max = Math.max(max, dfs(newX, newY) + 1);
+      let newX = row + x, newY = col + y;
+      if (newX > -1 && newX < n && newY > -1 && newY < m) {
+        if (matrix[newX][newY] > matrix[row][col]) {
+          ans = Math.max(ans, dfs(newX, newY) + 1);
+        }
       }
     }
-    dp[i][j] = max;
-    return max;
+    memo[row][col] = ans;
+    return ans;
   }
 };
 
