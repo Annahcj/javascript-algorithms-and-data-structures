@@ -7,32 +7,27 @@
 
 // Solution: Dynamic Programming
 
-// Time Complexity: O(mn) 80ms
-// Space Complexity: O(mn) 39.4MB
+// Time Complexity: O(nm) 76ms
+// Space Complexity: O(nm) 39.8MB
 var uniquePathsWithObstacles = function(obstacleGrid) {
-  let width = obstacleGrid[0].length, length = obstacleGrid.length;
-  if (obstacleGrid[0][0] === 1) return 0;
-  let dp = Array(length);
-  for (var i = 0; i < length; i++) {
-    dp[i] = Array(width);
-  }
-  // initialize dp[0][0] to 1
-  dp[0][0] = 1;
-  for (var i = 0; i < length; i++) {
-    for (var j = 0; j < width; j++) {
-      if (!i && !j) continue;
-      if (!obstacleGrid[i][j]) {
-        // if i > 0 AND above is not obstacle
-        let above = i && obstacleGrid[i - 1][j] === 0 ? dp[i - 1][j] : 0;
-        // if j > 0 AND left is not obstacle
-        let left = j && obstacleGrid[i][j - 1] === 0 ? dp[i][j - 1] : 0;
-        dp[i][j] = above + left;
-      } 
+  let n = obstacleGrid.length, m = obstacleGrid[0].length;
+  let dp = Array(n);
+  for (var i = 0; i < n; i++) dp[i] = Array(m);
+  // if first obstacleGrid row is [0,1,0,0], dp row will be -> [1,0,0,0]
+  // if not obstacle, set to 1. otherwise once there is an obstacle, any cell after it on the row cannot be reached, so set all after an obstacle to 0.
+  for (var j = 0; j < m; j++) dp[0][j] = obstacleGrid[0][j] === 1 || (j > 0 && dp[0][j - 1] === 0) ? 0 : 1;
+  // same for the first column -> once obstacle is reached, any cell after it will be 0 (cannot be reached)
+  for (i = 0; i < n; i++) dp[i][0] = obstacleGrid[i][0] === 1 || (i > 0 && dp[i - 1][0] === 0) ? 0 : 1;
+  for (i = 1; i < n; i++) {
+    for (j = 1; j < m; j++) {
+      // if obstacle, set to 0
+      if (obstacleGrid[i][j] === 1) dp[i][j] = 0;
+      // otherwise take upper and left
+      else dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
     }
-  } 
-  return dp[length - 1][width - 1] ? dp[length - 1][width - 1] : 0;
+  }
+  return dp[n - 1][m - 1];
 };
-
 
 // Two test cases to run function on
 console.log(uniquePathsWithObstacles([[0,0,0],[0,1,0],[0,0,0]])) // 2
