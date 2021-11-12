@@ -3,7 +3,53 @@
 // The bomb kills all the enemies in the same row and column from the planted point until it hits the wall since it is too strong to be destroyed.
 
 
-// Solution: Dynamic Programming / Preprocessing
+// Solution 1: Check Four Directions
+
+// Time Complexity: O(nm * (n + m)) 596ms
+// Space Complexity: O(1) 44.5MB
+var maxKilledEnemies = function(grid) {
+  let n = grid.length, m = grid[0].length;
+  let max = 0;
+  // for each cell, go in all four directions until a wall is reached
+  for (var i = 0; i < n; i++) {
+    for (var j = 0; j < m; j++) {
+      // if cell is empty
+      if (grid[i][j] === '0') {
+        let total = 0;
+        // left
+        let col = j - 1;
+        while (col >= 0 && grid[i][col] !== 'W') {
+          if (grid[i][col] === 'E') total++;
+          col--;
+        }
+        // right
+        col = j + 1;
+        while (col < m && grid[i][col] !== 'W') {
+          if (grid[i][col] === 'E') total++;
+          col++;
+        }
+        // up
+        let row = i - 1;
+        while (row >= 0 && grid[row][j] !== 'W') {
+          if (grid[row][j] === 'E') total++;
+          row--;
+        }
+        // down
+        row = i + 1;
+        while (row < n && grid[row][j] !== 'W') {
+          if (grid[row][j] === 'E') total++;
+          row++;
+        }
+        // update max
+        max = Math.max(max, total);
+      }
+    }
+  }
+  return max;
+}
+
+
+// Solution 2: Dynamic Programming / Preprocessing
 
 // For each cell, record the number of enemy cells on the
   // left
