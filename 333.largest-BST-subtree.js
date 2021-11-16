@@ -40,7 +40,6 @@ function makeTree(arr) { // note: this method only works when the array is in bf
 // Note: if we encountered an invalid tree in a subtree, the min and max value will be set to -Infinity/Infinity.
 
 // Base case: if node is null, return [0, Infinity, -Infinity] (0 nodes in tree, Infinity (so that it is a valid subtree), -Infinity (so that it is a valid subtree))
-// 
 
 // Time Complexity: O(n) 80ms
 // Space Complexity: O(n) 44.4MB
