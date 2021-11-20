@@ -13,6 +13,8 @@
   // 3. we found the answer - nums[mid] is not equal to the number on its left nor its right
     // return nums[mid]
 
+// Time Complexity: O(log(n)) 76ms
+// Space Complexity: O(1) 39.5MB
 var singleNonDuplicate = function(nums) {
   let left = 0, right = nums.length - 1;
   while (left < right) {
