@@ -20,12 +20,6 @@ var singleNonDuplicate = function(nums) {
   while (left < right) {
     let mid = Math.floor((left + right) / 2);
     let rightLenEven = (right - mid) % 2 === 0;
-    // if nums[mid - 1] is equal to nums[mid],
-      // then if rightleneven is true, our answer is on the left: mid - 2
-      // otherwise answer is on the right: mid + 1
-    // if nums[mid + 1] is equal to nums[mid],
-      // then if rightleneven is true, our answer is on the right: mid + 2
-      // otherwise answer is on the left: mid - 1
     if (nums[mid - 1] === nums[mid]) {
       if (rightLenEven) right = mid - 2;
       else left = mid + 1;
