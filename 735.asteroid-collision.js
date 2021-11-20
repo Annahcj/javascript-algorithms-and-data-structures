@@ -6,8 +6,6 @@
 
 // Solution: Stack
 
-// We maintain a stack where
-
 // Time Complexity: O(n) 72ms
 // Space Complexity: O(n) 41.4MB
 var asteroidCollision = function(asteroids) {
