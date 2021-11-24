@@ -27,28 +27,23 @@
   // Loop through the queue while the last item of the queue is smaller than nums[i]
     // Keep popping last item off queue
   // Push nums[i] into the queue.
-  // Calculate the left edge of the window (i + 1 - k), save it in a variable 'idx'
-  // If idx is bigger than or equal to 0 (if the window size is as least k)
-    // Push the first item of the queue into res
-    // If nums[idx] is equal to queue[0] (if number goes out of range of the window), shift it off the queue.
+  // if the leftmost element in the queue is out of range (equal to i - k), shift it off the queue.
+  // if i is bigger than or equal to k - 1, push nums[queue[0]] to res. 
 // Return res.
 
-// Time Complexity: O(n) 1016ms
-// Space Complexity: O(k) 75.3MB (monotonic queue's length will never be bigger than k)
-  var maxSlidingWindow = function(nums, k) {
-    let queue = [], res = [];
-    for (var i = 0; i < nums.length; i++) {
-      while (nums[i] > queue[queue.length - 1]) queue.pop();
-      queue.push(nums[i]);
-      let idx = i + 1 - k;
-      if (idx >= 0) {
-        res.push(queue[0]);
-        if (nums[idx] === queue[0]) queue.shift();
-      }
-    }  
-    return res;
-  };
+// Time Complexity: O(n) 428ms
+// Space Complexity: O(k) 79.1MB (monotonic queue's length will never be bigger than k)
+var maxSlidingWindow = function(nums, k) {
+  let queue = [], res = [];
+  for (var i = 0; i < nums.length; i++) {
+    while (queue.length && nums[queue[queue.length - 1]] <= nums[i]) queue.pop();
+    queue.push(i);
+    if (queue[0] === i - k) queue.shift();
+    if (i >= k - 1) res.push(nums[queue[0]]);
+  } 
+  return res;
+};
   
-  // Two test cases to run function on
-  console.log(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)) // [3,3,5,5,6,7]
-  console.log(maxSlidingWindow([9, 11], 2)) // [11]
+// Two test cases to run function on
+console.log(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3)) // [3,3,5,5,6,7]
+console.log(maxSlidingWindow([1,-1], 1)) // [1, -1]
