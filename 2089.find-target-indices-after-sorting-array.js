@@ -9,6 +9,8 @@
 // 1. Sort in asc order
 // 2. Get indexes of all numbers equal to target
 
+// Time Complexity: O(n log(n)) 76ms
+// Space Complexity: O(log(n)) 40.4MB
 var targetIndices = function(nums, target) {
   let res = [];
   nums.sort((a, b) => a - b);
