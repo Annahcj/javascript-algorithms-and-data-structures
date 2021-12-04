@@ -25,53 +25,49 @@
 
 
 // c = number of characters in all words, n = number of words
-// Time Complexity: O(c) 124ms
+// Time Complexity: O(c) 84ms
 // Space Complexity: O(n) 42.8MB
 var alienOrder = function(words) {
-  let graph = {};
-  let indegrees = {};
-  // set indegree for each character to 0
+  const graph = {}, indegrees = {};
   for (var word of words) {
-    for (var char of word) {
+    for (var char of word) { // initialize the indegrees and graph to avoid errors
       indegrees[char] = 0;
+      graph[char] = [];
     }
   }
-  let numUnique = Object.keys(indegrees).length;
-  for (var i = 1; i < words.length; i++) {
+  let unique = Object.keys(indegrees).length; // get the number of unique characters
+
+  for (var i = 0; i < words.length - 1; i++) {
+    let word1 = words[i], word2 = words[i + 1];
     let l = 0, r = 0;
-    // find first different character for adjacent words
-    while (l < words[i - 1].length || r < words[i].length) {
-      if (words[i - 1][l] !== words[i][r]) break;
+    while (l < word1.length && r < word2.length) { // find first different character for adjacent words
+      if (word1[l] !== word2[r]) break;
       l++, r++;
     }
-    let prevChar = words[i - 1][l], currChar = words[i][r];
-    // check for cases like (abc, ab), where it would be impossible
-    if (r === words[i].length && words[i - 1].length > words[i].length) return "";
-    if (!prevChar || !currChar) continue;
-    // add indegrees of currChar (bigger char)
-    indegrees[currChar] = (indegrees[currChar] || 0) + 1;
-    // add currChar as neighbor of prevChar
-    if (!graph[prevChar]) graph[prevChar] = [];
-    graph[prevChar].push(currChar);
+    if (r === word2.length && word1.length > word2.length) return ""; // check for cases like (abc, ab), where it would be impossible
+    if (!word1[l] || !word2[r]) continue;
+    indegrees[word2[r]]++; // add to the indegree count of the smaller character
+    graph[word1[l]].push(word2[r]); // push the smaller character as a neighbor of the bigger character
   }
 
-  let queue = [], ans = '';
-  // get chars with indegree of 0
-  for (var key in indegrees) {
-    if (indegrees[key] === 0) queue.push(key);
+  let queue = [];
+  for (var char in indegrees) {
+    if (indegrees[char] === 0) queue.push(char); // find characters with an indegree of 0
   }
+
+  let ans = '';
   // get chars by topological order
   while (queue.length) {
-    let curr = queue.shift();
-    ans += curr;
-    for (var neighbor of (graph[curr] || [])) {
+    let char = queue.shift();
+    ans += char;
+    unique--;
+    for (var neighbor of graph[char]) { 
       indegrees[neighbor]--;
       if (indegrees[neighbor] === 0) queue.push(neighbor);
     }
   }
-  return ans.length === numUnique ? ans : "";
+  return unique === 0 ? ans : '';
 };
-
 
 // Five test cases to run function on
 console.log(alienOrder(["wrt","wrf","er","ett","rftt"])) // "wertf"
