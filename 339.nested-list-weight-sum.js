@@ -42,7 +42,7 @@ var depthSum = function(nestedList) {
 // Solution 3: BFS
 
 // Alternatively, we could use a queue to bfs through and keep a global depth counter which we increment after going through each item in a level.
-// Since .shift() takes O(n) in a JavaScript array, we can use .pop() which takes O(1) because the order does not affect the level.
+// Since .shift() takes O(n) for a JavaScript array, we can use .pop() (which takes O(1)) because the order does not affect the level.
 
 // Time Complexity: O(n) 76ms
 // Space Complexity: O(n) 39.4MB
