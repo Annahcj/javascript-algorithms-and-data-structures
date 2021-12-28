@@ -8,7 +8,7 @@
 // Each minute represents 6 degrees.
 // Convert the hour to minutes: add on minutes / 60 and multiply by 5.
 // The angle will be the absolute value of (hourAngle - minutes) * the degrees for minutes (6).
-// Return the smaller angle: angle, or 360 - angle.
+// Return the smaller angle: angle or 360 - angle.
  
 // Time Complexity: O(1) 68ms
 // Space Complexity: O(1) 39MB
