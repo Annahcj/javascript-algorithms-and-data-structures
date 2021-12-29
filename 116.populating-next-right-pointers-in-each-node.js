@@ -27,7 +27,7 @@ var connect = function(root) {
     let next = [];
     while (queue.length) {
       let node = queue.shift();
-      node.next = queue[0];
+      node.next = queue.length ? queue[0] : null;
       if (node.left) next.push(node.left);
       if (node.right) next.push(node.right);
     }
