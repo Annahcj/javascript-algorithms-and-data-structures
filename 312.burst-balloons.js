@@ -6,7 +6,8 @@
 
 // Solution: Recursion w/ Memoization
 
-// For each value in nums, take it as the last ballon to pop IN the subarray of range [start, end]
+// For each value in nums, take it as the last ballon to pop IN the subarray of range [start, end].
+// Record the best choice: popping which balloon last would result in the maximum score?
 // memo[start][end] = maximum score obtained from popping all the balloons in the range of [start, end].
 
 // Time Complexity: O(n^3) 791ms
