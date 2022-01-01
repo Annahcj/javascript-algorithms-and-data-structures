@@ -6,14 +6,15 @@
 
 // Solution: Recursion w/ Memoization
 
-// For each value in nums, take it as the last ballon to pop IN the subarray of range [start, end].
+// For each value in nums, take it as the last ballon to pop in the subarray of range [start, end].
 // Record the best choice: popping which balloon last would result in the maximum score?
-// memo[start][end] = maximum score obtained from popping all the balloons in the range of [start, end].
+
+// memo[start][end] = maximum score obtained from popping all the balloons (in the range of [start, end]) in the most optimal order.
 
 // Time Complexity: O(n^3) 791ms
 // Space Complexity: O(n^2) 41.1MB
 var maxCoins = function(nums) {
-  nums = [1, ...nums, 1]; // pat with 1's so that we don't have to deal with the edge cases
+  nums = [1, ...nums, 1]; // pad start and end with 1's so that we don't have to deal with the edge cases
   let n = nums.length;
   let memo = Array(n);
   for (var i = 0; i < n; i++) memo[i] = Array(n);
