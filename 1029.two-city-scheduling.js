@@ -42,6 +42,27 @@ var twoCitySchedCost = function(costs) {
   return ans;
 };
 
+// Solution 2: Another Greedy Approach
+
+// Instead of sorting by absolute difference, we can sort by just the difference between aCost and bCost.
+// Then, we can take the first n flights to city a, and the rest to city b.
+// This works since we have minimized the total loss.
+
+// Time Complexity: O(n log(n)) 93ms
+// Space Complexity: O(log(n)) (sorting algo) 38.7MB
+var twoCitySchedCost = function(costs) {
+  let n = costs.length / 2;
+  
+  costs.sort((a, b) => (a[0] - a[1]) - (b[0] - b[1]));
+
+  let ans = 0;
+  for (var i = 0; i < n * 2; i++) {
+    if (i < n) ans += costs[i][0];
+    else ans += costs[i][1];
+  }
+  return ans;
+};
+
 // Three test cases to run function on
 console.log(twoCitySchedCost([[10,20],[30,200],[400,50],[30,20]])) // 110
 console.log(twoCitySchedCost([[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]])) // 1859
