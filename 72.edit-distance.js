@@ -27,7 +27,6 @@
 // Space Complexity: O(nm) 42.9MB
 var minDistance = function(word1, word2) {
   let n = word1.length, m = word2.length;
-  if (!n) return word2.length;
   let memo = Array(n);
   for (var i = 0; i < n; i++) memo[i] = Array(m);
   return recurse(0, 0);
@@ -37,14 +36,8 @@ var minDistance = function(word1, word2) {
     if (i === n) return m - j;
     if (j === m) return n - i;
     if (memo[i][j] !== undefined) return memo[i][j];
-    if (word1[i] === word2[j]) {
-      memo[i][j] = recurse(i + 1, j + 1);
-    } else {
-      let add = recurse(i, j + 1) + 1;
-      let del = recurse(i + 1, j) + 1;
-      let replace = recurse(i + 1, j + 1) + 1;
-      memo[i][j] = Math.min(add, del, replace);
-    }
+    if (word1[i] === word2[j]) return memo[i][j] = recurse(i + 1, j + 1);
+    memo[i][j] = Math.min(recurse(i, j + 1), recurse(i + 1, j), recurse(i + 1, j + 1)) + 1;
     return memo[i][j];
   }  
 };
