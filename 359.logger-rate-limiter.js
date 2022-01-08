@@ -20,6 +20,30 @@ Logger.prototype.shouldPrintMessage = function(timestamp, message) {
   return true;
 };
 
+// Solution 2: Queue & Hashset
+
+// We could save memory by removing expired messages.
+// Since the timestamps come in non-decreasing order, we can just use a queue to store the messages.
+// We can use a hashset to store messages we have used within the last 10 seconds.
+
+// If a message exists in the hashset, it means that we can't log it right now.
+
+var Logger = function() {
+  this.times = [];
+  this.messages = new Set();
+};
+
+Logger.prototype.shouldPrintMessage = function(timestamp, message) {
+  while (this.times.length && this.times[0][0] + 10 <= timestamp) { // delete expired messages
+    this.messages.delete(this.times[0][1]);
+    this.times.shift();
+  }
+  if (this.messages.has(message)) return false;
+  this.times.push([timestamp, message]);
+  this.messages.add(message);
+  return true;
+};
+
 // A few test cases
 let logger = new Logger();
 console.log(logger.shouldPrintMessage(1, "foo"));  // return true, next allowed timestamp for "foo" is 1 + 10 = 11
