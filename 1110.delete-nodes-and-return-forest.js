@@ -11,6 +11,8 @@
 // Each node needs to know whether it is a new root (after the parent has been deleted), and also must not be deleted itself.
 // To sum it up: If a node doesn't have a parent anymore AND it is not deleted itself, then add it to the result.
 
+// Time Complexity: O(n) 104ms
+// Space Complexity: O(n) 47.1MB
 var delNodes = function(root, to_delete) {
   let res = [], deleteSet = new Set(to_delete);
   dfs(root, true);
