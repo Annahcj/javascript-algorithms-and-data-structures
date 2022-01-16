@@ -8,42 +8,35 @@
 // Solution: Binary Search
 
 // 1. sort batteries in desc order
-// 2. get sum of smaller batteries (batteries with an index >= n)
-// 3. binary search for the biggest number of minutes where the remaining difference is less than or equal to the sum of smaller batteries
-
-// e.g: n = 2, batteries = [3,3,3]
-// smallerSum (sum of smaller batteries) = 3
-// let's binary search:
-// mid = 3: total diff of each battery with mid = 0. 0 <= 3 so we can try to find a bigger mid.
-
-// mid = 4: total diff of each battery with mid = 2 ((4 - 3) + (4 - 3)). 2 <= 3 so we can try to find a bigger mid.
-
-// mid = 5: total diff of each battery with mid = 4 ((5 - 3) + (5 - 3)). 4 > 3 so 5 cannot be the answer.
-
-// NOTE: Binary search doesn't work in an incremented order, this is just for the purpose of an example.
+// 2. get sum of the batteries (loose upper bound)
+// 3. binary search for the biggest n where the batteries can run more than or equal to (mid * n) minutes simultaneously.
 
 // m = sum of batteries
-// Time Complexity: O(n log(m)) 196ms
-// Space Complexity: O(log(n)) (sorting algo) 51.6MB
+// Time Complexity: O(m log(m)) 248ms
+// Space Complexity: O(log(n)) (sorting algo) 55MB
 var maxRunTime = function(n, batteries) {
   batteries.sort((a, b) => b - a);
-  let smallerSum = 0, sum = 0;
+  let sum = 0;
   for (var i = 0; i < batteries.length; i++) {
     sum += batteries[i];
-    if (i >= n) smallerSum += batteries[i];
   }
   
   let low = 1, high = sum;
   while (low < high) {
     let mid = Math.ceil((low + high) / 2);
-    let diff = 0;
-    for (var j = 0; j < n; j++) {
-      diff += Math.max(mid - batteries[j], 0);
-    }
-    if (diff <= smallerSum) low = mid;
+    if (isEnough(mid)) low = mid; // mid could be the final answer, but we still try to find a larger number of minutes
     else high = mid - 1;
   }
   return low;
+
+  function isEnough(minutes) {
+    let count = 0;
+    for (var bat of batteries) {
+      count += Math.min(bat, minutes); // can't take more than 'minutes' for each battery
+      if (count >= minutes * n) return true; // time optimization, break early if condition is already met.
+    }
+    if (count >= minutes * n) return true;
+  }
 };
 
 // Two test cases to run function on
