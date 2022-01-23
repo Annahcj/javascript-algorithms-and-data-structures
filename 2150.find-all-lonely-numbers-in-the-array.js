@@ -12,7 +12,7 @@
   // The hashmap doesn't contain num + 1
 
 // Time Complexity: O(n) 560ms
-// Space Complexity: O(n) 95MB
+// Space Complexity: O(n) (unique numbers, worst case is n) 95MB
 var findLonely = function(nums) {
   let count = new Map();
   for (var num of nums) count.set(num, (count.get(num) || 0) + 1);
