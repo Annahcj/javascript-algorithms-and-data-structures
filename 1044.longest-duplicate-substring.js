@@ -15,7 +15,7 @@
   // Since there is always a chance of a collision, one must compare the strings letter to letter for certainty.
   // Instead of storing the entire strings, just store the starting index for each string corresponding to its hash.
 
-// Why + mod in [hash = (hash - lastCode * powerK % mod + mod) % mod]: The hash value go into negative, so we add mod.
+// Why + mod in [hash = (hash - lastCode * powerK % mod + mod) % mod]: The hash value may go into negative, so we add mod.
 
 // Time Complexity: O(n log(n)) 940ms
 // Space Complexity: O(n) 133.7MB
