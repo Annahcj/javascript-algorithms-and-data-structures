@@ -76,7 +76,6 @@ var fourSumCount = function(nums1, nums2, nums3, nums4) {
   function count(idx, n, sums) {
     let nums = lists[idx];
     if (n === 1) {
-      // base case, count matching sums in map
       for (let i = 0; i < sums.length; i++) {
         for (let j = 0; j < nums.length; j++) {
           let sum = sums[i] + nums[j];
