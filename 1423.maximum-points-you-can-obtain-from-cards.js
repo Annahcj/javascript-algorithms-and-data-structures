@@ -5,7 +5,7 @@
 // Given the integer array cardPoints and the integer k, return the maximum score you can obtain.
 
 
-// Solution: Try all combinations
+// Solution 1: Prefix Sum - Try all combinations
 
 // Try out each k combinations:
   // 0 from left, k from right.
@@ -29,6 +29,29 @@ var maxScore = function(cardPoints, k) {
   for (let i = 0; i <= k; i++) {
     let leftScore = left[i], rightScore = right[k - i];
     ans = Math.max(ans, leftScore + rightScore);
+  }
+  return ans;
+};
+
+// Solution 2: Constant Space
+
+// 1. Calculate the sum of the last k cardPoints.
+// 2. Keep the running sum of the first k cardPoints and try every combination
+  // calculate the score: left + right
+  // add cardPoints[i] to left
+  // subtract cardPoints[n - k + i] from right
+
+// Time Complexity: O(k) 80ms
+// Space Complexity: O(1) 48.2MB
+var maxScore = function(cardPoints, k) {
+  let n = cardPoints.length;
+  let left = 0, right = 0;
+  for (let i = n - k; i < n; i++) right += cardPoints[i];
+  // take i from left, k - i from right
+  let ans = 0;
+  for (let i = 0; i <= k; i++) {
+    ans = Math.max(ans, left + right);
+    left += cardPoints[i], right -= cardPoints[n - k + i];
   }
   return ans;
 };
