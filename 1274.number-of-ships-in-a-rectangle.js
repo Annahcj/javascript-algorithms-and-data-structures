@@ -10,6 +10,8 @@
 // Like binary search, but since we have both the x and y coordinates, we would need to divide into 4 parts.
 // Note: Make sure to avoid overlapping rectangles since ships can be at a corner.
 
+// Time Complexity: O(10 * log(mn)) 121ms
+// Space Complexity: O(10 * log(mn)) 45.4MB
 var countShips = function(sea, topRight, bottomLeft) {
   let [topX, topY] = topRight, [bottomX, bottomY] = bottomLeft;
   if (!sea.hasShips(topRight, bottomLeft)) return 0; // no ships in this rectangle, terminate.
