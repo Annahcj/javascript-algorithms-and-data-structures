@@ -4,7 +4,7 @@
 // A Palindrome String is one that reads the same backward as well as forward.
 
 
-// Solution 1: Recursion w/ Memoization
+// Solution: Recursion w/ Memoization
 
 // Dynamic programming using recursion and memoization.
 // memo[start][end] = minimum cost to turn s[start] - s[end] into a palindrome.
