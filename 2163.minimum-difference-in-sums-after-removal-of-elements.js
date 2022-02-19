@@ -20,7 +20,7 @@
 // Use a min heap to keep the n biggest numbers from the right, 
   // calculate the best combination of numbers from left and numbers from the right: left[j - 1] - current right sum
 
-// The sum can only be used if there are at least n numbers (from the left and from the right).
+// Note: The sum can only be used if there are at least n numbers (from the left and from the right).
 
 // Time Complexity: O(n log(n)) 599ms
 // Space Complexity: O(n) 100.4MB
