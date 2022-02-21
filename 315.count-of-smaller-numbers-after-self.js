@@ -2,7 +2,7 @@
 // You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
 
 
-// Solution: Merge Sort
+// Solution 1: Merge Sort
 
 // Basically, we just sort nums using merge sort, but in the merge helper function, count the number of smaller numbers.
 // For example, for numbers [5,2,6,1]
@@ -72,49 +72,102 @@
 
 // Time Complexity: O(n log(n)) 827ms
 // Space Complexity: O(n) 112.7MB
-  var countSmaller = function(nums) {
-    let res = Array(nums.length).fill(0);
-    for (var i = 0; i < nums.length; i++) {
-      nums[i] = {val: nums[i], idx: i};
-    }
-    nums = mergeSort(nums);
-    return res;
-    function mergeSort(arr) {
-      if (arr.length === 1) return [arr[0]];
-      let mid = Math.floor(arr.length / 2);
-      let left = mergeSort(arr.slice(0, mid));
-      let right = mergeSort(arr.slice(mid));
-      return merge(left, right);
-    }
-    function merge(arr1, arr2) {
-      let newArr = [];
-      let i = 0, j = 0;
-      let smallerCount = 0;
-      while (i < arr1.length && j < arr2.length) {
-        if (arr2[j].val < arr1[i].val) {
-          smallerCount++;
-          newArr.push(arr2[j]);
-          j++;
-        } else {
-          res[arr1[i].idx] += smallerCount;
-          newArr.push(arr1[i]);
-          i++;
-        }
-      }
-      while (i < arr1.length) {
+var countSmaller = function(nums) {
+  let res = Array(nums.length).fill(0);
+  for (var i = 0; i < nums.length; i++) {
+    nums[i] = {val: nums[i], idx: i};
+  }
+  nums = mergeSort(nums);
+  return res;
+  function mergeSort(arr) {
+    if (arr.length === 1) return [arr[0]];
+    let mid = Math.floor(arr.length / 2);
+    let left = mergeSort(arr.slice(0, mid));
+    let right = mergeSort(arr.slice(mid));
+    return merge(left, right);
+  }
+  function merge(arr1, arr2) {
+    let newArr = [];
+    let i = 0, j = 0;
+    let smallerCount = 0;
+    while (i < arr1.length && j < arr2.length) {
+      if (arr2[j].val < arr1[i].val) {
+        smallerCount++;
+        newArr.push(arr2[j]);
+        j++;
+      } else {
         res[arr1[i].idx] += smallerCount;
         newArr.push(arr1[i]);
         i++;
       }
-      while (j < arr2.length) {
-        newArr.push(arr2[j]);
-        j++;
-      }
-      return newArr;
     }
-  };
-  
-  // Three test cases to run function on
-  console.log(countSmaller([5,2,6,1])) // [2,1,1,0]
-  console.log(countSmaller([-1])) // [0]
-  console.log(countSmaller([-1,-1])) // [0,0]
+    while (i < arr1.length) {
+      res[arr1[i].idx] += smallerCount;
+      newArr.push(arr1[i]);
+      i++;
+    }
+    while (j < arr2.length) {
+      newArr.push(arr2[j]);
+      j++;
+    }
+    return newArr;
+  }
+};
+
+// Solution 2: Segment Tree
+
+// Since nums[i] is in the range of [-10000, 10000], create a segment tree of size 10000 * 2 + 1.
+// Each bucket in the segment tree represents the count of the number i.
+
+// Traverse nums backwards and get the range sum/count of numbers between -10000 and nums[i] - 1.
+// Then, update the count of nums[i].
+// Note: We need an offset of 10000 since nums[i] can be as small as -10000. 
+  // Whenever updating or getting the range sum/count, remember to add the offset.
+
+// m = 10^4 * 2.
+// Time Complexity: O(n log(m)) 528ms
+// Space Complexity: O(m) 66.7MB
+var countSmaller = function(nums) {
+  let n = nums.length, res = Array(n).fill(0);
+  let offset = 10 ** 4;
+  let segTree = new SegmentTree(offset * 2 + 1);
+  for (let i = n - 1; i >= 0; i--) {
+    res[i] = segTree.getSum(0, nums[i] + offset - 1);
+    segTree.update(nums[i] + offset, 1);
+  }
+  return res;
+};
+
+class SegmentTree {
+  constructor(n) {
+    this.size = n;
+    this.segTree = Array(n * 2).fill(0);
+  }
+  update(index, val) {
+    let n = this.size, idx = index + n;
+    this.segTree[idx] += val;
+    idx = Math.floor(idx / 2);
+
+    while (idx > 0) {
+      this.segTree[idx] = this.segTree[idx * 2] + this.segTree[idx * 2 + 1];
+      idx = Math.floor(idx / 2);
+    }
+  }
+  getSum(left, right) {
+    let n = this.size, sum = 0;
+    let left_idx = left + n, right_idx = right + n;
+    // left must be even, right must be odd
+    while (left_idx <= right_idx) {
+      if (left_idx % 2 === 1) sum += this.segTree[left_idx++];
+      if (right_idx % 2 === 0) sum += this.segTree[right_idx--];
+      left_idx = Math.floor(left_idx / 2);
+      right_idx = Math.floor(right_idx / 2);
+    }
+    return sum;
+  }
+}
+
+// Three test cases to run function on
+console.log(countSmaller([5,2,6,1])) // [2,1,1,0]
+console.log(countSmaller([-1])) // [0]
+console.log(countSmaller([-1,-1])) // [0,0]
