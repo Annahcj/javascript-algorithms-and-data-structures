@@ -6,7 +6,9 @@
 
 // Take the max of two options:
   // 1. The 3 biggest numbers
+    // Three biggest positives
   // 2. The biggest number & the two smallest numbers (considering negative values)
+    // Biggest positive & two smallest negatives = Positive
 
 // Note: The time complexity can be improved to O(n) by using a heap (O(k), where k is 3).
 
