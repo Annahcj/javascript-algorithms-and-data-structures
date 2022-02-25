@@ -24,10 +24,10 @@ var findInMountainArray = function(target, mountainArr) {
   let low = 0, high = n - 1;
   // find the peak
   while (low < high) {
-    let mid = Math.floor((low + high) / 2);
+    let mid = Math.ceil((low + high) / 2);
     let val = mountainArr.get(mid);
-    if (mountainArr.get(mid - 1) < val) low = mid + 1;
-    else high = mid;
+    if (mountainArr.get(mid - 1) < val) low = mid;
+    else high = mid - 1;
   }
   let peak = low;
   
