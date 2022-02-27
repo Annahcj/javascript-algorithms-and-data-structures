@@ -33,7 +33,7 @@ var minimumFinishTime = function(tires, changeTime, numLaps) {
   dp[0] = 0;
   for (let i = 1; i <= numLaps; i++) { // i = laps
     for (let j = 1; j <= maxLaps && i >= j; j++) {
-      dp[i] = Math.min(dp[i], bestTime[j] + dp[i - j]); // use the jth tire
+      dp[i] = Math.min(dp[i], bestTime[j] + dp[i - j]); // use the same tire for j laps
     }
   }
   return dp[numLaps] - changeTime;
