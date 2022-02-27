@@ -18,7 +18,7 @@ var minimumFinishTime = function(tires, changeTime, numLaps) {
   let bestTime = Array(numLaps + 1).fill(Infinity), maxLaps = 0;
   for (let tire of tires) {
     let [f, r] = tire, time = changeTime;
-    // using the jth tire
+    // using the tire j times
     for (let j = 1; j <= numLaps; j++) {
       // optimization: only while the time is less than changing to a new tire (f + changeTime).
       let cost = f * (r ** (j - 1));
