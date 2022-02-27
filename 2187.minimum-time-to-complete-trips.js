@@ -9,8 +9,8 @@
 // Upper bound set to 10^7 * 10^7, since time[i], totalTrips <= 10^7.
 // Binary search for the minimum time where each bus can complete at least 'time' number of trips.
 
-// Time Complexity: O(n log(10^14))
-// Space Complexity: O(1)
+// Time Complexity: O(n log(10^14)) 186ms
+// Space Complexity: O(1) 53.4MB
 var minimumTime = function(time, totalTrips) {
   let low = 1, high = 100000000000000 + 1;
   while (low < high) {
