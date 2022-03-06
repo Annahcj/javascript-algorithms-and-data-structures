@@ -10,7 +10,7 @@
 
 // Use a map 'nodes' to store the references to the tree nodes.
 // Use a set 'children' to store the values of all children nodes. 
-//   This is used to find the root, the root node is the only node that does not exist in the set.
+  // This is used to find the root, the root node is the only node that does not exist in the set.
 
 // Time Complexity: O(n) 510ms
 // Space Complexity: O(n) 88.8MB
