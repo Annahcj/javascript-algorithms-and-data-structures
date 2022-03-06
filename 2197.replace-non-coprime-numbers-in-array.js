@@ -13,8 +13,9 @@
 
 // The key to the problem: It can be shown that replacing adjacent non-coprime numbers in any arbitrary order will lead to the same result.
 // Because we are given this proof, we can use a stack.
-  // Push in nums[i].
-  // Compare and replace the last two numbers of the stack.
+  // 1. Push in nums[i].
+  // 2. Compare and replace the last two numbers of the stack while their gcd > 1.
+// Repeat these two steps until we have finished looping through nums.
 
 // Time Complexity: O(n) 268ms
 // Space Complexity: O(n) 75.7MB
