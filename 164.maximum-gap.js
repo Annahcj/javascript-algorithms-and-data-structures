@@ -8,7 +8,7 @@
 // Get the max number from nums and count the number of digits it has.
 // Loop for maxDigits number of times
   // 1. arrange each nums[i] into its bucket based on the current digit
-  // 2. prefix sum/accumulate in count
+  // 2. prefix sum/accumulate indices in count
   // 3. place each nums[i] to next based on the accumulated index in count
   // 4. reassign nums to next
 
