@@ -36,6 +36,28 @@ var longestSubarray = function(nums, limit) {
   return ans;
 };
 
+// Alternative Implementation: 
+// Basically the same as the solution above, but we store the actual values in the queues instead of the indices.
+// The only thing to watch out for is that we don't remove equal elements when popping out, since a window may contain multiples of the same element.
+
+var longestSubarray = function(nums, limit) {
+  let min_queue = new Deque(), max_queue = new Deque();
+  let ans = 0;
+  for (let j = 0, i = 0; j < nums.length; j++) {
+    while (min_queue.size && min_queue.back() > nums[j]) min_queue.pop();
+    while (max_queue.size && max_queue.back() < nums[j]) max_queue.pop();
+    min_queue.push(nums[j]), max_queue.push(nums[j]);
+    
+    while (max_queue.front() - min_queue.front() > limit) {
+      if (min_queue.front() === nums[i]) min_queue.shift();
+      if (max_queue.front() === nums[i]) max_queue.shift();
+      i++;
+    }
+    ans = Math.max(ans, j - i + 1);
+  }
+  return ans;
+};
+
 class Deque {
   constructor() {
     this.head = new Node(null);
