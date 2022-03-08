@@ -9,14 +9,14 @@
   // Note: We start from left to right because having a bit on the left always results in a higher number than one on the right of it.
   // To elaborate, even if we get 1000, and 0111 exists in the trie, 1000 is bigger, so an earlier left bit is always better.
 
-// Time Complexity: O(32n) 1039ms
-// Space Complexity: O(2^31) (worst case) 112.5MB
+// Note: To make it faster, we can add the numbers into the trie on the go, since the XOR result of [i, j] and [j, i] is always equal.
+
+// Time Complexity: O(32n) 688ms
+// Space Complexity: O(2^31) (worst case) 91.5MB
 var findMaximumXOR = function(nums) {
-  let trie = new Trie();
-  for (var num of nums) trie.addNum(num);
-  
-  let max = 0;
-  for (var num of nums) {
+  let trie = new Trie(), max = 0;
+  for (let num of nums) {
+    trie.addNum(num);
     max = Math.max(max, trie.getMax(num));
   }
   return max;
@@ -24,7 +24,7 @@ var findMaximumXOR = function(nums) {
 
 class TrieNode {
   constructor() {
-    this.children = Array(2); // there can only be 0 or 1
+    this.children = Array(2);
     this.num = null;
   }
 }
@@ -33,9 +33,10 @@ class Trie {
     this.root = new TrieNode();
   }
   addNum(num) {
+    // loop from 31 to 0
     let node = this.root;
     for (var i = 31; i >= 0; i--) {
-      let bit = (num >> i) & 1; // gets the bit at position i from left
+      let bit = (num >> i) & 1; // returns the bit at position i from left
       node = node.children;
       if (!node[bit]) node[bit] = new TrieNode();
       node = node[bit];
@@ -47,8 +48,8 @@ class Trie {
     for (var i = 31; i >= 0; i--) {
       let bit = (num >> i) & 1, opposite = bit ^ 1;
       node = node.children;
-      if (node[opposite]) node = node[opposite]; // it is always optimal to pick the opposite bit if we can, since it results in a higher number.
-      else node = node[bit]; // otherwise, go with the same bit.
+      if (node[opposite]) node = node[opposite];
+      else node = node[bit];
     }
     return num ^ node.num;
   }
