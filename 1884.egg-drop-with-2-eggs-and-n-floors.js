@@ -5,7 +5,7 @@
 // Return the minimum number of moves that you need to determine with certainty what the value of f is.
 
 
-// Solution: Top Down Dynamic Programming
+// Solution: Dynamic Programming
 
 // Try to drop at positions 1 to n,
 // Take the max of the two situations:
