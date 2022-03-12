@@ -10,7 +10,7 @@
 // Solution: Sorting & Two Pointers
 
 // 1. Group each difficulty[i] and profit[i] together in an array 'jobs'.
-// 2. Sort jobs and worker based on difficulty
+// 2. Sort jobs and worker based on difficulty.
 // 3. Use two pointers to find the job with the maximum profit for each worker.
   // Keep track of the max profit for jobs whose difficulty is less than or equal to worker[j].
 
