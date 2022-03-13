@@ -11,7 +11,8 @@
 // Each row must be [0,0,1,1] or [1,1,0,0]
 
 // If rows are inverse, that means they can all be made equal. Flipping this row [0,0,1,1] = [1,1,0,0]
-// And when all rows are equal, we can flip the columns with 1's to remove all 1's. 
+// And when all rows are equal, that means each column is either all 1's or all 0's.
+// Then, we can flip all the columns with 1's to 0's, ending up with all 0's. 
 
 // Time Complexity: O(mn) 60ms
 // Space Complexity: O(1) 45.7MB 
