@@ -10,6 +10,12 @@
 
 // The result is count(right) - count(left - 1)
 
+// e.g: [1,2,3], left = 3, right = 3
+// count(2) = 3 -> [[1],[1,2],[2]]
+// count(3) = 6 -> [[1],[1,2],[2],[1,2,3],[2,3],[3]]
+// count(3) - count(2) = 6 - 3 = 3
+// removing [[1],[1,2],[2]].
+
 // Time Complexity: O(n) 64ms
 // Space Complexity: O(1) 47.6MB
 var numSubarrayBoundedMax = function(nums, left, right) {
