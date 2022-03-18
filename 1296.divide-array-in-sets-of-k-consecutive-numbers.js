@@ -11,7 +11,7 @@
   // If the count of the current number is 0, skip the iteration.
   // Otherwise, check whether we have the k consecutive numbers starting from num.
 
-// Time Complexity: O(n) 255ms
+// Time Complexity: O(n log(n)) 255ms
 // Space Complexity: O(n) 63.6MB
 var isPossibleDivide = function(nums, k) {
   let count = {};
