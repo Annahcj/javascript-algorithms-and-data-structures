@@ -13,7 +13,7 @@
 
 // 1. Find the start location
 // 2. Do level by level bfs to find the shortest path to a food cell
-
+ 
 // Time Complexity: O(mn) 252ms
 // Space Complexity: O(mn) 52.4MB
 var getFood = function(grid) {
