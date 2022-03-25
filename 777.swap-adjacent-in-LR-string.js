@@ -5,7 +5,7 @@
 // Solution: Two Pointers
 
 // Being able to swap "XL" with "LX" means we can move L as far LEFT as we want until it reaches an R.
-// Being able to swap RX" with "XR" means we can move R as far RIGHT as we want until it reaches an L.
+// Being able to swap "RX" with "XR" means we can move R as far RIGHT as we want until it reaches an L.
 // When L and R meet, they can't be swapped.
 
 // Conditions that need to be met:
@@ -18,7 +18,7 @@
 // If the count of R's in start is less than the count of R's in end, it is invalid.
 
 // Time Complexity: O(n) 79ms
-// Space Complexity: O(1) 44.3MB
+// Space Complexity: O(n) 44.3MB
 var canTransform = function(start, end) {  
   let n = start.length;
   let start_str = "", end_str = "";
