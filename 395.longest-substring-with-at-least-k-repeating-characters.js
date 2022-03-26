@@ -15,7 +15,7 @@
   // kCount: number of characters with frequency >= k
 
 // Time Complexity: O(26n) = O(n) 68ms
-// Space Complexity: O(1) 42.7MB
+// Space Complexity: O(26) = O(1) 42.7MB
 var longestSubstring = function(s, k) {
   let n = s.length, ans = 0;
   for (let i = 1; i <= 26; i++) {
