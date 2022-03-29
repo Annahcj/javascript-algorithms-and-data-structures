@@ -4,7 +4,7 @@
   // For example, the score of the path 8 → 4 → 5 → 9 is 4.
 
 
-// Solution: BFS w/ Max Heap
+// Solution 1: BFS w/ Max Heap
 
 // It is always optimal to pick the neighbor with the maximum value.
 // Use a max heap to store the [min value, row, column].
@@ -84,6 +84,76 @@ class PriorityQueue {
   }
   isEmpty() {
     return this.size === 0;
+  }
+}
+
+// Solution 2: Union Find w/ Sorting
+
+// 1. Get all values and their rows and columns ([value, row, column]) into an array.
+// 2. Sort the array by the values in desc order
+// 3. Connect each cell with their visited neighbors.
+// When the top left cell is connected to the bottom right cell, return the current value we are up to.
+
+// Note: To get the position in the union find array -> row * n + column (n = number of columns in grid)
+
+// Time Complexity: O(mn log(mn)) 568ms
+// Space Complexity: O(mn) 64.3MB
+var maximumMinimumPath = function(grid) {
+  let m = grid.length, n = grid[0].length;
+  const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+  let seen = Array(m).fill(0).map(() => Array(n).fill(0));
+  let uf = new UnionFind(m * n);
+  let values = [];
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      values.push([grid[i][j], i, j]);
+    }
+  }
+  values.sort((a, b) => b[0] - a[0]);
+  
+  for (let [val, row, col] of values) {
+    let key = row * n + col;
+    seen[row][col] = 1;
+    for (let [x, y] of directions) {
+      let newX = row + x, newY = col + y;
+      if (newX < 0 || newX >= m || newY < 0 || newY >= n || !seen[newX][newY]) continue;
+      let neighborKey = newX * n + newY;
+      uf.union(key, neighborKey);
+    }
+    if (uf.find(0) === uf.find(m * n - 1)) return val; // top left cell is connected with bottom right cell
+  }
+};
+
+class UnionFind {
+  constructor(size) {
+    this.size = size;
+    this.root = Array(size);
+    this.rank = Array(size);
+    for (let i = 0; i < size; i++) {
+      this.root[i] = i;
+      this.rank[i] = 1;
+    }
+  }
+  find(x) {
+    if (x === this.root[x]) return x;
+    return this.root[x] = this.find(this.root[x]);
+  }
+  union(x, y) {
+    let rootX = this.find(x), rootY = this.find(y);
+    if (rootX === rootY) return false;
+    this.size--;
+    if (this.rank[rootX] > this.rank[rootY]) {
+      this.root[rootY] = rootX;
+    } else if (this.rank[rootX] < this.rank[rootY]) {
+      this.root[rootX] = rootY;
+    } else {
+      this.root[rootY] = rootX;
+      this.rank[rootX]++;
+    }
+    return true;
+  }
+  isConnected(x, y) {
+    return this.find(x) === this.find(y);
   }
 }
 
