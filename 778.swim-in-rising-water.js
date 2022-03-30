@@ -13,8 +13,8 @@
   // We never have to revisit a cell because the best path would visit each cell first.
   // This concept is similar to Dijkstra's Algorithm, where we never have to revisit a node since the best path would have reached it first due to the heap.
 
-// Time Complexity: O(mn log(mn)) 228ms
-// Space Complexity: O(mn) 52.3MB
+// Time Complexity: O(n^2 log(n^2)) 228ms
+// Space Complexity: O(n^2) 52.3MB
 var swimInWater = function(grid) {
   let n = grid.length, seen = Array(n).fill(0).map(() => Array(n).fill(0));
   const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
@@ -95,8 +95,8 @@ class PriorityQueue {
 
 // This approach works because we are able to swim anywhere that we've been to before, and anywhere where the value <= t.
 
-// Time Complexity: O(mn log(mn)) 227ms
-// Space Complexity: O(mn) 52.6MB
+// Time Complexity: O(n^2 log(n^2)) 227ms
+// Space Complexity: O(n^2) 52.6MB
 var swimInWater = function(grid) {
   let n = grid.length, seen = Array(n).fill(0).map(() => Array(n).fill(0));
   const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
