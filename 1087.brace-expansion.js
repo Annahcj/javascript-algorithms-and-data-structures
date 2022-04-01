@@ -18,8 +18,7 @@
 // Time Complexity: O(n + m^k) 120ms
 // Space Complexity: O(n) (not including output) 43.9MB
 var expand = function(s) {
-  let options = [];
-  let inBrace = false;
+  let options = [], inBrace = false;
   for (let char of s) {
     if (char === '{') {
       inBrace = true;
