@@ -6,8 +6,8 @@
 // Solution: Sorting & Two Pointers
 
 // 1. Sort the array (the order of i, j, k doesn't matter)
-// 2. Loop through from 0 to n - 2
-  // Use two pointers to find the number of pairs where arr[i] + arr[j] + arr[k] is equal to the target.
+// 2. Loop through from 0 to n - 2 (i)
+  // Use two pointers to find the number of pairs j and k where arr[i] + arr[j] + arr[k] is equal to the target.
   // At each pair, count the number of same numbers for each. 
   // left = count of same numbers for arr[j], right = count of same numbers for arr[k].
   // There are two cases:
