@@ -6,8 +6,9 @@
 // Solution: Min Heap
 
 // It is always optimal to increase the smallest numbers for the maximum product.
-// Use a min heap to increment the smallest numbers.
-  // After removing a number from the heap, add back the number + 1
+// Use a min heap to keep track of the smallest number.
+// After removing a number from the heap, add back the number + 1.
+// Repeat this process k times.
 
 // Time Complexity: O(n log(n)) 380ms
 // Space Complexity: O(n) 66.5MB
