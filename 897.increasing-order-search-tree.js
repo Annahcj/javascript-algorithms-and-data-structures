@@ -2,7 +2,7 @@
 // Given the root of a binary search tree, rearrange the tree in in-order so that the leftmost node in the tree is now the root of the tree, and every node has no left child and only one right child.
 
 
-// Solution: Inorder Traversal 
+// Solution 1: Inorder Traversal 
 
 // 1. Do an inorder traversal to get the values
 // 2. Build a new tree based on those values
@@ -25,6 +25,29 @@ var increasingBST = function(root) {
   for (let val of values) {
     node.right = new TreeNode(val);
     node = node.right;
+  }
+  return dummy.right;
+};
+
+
+// Solution 2: Inorder Traversal & Relinking
+
+// h = height of the tree
+// Time Complexity: O(n) 72ms
+// Space Complexity: O(h) 42.4MB
+var increasingBST = function(root) {
+  let stack = [];
+  let dummy = new TreeNode(0), node = dummy;
+  while (root || stack.length) {
+    while (root) {
+      stack.push(root);
+      root = root.left;
+    }
+    root = stack.pop();
+    node.right = root;
+    node = node.right;
+    node.left = null; // cut off left connection
+    root = root.right;
   }
   return dummy.right;
 };
