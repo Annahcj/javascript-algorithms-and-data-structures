@@ -12,9 +12,9 @@
 
 // Use a bitmask to represent which tasks have been done: bits 110 = tasks at index 1 & 2 done, task at index 0 not done.
 // Use recursion and memoization to try every combination of tasks
-  // For each task, get the minimum session of two situations:
-    // 1. Use tasks[i] in the current session (we handle going out of bounds when time > sessionTime)
-    // 2. Use tasks[i] in a new session
+  // For each task, there are two possible situations:
+    // 1. If tasks[i] can fit in the current session, use tasks[i] in the current session
+    // 2. Otherwise, use tasks[i] in a new session
 
 // To check whether the tasks are all done, we compare the current bitmask with (1 << n) - 1.
 // When n = 5
@@ -22,8 +22,8 @@
   // (1 << n) - 1 = 11111
 
 // n = tasks.length, s = sessionTime
-// Time Complexity: O(2^n * n * s) 1283ms
-// Space Complexity: O(2^n * s) 72.6MB
+// Time Complexity: O(2^n * n * s) 996ms
+// Space Complexity: O(2^n * s) 72.5MB
 var minSessions = function(tasks, sessionTime) {
   let n = tasks.length, finished = (1 << n) - 1;
   let memo = Array(1 << 14).fill(0).map(() => Array(16).fill(-1));
@@ -37,9 +37,11 @@ var minSessions = function(tasks, sessionTime) {
     let ans = Infinity;
     for (let i = 0; i < n; i++) {
       if ((mask >> i) & 1) continue; // already done, skip.
-      let take = dp(mask | (1 << i), time + tasks[i]); // use tasks[i] in current session
-      let skip = dp(mask | (1 << i), tasks[i]) + 1; // use tasks[i] in a new session
-      ans = Math.min(ans, take, skip);
+      if (time + tasks[i] <= sessionTime) {
+        ans = Math.min(ans, dp(mask | (1 << i), time + tasks[i]));
+      } else {
+        ans = Math.min(ans, dp(mask | (1 << i), tasks[i]) + 1);
+      }
     }
     return memo[mask][time] = ans;
   }
