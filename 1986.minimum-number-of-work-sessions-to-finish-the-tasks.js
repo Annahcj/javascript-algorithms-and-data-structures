@@ -22,15 +22,14 @@
   // (1 << n) - 1 = 11111
 
 // n = tasks.length, s = sessionTime
-// Time Complexity: O(2^n * n * s) 996ms
-// Space Complexity: O(2^n * s) 72.5MB
+// Time Complexity: O(2^n * n * s) 943ms
+// Space Complexity: O(2^n * s) 72.3MB
 var minSessions = function(tasks, sessionTime) {
   let n = tasks.length, finished = (1 << n) - 1;
   let memo = Array(1 << 14).fill(0).map(() => Array(16).fill(-1));
   return dp(0, 0);
   
   function dp(mask, time) {
-    if (time > sessionTime) return Infinity;
     if (memo[mask][time] !== -1) return memo[mask][time];
     if (mask === finished) return 1;
     
