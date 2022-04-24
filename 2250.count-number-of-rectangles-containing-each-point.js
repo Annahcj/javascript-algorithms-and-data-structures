@@ -16,8 +16,8 @@
 // 3. For each point, only loop through the buckets where the y coordinate >= the point's y coordinate.
   // For each bucket, binary search to find the number of coordinates where the x coordinate is >= the point's x coordinate.
 
-// n = rectangles.length
-// Time Complexity: O(n log(n) * 100) 627ms
+// n = rectangles.length, m = points.length
+// Time Complexity: O(n log(n) + m log(n) * 100) 627ms
 // Space Complexity: O(n) 73.5MB
 var countRectangles = function(rectangles, points) {
   let buckets = Array(101).fill(0).map(() => []);
