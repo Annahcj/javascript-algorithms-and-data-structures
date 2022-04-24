@@ -8,7 +8,7 @@
 // Solution: Binary Search
 
 // The constraints state that the height <= 10^9 and the width <= 100.
-// Given these constraints, we can do binary search on the height and loop through the widths in a brute force manner.
+// Given these constraints, we can do binary search on the x coordinates and loop through the y coordinates in a brute force manner.
 
 // To sum it up:
 // 1. Group the rectangle coordinates by the y coordinate -> [[x coordinate, x coordinate, ...], [x coordinate, ...], ...]
@@ -16,6 +16,7 @@
 // 3. For each point, only loop through the buckets where the y coordinate >= the point's y coordinate.
   // For each bucket, binary search to find the number of coordinates where the x coordinate is >= the point's x coordinate.
 
+// n = rectangles.length
 // Time Complexity: O(n log(n) * 100) 627ms
 // Space Complexity: O(n) 73.5MB
 var countRectangles = function(rectangles, points) {
