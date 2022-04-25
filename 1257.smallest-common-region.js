@@ -16,7 +16,7 @@
 // Traverse the path from region2 to the root until we come across a region that exists in the hashset.
 
 // n = total number of regions
-// Time Complexity: O(n) 98msms
+// Time Complexity: O(n) 98ms
 // Space Complexity: O(n) 52.2MB
 var findSmallestRegion = function(regions, region1, region2) {
   let parent = {};
