@@ -4,7 +4,7 @@
 // Return the minimum effort required to travel from the top-left cell to the bottom-right cell.
 
 
-// Solution: Dijkstra's Algorithm
+// Solution 1: Dijkstra's Algorithm
 
 // keep a diffs matrix which represents the minimum effort from the source (0, 0) to a cell,
 // initially set all differences to Infinity, and diffs[0][0] to 0 (since we are already there)
@@ -92,6 +92,55 @@ class MinHeap {
     return value;
   }
 }
+
+
+// Solution 2: Binary Search w/ BFS
+
+// Binary search for the minimum maximum difference.
+// isEnough:
+  // Given a maximum difference, 
+  // perform bfs from the top left cell, only travelling to cells where the difference is <= the maximum difference.
+  // If we can reach the bottom right cell, return true.
+
+// Time Complexity: O(mn log(10^6)) 599ms
+// Space Complexity: O(mn) 59.7MB
+var minimumEffortPath = function(heights) {
+  let m = heights.length, n = heights[0].length;
+  let min = heights[0][0], max = heights[0][0];
+  // get minimum and maximum height
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      min = Math.min(min, heights[i][j]);
+      max = Math.max(max, heights[i][j]);
+    }
+  }
+  
+  let low = 0, high = max - min;
+  while (low < high) {
+    let mid = Math.floor((low + high) / 2);
+    if (isEnough(mid)) high = mid;
+    else low = mid + 1;
+  }
+  return low;
+  
+  function isEnough(maxDiff) {
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    let queue = [[0, 0]], seen = Array(m).fill(0).map(() => Array(n).fill(0));
+    
+    while (queue.length) {
+      let [row, col] = queue.shift();
+      if (row === m - 1 && col === n - 1) return true; // reached bottom right cell
+      for (let [x, y] of directions) {
+        let newX = row + x, newY = col + y;
+        if (newX < 0 || newX >= m || newY < 0 || newY >= n) continue; 
+        if (Math.abs(heights[row][col] - heights[newX][newY]) > maxDiff || seen[newX][newY]) continue;
+        seen[newX][newY] = 1;
+        queue.push([newX, newY]);
+      }
+    }
+    return false;
+  }
+};
 
 // Three test cases to run function on
 console.log(minimumEffortPath([[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]]))
