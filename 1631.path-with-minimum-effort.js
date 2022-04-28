@@ -143,6 +143,6 @@ var minimumEffortPath = function(heights) {
 };
 
 // Three test cases to run function on
-console.log(minimumEffortPath([[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]]))
+console.log(minimumEffortPath([[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]])) // 0
 console.log(minimumEffortPath([[1,2,2],[3,8,2],[5,3,5]])) // 2 -> [1,3,5,3,5]
 console.log(minimumEffortPath([[1,2,3],[3,8,4],[5,3,5]])) // 1
