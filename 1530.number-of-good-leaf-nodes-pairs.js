@@ -51,3 +51,41 @@ var countPairs = function(root, distance) {
     }
   }
 };
+
+// Solution 2: Distance Array
+
+// Recursively DFS the root, returning a distance array where distance[i] = number of nodes distance i away from the current node
+// When we find a leaf node, return a distance array with distance[1] = 1.
+// For any other node, get the distance array for the left and right subtrees.
+  // Loop through each combination of left distance (i) and right distance (j),
+  // if i + j <= distance, add left[i] * right[j] to the count of pairs.
+// Then, return a distance array after adding 1 to each distance.
+
+// Time Complexity: O(n * d^2) 187ms
+// Space Complexity: O(n) 57.2MB
+var countPairs = function(root, distance) {
+  let ans = 0;
+  dfs(root);
+  return ans;
+  
+  function dfs(node) {
+    let res = Array(distance + 1).fill(0);
+    if (!node) return res;
+    if (!node.left && !node.right) {
+      res[1] = 1;
+      return res;
+    }
+    let left = dfs(node.left), right = dfs(node.right);
+    for (let i = 1; i < left.length; i++) {
+      for (let j = 1; j < left.length; j++) {
+        if (i + j > distance) break;
+        ans += left[i] * right[j];
+      }
+    }
+    
+    for (let i = 1; i < distance; i++) {
+      res[i + 1] = left[i] + right[i];
+    }
+    return res;
+  }
+};
