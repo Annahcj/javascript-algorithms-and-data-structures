@@ -27,7 +27,7 @@ var findUnsortedSubarray = function(nums) {
 // min[i] represents the smallest number from i (inclusive) to the end
 // max[i] represents the bigger number from 0 to i (inclusive)
 
-// For e.g: for this array [ 2, 4, 4, 8, 9, 9, 15 ],
+// For e.g: for this array [ 2, 6, 4, 8, 10, 9, 15 ],
   // min = [ 2, 4, 4, 8, 9, 9, 15 ]
   // max = [ 2, 6, 6, 8, 10, 10, 15 ]
 
