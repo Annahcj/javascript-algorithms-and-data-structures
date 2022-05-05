@@ -21,7 +21,6 @@ var MyStack = function() {
 };
 
 MyStack.prototype.push = function(x) {
-  // same push  
   this.queue1.push(new Node(x));
 };
 
@@ -83,6 +82,47 @@ class Node {
     this.next = null;
   }
 }
+
+
+// Solution 2: Two Queues - Reverse Stack
+
+// Keep nodes in reversed order.
+// For pop and top, take the first node in the queue.
+// For push:
+  // 1. Shift out all nodes into queue2
+  // 2. Push new node into queue1
+  // 3. Push back all the nodes from queue2 back to queue1
+
+// Time Complexity: 67ms
+  // push: O(n)
+  // pop, top, empty: O(1)
+// Space Complexity: O(n) 42MB
+var MyStack = function() {
+  this.queue1 = new LinkedList();
+  this.queue2 = new LinkedList();
+};
+
+MyStack.prototype.push = function(x) {
+  while (this.queue1.size) {
+    this.queue2.push(this.queue1.shift());
+  }
+  this.queue1.push(new Node(x));
+  while (this.queue2.size) {
+    this.queue1.push(this.queue2.shift());
+  }
+};
+
+MyStack.prototype.pop = function() {
+  return this.queue1.shift().val;
+};
+
+MyStack.prototype.top = function() {
+  return this.queue1.front().val;
+};
+
+MyStack.prototype.empty = function() {
+  return this.queue1.size === 0;
+};
 
 // A few test cases
 let myStack = new MyStack();
