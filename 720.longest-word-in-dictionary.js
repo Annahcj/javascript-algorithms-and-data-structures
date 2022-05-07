@@ -9,6 +9,7 @@
 // For each word, check whether the previous word exists: word.slice(0, word.length - 1)
 // If it does, add it to the set and compare it with the answer.
 
+// n = words.length, m = words[i].length
 // Time Complexity: O(n log(n) * m * 30) = O(n log(n) * m) 121ms
 // Space Complexity: O(nm) 45.6MB
 var longestWord = function(words) {
@@ -33,7 +34,6 @@ var longestWord = function(words) {
 // Use recursive DFS to find the longest word by trying every valid path.
   // Each node must be a 'wordEnd', because otherwise they are cannot be built incrementally (one character at a time from the first one)
 
-// n = words.length, m = words[i].length
 // Time Complexity: O(nm) 104ms
 // Space Complexity: O(nm) 51.1MB
 var longestWord = function(words) {
