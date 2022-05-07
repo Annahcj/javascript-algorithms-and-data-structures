@@ -3,7 +3,31 @@
 // If there is more than one possible answer, return the longest word with the smallest lexicographical order. If there is no answer, return the empty string.
 
 
-// Solution: Trie & DFS
+// Solution 1: Hashset w/ Sorting
+
+// Sort words so that they will be sorted by length.
+// For each word, check whether the previous word exists: word.slice(0, word.length - 1)
+// If it does, add it to the set and compare it with the answer.
+
+// Time Complexity: O(n log(n) * m * 30) = O(n log(n) * m) 121ms
+// Space Complexity: O(nm) 45.6MB
+var longestWord = function(words) {
+  let set = new Set(['']);
+  let ans = '';
+  words.sort();
+  for (let word of words) {
+    let prevWord = word.slice(0, word.length - 1);
+    if (set.has(prevWord)) {
+      set.add(word);
+      if ((word.length > ans.length) || (word.length === ans.length && word < ans)) {
+        ans = word;
+      } 
+    }
+  }
+  return ans;
+};
+
+// Solution 2: Trie & DFS
 
 // Store every word in a trie.
 // Use recursive DFS to find the longest word by trying every valid path.
