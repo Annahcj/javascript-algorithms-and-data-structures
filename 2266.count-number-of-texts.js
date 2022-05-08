@@ -9,7 +9,7 @@
 // Since the answer may be very large, return it modulo 10^9 + 7.
 
 
-// Solution 1: Recursion w/ Memoization
+// Solution 1: Dynamic Programming - Recursion w/ Memoization
 
 // dp(index) returns number of ways from index to the end of pressedKeys
 // For index,
