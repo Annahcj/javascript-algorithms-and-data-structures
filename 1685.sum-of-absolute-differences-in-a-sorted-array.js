@@ -32,6 +32,26 @@ var getSumAbsoluteDifferences = function(nums) {
   return res;
 };
 
+// Solution 2: Prefix Sum - Optimized Space
+
+// Keep a running sum for the left and right sums to reduce O(n) space to O(1).
+
+// Time Complexity: O(n) 269ms
+// Space Complexity: O(1) 78.7MB
+var getSumAbsoluteDifferences = function(nums) {
+  let n = nums.length, res = Array(n), leftSum = 0;
+  let rightSum = nums.reduce((acc, num) => acc + num);
+  for (let i = 0; i < n; i++) {
+    let left = Math.abs(i * nums[i] - leftSum);
+    let right = Math.abs((n - i) * nums[i] - rightSum);
+    res[i] = left + right;
+    
+    leftSum += nums[i];
+    rightSum -= nums[i];
+  }
+  return res;
+};
+
 // Two test cases to run function on
 console.log(getSumAbsoluteDifferences([2,3,5])) // [4,3,5]
 console.log(getSumAbsoluteDifferences([1,4,6,8,10])) // [24,15,13,15,21]
