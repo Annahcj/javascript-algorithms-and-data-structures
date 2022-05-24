@@ -16,6 +16,7 @@
 // Time Complexity: O(n^2 * log(n)) 136ms
 // Space Complexity: O(n) 46.2MB
 var construct = function(grid) {
+  if (!grid.length) return null;
   return dfs(0, 0, grid.length - 1, grid.length - 1);
   
   function dfs(r1, c1, r2, c2) { // left top and right bottom corner coordinates
