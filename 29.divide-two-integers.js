@@ -7,32 +7,40 @@
 
 // Solution 1: Repeated Exponential Searches
 
+// Find the number of times the divisor can fit into the dividend.
+// The brute force way would be to subtract the divisor from the dividend until the dividend becomes smaller than the divisor.
+// We can make it more efficient by doubling the divisor at each iteration. We can count the number of times by doubling that too.
+// When the divisor becomes bigger than the dividend, get the difference and repeat the same process.
+
 // Time Complexity: O(log^2(n)) 88ms
 // Space Complexity: O(1) 40MB
 var divide = function(dividend, divisor) {
-  if (dividend === -2147483648 && divisor === -1) return 2147483647;
-  let negatives = 0;
+  let MAX_INT = 2147483647, MIN_INT = -2147483648;
+  let negative = false;
   if (dividend < 0) {
+    negative = true;
     dividend = -dividend;
-    negatives++;
   }
   if (divisor < 0) {
+    negative = !negative;
     divisor = -divisor;
-    negatives++;
   }
-  let res = 0;
+  
+  let quotient = 0;
   while (dividend >= divisor) {
-    let times = 1;
-    let sum = divisor;
-    while (sum + sum < dividend) {
-      sum += sum;
+    let val = divisor, times = 1;
+    while (val + val <= dividend) {
+      val += val;
       times += times;
     }
-    res += times;
-    dividend -= sum;
-  }  
-  if (negatives === 1) res = -res;
-  return res;
+    quotient += times;
+    dividend -= val;
+  }
+  
+  if (negative) quotient = -quotient;
+  if (quotient > MAX_INT) quotient = MAX_INT;
+  if (quotient < MIN_INT) quotient = MIN_INT;
+  return quotient;
 };
 
 // Solution 2: Powers of Two
@@ -120,7 +128,7 @@ var divide = function(dividend, divisor) {
   return res;
 };
 
-// Four test cases to run function on
+// Five test cases to run function on
 console.log(divide(21, 3)) // 7
 console.log(divide(10, 3)) // 3
 console.log(divide(7, -3)) // -2
