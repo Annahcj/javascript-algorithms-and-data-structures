@@ -27,7 +27,6 @@ var maximumEvenSplit = function(finalSum) {
     if (remain <= i) break;
     res.push(i);
     sum -= i;
-    if (sum === 0) break;
   }
   res.push(sum);
   return res;
