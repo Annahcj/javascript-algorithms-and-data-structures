@@ -4,7 +4,7 @@
 // Return the minimum number of steps needed to move the knight to the square [x, y].  It is guaranteed the answer exists.
 
 
-// Solution: BFS with Optimizations
+// Solution 1: BFS with Optimizations
 
 // Logic:
 // We start at the origin (0, 0), then put it in a queue.
@@ -35,27 +35,74 @@
 
 // Runtime on LeetCode: 2756 ms
 // Memory Usage on LeetCode: 64.6MB
-  var minKnightMoves = function(x, y) {
-    let moves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
-    let queue = [[0, 0]];
-    x = Math.abs(x), y = Math.abs(y);
-    let visited = {}, level = 0;
+var minKnightMoves = function(x, y) {
+  let moves = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+  let queue = [[0, 0]];
+  x = Math.abs(x), y = Math.abs(y);
+  let visited = {}, level = 0;
+  while (queue.length) {
+    let next = [];
     while (queue.length) {
-      let next = [];
-      while (queue.length) {
-        let curr = queue.pop();
-        if (curr[0] === x && curr[1] === y) return level;
-        if (!visited[[curr[0], curr[1]]] && curr[0] >= -1 && curr[1] >= -1) {
-          visited[[curr[0], curr[1]]] = true;
-          for (var move of moves) {
-            next.push([curr[0] + move[0], curr[1] + move[1]]);
-          }
+      let curr = queue.pop();
+      if (curr[0] === x && curr[1] === y) return level;
+      if (!visited[[curr[0], curr[1]]] && curr[0] >= -1 && curr[1] >= -1) {
+        visited[[curr[0], curr[1]]] = true;
+        for (var move of moves) {
+          next.push([curr[0] + move[0], curr[1] + move[1]]);
         }
       }
-      queue = next;
-      level++;
     }
-  };
-  // Two test cases to run function on
-  console.log(minKnightMoves(2, 1)) // 1
-  console.log(minKnightMoves(5, 5)) // 4 
+    queue = next;
+    level++;
+  }
+};
+
+
+// Solution 2: Bidirectional BFS
+
+// Instead of starting the search outwards from position [0,0], we also simultaneously search from the target to the origin.
+// This cuts the search space in half, as we can meet at the midpoint between the origin and target.
+
+// Maintain two queues and two hashmaps (stores the minimum number of moves to each location and also acts as a visited set) for the BFS from the origin and from the target.
+
+var minKnightMoves = function(x, y) {
+  let directions = [[-1, -2], [-1, 2], [1, 2], [1, -2], [-2, -1], [-2, 1], [2, 1], [2, -1]];
+  let queue = [[0, 0]], targQueue = [[x, y]];
+  let dist = new Map(), targDist = new Map();
+  dist.set('0,0', 0), targDist.set(`${x},${y}`, 0);
+  
+  while (queue.length) {
+    let [row, col] = queue.shift(), key = `${row},${col}`;
+    let moves = dist.get(key);
+    if (targDist.has(key)) {
+      return moves + targDist.get(key);
+    }
+    
+    let [targRow, targCol] = targQueue.shift();
+    key = `${targRow},${targCol}`;
+    let targMoves = targDist.get(key);
+    if (dist.has(key)) {
+      return targMoves + dist.get(key);
+    }
+    
+    for (let [addX, addY] of directions) {
+      let newRow = row + addX, newCol = col + addY;
+      key = `${newRow},${newCol}`;
+      if (!dist.has(key)) {
+        queue.push([newRow, newCol]);
+        dist.set(key, moves + 1);
+      }
+      
+      let newTargRow = targRow + addX, newTargCol = targCol + addY;
+      key = `${newTargRow},${newTargCol}`;
+      if (!targDist.has(key)) {
+        targQueue.push([newTargRow, newTargCol]);
+        targDist.set(key, targMoves + 1);
+      }
+    }
+  }
+};
+
+// Two test cases to run function on
+console.log(minKnightMoves(2, 1)) // 1
+console.log(minKnightMoves(5, 5)) // 4 
