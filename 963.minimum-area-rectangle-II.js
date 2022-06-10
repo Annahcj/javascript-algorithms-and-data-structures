@@ -15,11 +15,11 @@
     // We can change the formula to find x4 and y4: x4 = x1 + x3 - x2, y4 = y1 + y3 - y2
     // Check if the hashset contains (x4, y4), if it does, we have found a valid rectangle.
 
-// Time Complexity: O(n^3) 222ms
+// Time Complexity: O(n^3) 218ms
 // Space Complexity: O(n) 45.9MB
 var minAreaFreeRect = function(points) {
   let ans = Infinity;
-  let n = points.length, map = new Set(points.map(point => `${point[0]},${point[1]}`));
+  let n = points.length, pointsSet = new Set(points.map(point => `${point[0]},${point[1]}`));
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
       if (i === j) continue;
@@ -28,7 +28,7 @@ var minAreaFreeRect = function(points) {
         if (getDistSquared(points[i], points[j]) + getDistSquared(points[j], points[k]) !== getDistSquared(points[i], points[k])) continue; 
         let newX = points[i][0] + points[k][0] - points[j][0];
         let newY = points[i][1] + points[k][1] - points[j][1];
-        if (!map.has(`${newX},${newY}`)) continue;
+        if (!pointsSet.has(`${newX},${newY}`)) continue;
         ans = Math.min(ans, Math.sqrt(getDistSquared(points[i], points[j])) * Math.sqrt(getDistSquared(points[j], points[k])));
       }
     }
