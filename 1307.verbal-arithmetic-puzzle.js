@@ -29,8 +29,9 @@
   // Keep track of digits that we have already used.
   // Account for the case of leading zeros using the isFirst array that we populated in the beginning.
 
-// Time Complexity: O() 
-// Space Complexity: O()
+// n = unique characters in words and result, d = number of digits
+// Time Complexity: O(d^n) loose bound 2643ms
+// Space Complexity: O(n) 45.2MB
 var isSolvable = function(words, result) {
   let chars = new Set(), isFirst = Array(26).fill(0); // isFirst[i] is 1 if character i is the first character in any word or in result
   let leftPow = Array(26).fill(0), rightPow = Array(26).fill(0);
