@@ -61,8 +61,8 @@ var isSolvable = function(words, result) {
       if (i === 0 && isFirst[currCharCode]) continue; // leading zero
       if (used[i]) continue; 
       used[i] = 1;
-      let leftAdd = i === 0 ? 0 : leftPow[currCharCode] * i;
-      let rightAdd = i === 0 ? 0 : rightPow[currCharCode] * i;
+      let leftAdd = leftPow[currCharCode] * i;
+      let rightAdd = rightPow[currCharCode] * i;
       if (backtrack(index + 1, bal + leftAdd - rightAdd)) return true;
       used[i] = 0;
     }
