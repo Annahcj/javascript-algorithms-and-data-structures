@@ -20,7 +20,7 @@
     // (suffixes2.length - common) = the number of suffixes in "b" but not in "a"
     // * 2 = multiply by 2 because we count the flipped pairs too.
 
-// Time Complexity: O(n * 26^2) 491ms
+// Time Complexity: O(n + 26^2) 491ms
 // Space Complexity: O(n) 74.5MB
 var distinctNames = function(ideas) {
   let suffixes = Array(26).fill(0).map(() => new Set());
