@@ -14,8 +14,8 @@
 // (current node in tree (the root starts from 1), start index, end index, left query index, right query index).
 
 // n = paint.length, m = max number in paint
-// Time Complexity: O(n log(n)) 911ms
-// Space Complexity: O(4 * m) 94.8MB
+// Time Complexity: O(n log(n)) 662ms
+// Space Complexity: O(4 * m) 80.1MB
 var amountPainted = function(paint) {
   let res = Array(paint.length), max = 0;
   for (let [_, end] of paint) max = Math.max(max, end);
@@ -46,7 +46,7 @@ class SegmentTree {
     if (start > end || start > right || end < left) return; // out of range
     if (start >= left && end <= right) { // completely within range
       this.tree[node] = (end - start + 1) * val;
-      if (start !== end) { // not a leaf node, propagate children
+      if (start < end) { // not a leaf node, propagate children
         this.lazy[node * 2] = val;
         this.lazy[node * 2 + 1] = val;
       }
