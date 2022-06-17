@@ -8,7 +8,12 @@
 // There are three situations to take into account:
   // 1. Node is null, return CAMERA_NOT_NEEDED (we don't need a camera for the parent node)
   // 2. The left or right child does not have a camera: add a camera to the current node and increase the count.
-  // 3. If the left or right child has a camera, then we don't need a camera. Otherwise we return NOT_COVERED for the parent nodes.
+  // 3. If the left or right child has a camera, then we don't need a camera. Otherwise we return NO_CAMERA for the parent nodes.
+
+// The three states of a node:
+  // NO_CAMERA: The node does not have a camera
+  // HAS_CAMERA: The node has a camera
+  // CAMERA_NOT_NEEDED: The node does not have a camera, but is covered.
 
 // Time Complexity: O(n) 103ms
 // Space Complexity: O(h) 45.9MB
