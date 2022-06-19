@@ -8,7 +8,7 @@
 // Use dynamic programming.
 // For each prices[i], we have two choices: floor (round it down) or ceil (round it up).
   // Take the minimum cost out of these two choices.
-// The time complexity of such a solution will be 2^n, since we have two choices for each price.
+// The time complexity of such a solution will be O(2^n), since we have two choices for each price.
 // We can memoize on (index, current sum) to bring the time complexity down to O(n * target)
 
 // We can use a hashmap to keep track of the memoized results instead of a 2D array, since the situations are fairly sparse.
