@@ -20,27 +20,18 @@
 // Time Complexity: O(n log(l)) 116ms
 // Space Complexity: O(l) 56.9MB
 var furthestBuilding = function(heights, bricks, ladders) {
-  let n = heights.length, heap = new PriorityQueue();
-  for (let i = 1; i < n; i++) {
+  let heap = new PriorityQueue();
+  for (let i = 1; i < heights.length; i++) {
     let diff = heights[i] - heights[i - 1];
     if (diff <= 0) continue;
-    if (ladders > 0) {
-      // use a ladder
-      ladders--;
-      heap.add(diff);
-    } else { 
-      // no more ladders
-      let minDiff = heap.isEmpty() ? Infinity : heap.top();
-      if (minDiff < diff) { // replace previous ladder with bricks
-        heap.remove();
-        heap.add(diff);
-        diff = minDiff; // "replace" previous 
-      }
-      if (diff > bricks) return i - 1; // ran out of bricks and ladders
-      bricks -= diff; // use bricks 
+    heap.add(diff);
+    if (heap.size > ladders) {
+      let minDiff = heap.remove();
+      if (bricks < minDiff) return i - 1;
+      bricks -= minDiff;
     }
   }
-  return n - 1;
+  return heights.length - 1;
 };
 
 class PriorityQueue {
