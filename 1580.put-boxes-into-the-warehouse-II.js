@@ -60,6 +60,10 @@ var maxBoxesInWarehouse = function(boxes, warehouse) {
 // Why it works: With the two pointers, it doesn't matter which side we take because boxes we process will only get shorter, 
 // so there is no benefit to process them greedily from here.
 
+// Another reason this approach (out-to-in approach and processing boxes in reverse order) works without preprocessing 
+// is that by processing boxes in reverse order, we know that boxes will only get shorter 
+// and will therefore always be able to fix through the spaces the taller boxes have passed through.
+
 // Time Complexity: O(n log(n) + m) 164ms
 // Space Complexity: O(log(n)) (space for sorting) 53.5MB
 var maxBoxesInWarehouse = function(boxes, warehouse) {
