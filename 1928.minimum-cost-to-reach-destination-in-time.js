@@ -21,7 +21,7 @@
 // This solution handles the case of nodes with small enough time and cost, but not the smallest cost: the minimum time would get overwritten three times because the heap is ordered by minimum cost.
 // In the case where the time is greater than the minimum time, the cost is guaranteed to be bigger or equal than the minimum recorded cost, because the heap is ordered by minimum cost.
 
-// Time Complexity: O(E log(E)) 380ms
+// Time Complexity: O(E log(E)) 264ms
 // Space Complexity: O(V + E) 62.3MB
 var minCost = function(maxTime, edges, passingFees) {
   let n = passingFees.length, minTime = Array(n).fill(Infinity);
