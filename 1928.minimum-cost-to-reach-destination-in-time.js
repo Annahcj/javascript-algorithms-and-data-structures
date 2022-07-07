@@ -8,7 +8,8 @@
 // Solution: Dijkstra's Algorithm
 
 // Do dijkstra's algorithm, taking into account that time must not exceed maxTime.
-// This means we need to account for cases where the time is smaller, but the cost may not be smaller than the current minimum.
+// Keep track of the minimum time to get to each node.
+// This is so that we can account for cases where the time is smaller, but the cost may not be smaller than the current minimum.
 // This is because although the heap takes care of the minimum cost, we may still exceed maxTime for that route.
 
 // Keep [node, cost, time] values in a min heap, ordered by minimum cost, then minimum time.
@@ -23,8 +24,8 @@
 // Time Complexity: O(E log(E)) 380ms
 // Space Complexity: O(V + E) 62.3MB
 var minCost = function(maxTime, edges, passingFees) {
-  let n = passingFees.length, graph = Array(n).fill(0).map(() => []);
-  let minTime = Array(n).fill(Infinity), minCost = Array(n).fill(Infinity);
+  let n = passingFees.length, minTime = Array(n).fill(Infinity);
+  let graph = Array(n).fill(0).map(() => []);
   for (let [x, y, time] of edges) {
     graph[x].push([y, time]);
     graph[y].push([x, time]);
@@ -34,25 +35,20 @@ var minCost = function(maxTime, edges, passingFees) {
     return a[1] === b[1] ? a[2] - b[2] : a[1] - b[1];
   });
   heap.add([0, passingFees[0], 0]);
-  minTime[0] = 0, minCost[0] = passingFees[0];
+  minTime[0] = 0;
   
   while (!heap.isEmpty()) {
     let [node, currCost, currTime] = heap.remove();
+    if (node === n - 1) return currCost;
     
     for (let [nei, time] of graph[node]) {
       let newCost = currCost + passingFees[nei], newTime = currTime + time;
-      if (newTime > maxTime) continue; // can't process, exceeds maxTime
-      if (newCost < minCost[nei]) { // cost is smaller
-        minCost[nei] = newCost;
-        minTime[nei] = newTime;
-        heap.add([nei, newCost, newTime]);
-      } else if (newTime < minTime[nei]) { // time is less
-        minTime[nei] = newTime;
-        heap.add([nei, newCost, newTime]);
-      }
+      if (newTime > maxTime || newTime >= minTime[nei]) continue; // exceeds maxTime or current minimum time
+      minTime[nei] = newTime;
+      heap.add([nei, newCost, newTime]);
     }
   }
-  return minCost[n - 1] === Infinity ? -1 : minCost[n - 1];
+  return -1;
 };
 
 class PriorityQueue {
