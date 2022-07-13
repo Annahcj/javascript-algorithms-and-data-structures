@@ -6,7 +6,7 @@
 // Solution 1: Top-down DP - Recursion w/ Memoization
 
 // Memoize each dp(i, stepsLeft) -> the number of ways at index i with 'stepsLeft' number of steps left.
-// For each (i, stepsLeft), get the sum of the three sitations:
+// For each (i, stepsLeft), get the sum of the three situations:
   // Move left (-1)
   // Move right (+1)
   // Stay at the current index
