@@ -4,7 +4,7 @@
   // For example, "ace" is a subsequence of "abcde".
 
 
-// Solution: Keep Pointers for each Word
+// Solution 1: Keep Pointers for each Word
 
 // Use a node for each word which tracks:
   // wordIdx: the index of the word in words
@@ -51,6 +51,48 @@ class Node {
     this.index = index; // index in the word
   }
 }
+
+// Solution 2: Arrays of Indices & Binary Search
+
+// Keep the indices of s for each character (a - z) -> [[index of a, index of a], [index of b, index of b], [index of c, ...], ...]
+// Loop through each word and greedily try to match the word with s based on the indices kept in the arrays.
+  // For each character in the word, binary search for next biggest index in each indices array.
+
+// n = s.length, m = words.length, k = max length of a word
+// Time Complexity: O(n + mklog(n)) 261ms
+// Space Complexity: O(n)
+var numMatchingSubseq = function(s, words) {
+  let indexes = Array(26).fill(0).map(() => []);
+  for (let i = 0; i < s.length; i++) {
+    indexes[s.charCodeAt(i) - 97].push(i);
+  }
+  
+  let res = [];
+  for (let i = 0; i < words.length; i++) {
+    let idx = -1, isSubsequence = true;
+    for (let char of words[i]) {
+      idx = getNextIndex(idx, char);
+      if (idx === -1) {
+        isSubsequence = false;
+        break;
+      }
+    }
+    if (isSubsequence) res++;
+  }
+  return res;
+  
+  function getNextIndex(currIndex, char) {
+    let charcode = char.charCodeAt() - 97, n = indexes[charcode].length;
+    if (!indexes[charcode].length) return -1;
+    let low = 0, high = n - 1;
+    while (low < high) {
+      let mid = Math.floor((low + high) / 2);
+      if (indexes[charcode][mid] > currIndex) high = mid;
+      else low = mid + 1;
+    }
+    return indexes[charcode][low] > currIndex ? indexes[charcode][low] : -1;
+  }
+};
 
 // Two test cases to run function on
 console.log(numMatchingSubseq("abcde", ["a","bb","acd","ace"])) // 3
