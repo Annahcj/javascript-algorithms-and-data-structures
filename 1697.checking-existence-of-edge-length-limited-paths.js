@@ -15,7 +15,7 @@
   // If the two nodes are connected after using all the edges with a distance less than limit, set res[i] to true, otherwise false.
 
 // n = number of nodes, m = number of edges, k = number of queries
-// Time Complexity: O(m log(m) + k log(k)) 683ms
+// Time Complexity: O(n + m log(m) + k log(k)) 683ms
 // Space Complexity: O(n) 108.3MB
 var distanceLimitedPathsExist = function(n, edgeList, queries) {
   edgeList.sort((a, b) => a[2] - b[2]);
