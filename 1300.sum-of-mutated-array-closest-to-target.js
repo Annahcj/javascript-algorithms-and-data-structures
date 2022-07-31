@@ -9,8 +9,9 @@
 // Binary search for the highest value with sum of array <= target.
 // To account for the absolute difference, we need to compare it with the upper bound index + 1.
 
-// If value is bigger, sum will be bigger
-// If value is smaller, sum will be smaller
+// Things to keep in mind:
+  // If value is bigger, sum will be bigger
+  // If value is smaller, sum will be smaller
 
 // n = length of arr, m = max(arr)
 // Time Complexity: O(n log(m)) 85ms
