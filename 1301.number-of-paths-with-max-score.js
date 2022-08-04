@@ -5,7 +5,7 @@
 // In case there is no path, return [0, 0].
 
 
-// Solution: DP - Tabulation
+// Solution 1: DP - Tabulation
 
 // Keep track of the max score and number of paths.
 // Start from the bottom right corner and traverse the three possible paths from each position: right, bottom right, bottom
