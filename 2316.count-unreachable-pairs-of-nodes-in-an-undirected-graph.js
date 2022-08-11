@@ -10,6 +10,7 @@
 // Subtract the count of connected pairs of each group from the total pairs count: (group count - 1) + (group count - 2) + (group count - 3) + ... + 1
   // We can find the size of each group by finding the unique roots, then finding the size for each.
 
+// n = number of nodes, m = number of edges
 // Time Complexity: O(n + m) 338ms
 // Space Complexity: O(n) 95.8MB
 var countPairs = function(n, edges) {
