@@ -14,7 +14,7 @@
 // There is no point in re-using words since the first time we get to it, it will be the minimum move to get there.
   // Keep track of used words to avoid re-using.
 
-// Note: if the length of bank becomes very long, we should use a different approach instead of looping through each time:
+// Note: if the length of bank becomes very long, we should use a different approach instead of looping through bank each time:
   // 1. Use a set for bank
   // 2. Try to change each individual character in a word to ['A', 'C', 'G', 'T'] and check whether the set contains the new word.
 // This approach should bring the time complexity down to O(nm)
