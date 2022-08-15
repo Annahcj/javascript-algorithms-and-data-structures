@@ -3,7 +3,7 @@
 // Return the number of positive integers that can be generated that are less than or equal to a given integer n.
 
 
-// Solution: 
+// Solution 1: 
 
 // nDigits = number of digits in n, digitsSize = length of digits
 
@@ -39,6 +39,49 @@ var atMostNGivenDigitSet = function(digits, n) {
     if (!digitsMatch) return ans;
   }
   return ans + 1;
+};
+
+
+// Solution 2: Digit DP
+
+// Memoize each dp(i, state), where
+  // i = the number of digits we currently have
+  // state = whether the current number is tracking smaller, the same, or greater than n.
+    // 0: smaller
+    // 1: same
+    // 2: greater
+
+// Try each digit in digits as the next digit.
+  // If digit < n[index], set state to 0 (smaller) if it's currently 1 (equal).
+  // If digit === n[index], keep it to whatever state we currently have.  
+  // If digit > n[index], set state to 2 (bigger) if it's currently 1 (equal).
+
+// Note: Subtract one from the final answer for the first case with 0 digits.
+
+// d = number of digits in digits, k = number of digits in n
+// Time Complexity: O(k * 3 * d) = O(kd) 67ms
+// Space Complexity: O(k * 3) = O(k) 41.9MB
+var atMostNGivenDigitSet = function(digits, n) {
+  let str = n.toString(), size = str.length;
+  let memo = Array(size).fill(0).map(() => Array(3).fill(-1));
+  return dp(0, 1) - 1;
+  
+  function dp(i, state) { 
+    if (i === size) return state === 2 ? 0 : 1;
+    if (memo[i][state] !== -1) return memo[i][state];
+    
+    let ans = 1;
+    for (let digit of digits) {
+      if (digit < str[i]) {
+        ans += dp(i + 1, state === 1 ? 0 : state);
+      } else if (digit === str[i]) {
+        ans += dp(i + 1, state);
+      } else {
+        ans += dp(i + 1, state === 1 ? 2 : state);
+      }
+    }
+    return memo[i][state] = ans;
+  }  
 };
 
 // Five test cases to run function on
