@@ -12,7 +12,7 @@
 
 // 2. Construct the first half of the number. 
   // It is always optimal to put larger digits earlier on.
-  // Going from 9 to 0, add digits to the end of result while the count > 1. 
+  // Going from 9 to 0, add digits to the end of result while the count of the digit > 1. 
   // We use two occurances per new digit since it needs to be symmetrical.
 
 // 3. Get the largest possible single digit as the middle of the palindrome.
