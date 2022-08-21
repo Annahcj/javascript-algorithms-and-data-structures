@@ -8,7 +8,7 @@
 
 // Solution: Parent Hashmap & BFS
 
-// 1. DFS through the tree to record the parent node of each node and get the start node.
+// 1. DFS through the tree to record the parent node of each node in a hashmap and get the start node.
 // 2. Level-by-level BFS from the start node to get the total time to reach every node.
   // Keep track of nodes we have visited to avoid revisiting.
   // From every node, visit the parent, left child, and right child if they haven't been visited.
