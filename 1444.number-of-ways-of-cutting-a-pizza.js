@@ -22,6 +22,7 @@
   // We can check this by checking whether the appleCount[newRow][newColumn] > appleCount[row][column].
   // If appleCount[newRow][newColumn] is equal to appleCount[row][column], we know the piece we are taking has no apples.
 
+// m = number of rows, n = number of columns
 // Time Complexity: O(mnk * (m + n)) 146ms
 // Space Complexity: O(mnk) 44.5MB
 var ways = function(pizza, k) {
