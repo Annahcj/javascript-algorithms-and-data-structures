@@ -19,7 +19,7 @@
 // Space Complexity: O(n * 2^m) 44.5MB
 var connectTwoGroups = function(cost) {
   let n = cost.length, m = cost[0].length; // n = size of group1, m = size of group2
-  let minCost = Array(m).fill(Infinity); // minCost[j] = minimum cost to connect to a point in group1
+  let minCost = Array(m).fill(Infinity); // minCost[j] = minimum cost to connect point j (from group2) to a point in group1
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < m; j++) {
       minCost[j] = Math.min(minCost[j], cost[i][j]);
