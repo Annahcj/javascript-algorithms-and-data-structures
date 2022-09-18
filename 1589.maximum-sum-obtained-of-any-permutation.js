@@ -13,14 +13,14 @@
 
 // n = length of nums, m = number of requests
 // Time Complexity: O(n log(n) + m) 609ms
-// Space Complexity: O(n) 81.2MB
+// Space Complexity: O(n) 80.8MB
 var maxSumRangeQuery = function(nums, requests) {
   let n = nums.length, sum = Array(n).fill(0);
   for (let [start, end] of requests) {
     sum[start]++;
     sum[end + 1]--;
   }
-  for (let i = 1; i <= n; i++) {
+  for (let i = 1; i < n; i++) {
     sum[i] += sum[i - 1];
   }
 
