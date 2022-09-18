@@ -14,8 +14,8 @@
 // Since we stored the count of words on every node, we can calculate the count of every prefix for every word on the fly.
 
 // n = number of words, m = max(words[i].length)
-// Time Complexity: O(nm) 
-// Space Complexity: O(26^m) at worst
+// Time Complexity: O(nm) 1884ms
+// Space Complexity: O(26^m) (at worst) 146.1MB
 var sumPrefixScores = function(words) {
   let trie = new Trie();
   for (let word of words) {
