@@ -17,7 +17,7 @@
 // To avoid integer overflow, make sure each number doesn't exceed the maximum safe integer.
 
 // n = length of s, m = number of different numbers from s (there can be at most n^2)
-// Time Complexity: O(nm) 73ms
+// Time Complexity: O(n^2 * m) 73ms
 // Space Complexity: O(nm) 43.1MB
 var splitString = function(s) {
   let n = s.length, num = 0, memo = new Map();
