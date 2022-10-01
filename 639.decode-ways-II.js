@@ -1,3 +1,4 @@
+// 639.decode-ways-II.js
 // 639. Decode Ways II
 // A message containing letters from A-Z can be encoded into numbers using the following mapping:
   // 'A' -> "1"
@@ -13,13 +14,13 @@
 // Since the answer may be very large, return it modulo 10^9 + 7.
 
 
-// Solution: DP 
+// Solution 1: DP 
 
 // Populate dp, where dp[i] = number of ways for string at index i to n - 1.
 // For each index i, we can either take one digit or two digits.
 
 // There are three cases for one character:
-  // *: 9 ways (1-9)
+  // *: 9 ways (1-9).
   // 0: 0 ways
   // else: 1 way
 
@@ -37,8 +38,6 @@
 
   // 11 = Check if >= 10 && <= 26 
 
-  // Note: In each example, the digit "1" is used to represent a digit in s, which can be in the range 0-9.
-
 // Time Complexity: O(n) 233ms
 // Space Complexity: O(n) 56.6MB
 var numDecodings = function(s) {
@@ -52,6 +51,40 @@ var numDecodings = function(s) {
     }
   }
   return dp[0];
+  
+  function getWaysOneDigit(char) {
+    if (char === '0') return 0;
+    return char === '*' ? 9 : 1;
+  }
+  
+  function getWaysTwoDigits(char1, char2) {
+    if (char1 === '*' && char2 === '*') return 15;
+    if (char1 === '*') return Number(char2) > 6 ? 1 : 2;
+    if (char2 === '*') return char1 === '1' ? 9 : (char1 === '2' ? 6 : 0);
+    let num = Number(char1 + char2);
+    return num >= 10 && num <= 26 ? 1 : 0; 
+  }
+};
+
+
+// Solution 2: DP - Constant Space
+
+// Since we only need to access the next two dp values, we can store them in two variables.
+
+// Time Complexity: O(n) 218ms
+// Space Complexity: O(1) 50.6MB
+var numDecodings = function(s) {
+  let n = s.length, MOD = 10 ** 9 + 7;
+  let next = 1, nextNext = 0;
+  for (let i = n - 1; i >= 0; i--) {
+    let ways = next * getWaysOneDigit(s[i]);
+    if (i < n - 1) {
+      ways = (ways + nextNext * getWaysTwoDigits(s[i], s[i + 1])) % MOD;
+    }
+    nextNext = next;
+    next = ways;
+  }
+  return next;
   
   function getWaysOneDigit(char) {
     if (char === '0') return 0;
