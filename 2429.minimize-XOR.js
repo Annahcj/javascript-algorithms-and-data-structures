@@ -7,7 +7,7 @@
 // The number of set bits of an integer is the number of 1's in its binary representation.
 
 
-// Solution: Greedy - N Most Significant Bits in num2
+// Solution: Greedy - N Most Significant Bits in num1
 
 // Find n, the number of 1-bits in num2.
 
