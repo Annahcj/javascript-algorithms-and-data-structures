@@ -11,7 +11,13 @@
 // Compare individual bits of pref[i - 1] and pref[i]:
   // If the bits are the same, we must take bit 0.
   // If the bits are different, we must take bit 1.
+  
 // Notice that the bits we need to take are actually the same as the result of XORing them together.
+  // 1 ^ 1 = 0
+  // 0 ^ 0 = 0
+  // 1 ^ 0 = 1
+  // 0 ^ 1 = 1
+
 // Therefore, we can XOR each pref[i - 1] and pref[i] to get the answers.
 
 // Time Complexity: O(n) 229ms
