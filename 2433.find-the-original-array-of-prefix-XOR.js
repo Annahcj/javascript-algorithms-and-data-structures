@@ -8,7 +8,7 @@
 // Solution: XOR
 
 // For each pref[i], we need to find the number where pref[i - 1] ^ ? = pref[i].
-// Compare individual bits of pref[i - 1] and pref[i]:
+// Look at individual bits of pref[i - 1] and pref[i] and construct the number we need:
   // If the bits are the same, we must take bit 0.
   // If the bits are different, we must take bit 1.
   
