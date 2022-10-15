@@ -16,6 +16,7 @@
   // This covers all cases including (4,6), where 4 and 6 are both a multiple of 2, and will therefore be connected.
   // This approach works because the cities are in range 1 to n, so all possible allowed divisors are covered.
 
+// n = number of cities, m = number of queries
 // Time Complexity: O(n + m) 261ms
   // Taking the multiples of each city i takes O(n/2) + O(n/3) + O(n/4) + ...
 // Space Complexity: O(n + m) 63.6MB
