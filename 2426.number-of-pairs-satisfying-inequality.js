@@ -7,8 +7,7 @@
 
 // Solution: Math & Segment Tree
 
-// The equation nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff can be turned into (nums2[j] - nums1[j]) - (nums1[i] - nums2[i]) <= diff.
-// Convert the equation to nums1[i] - nums2[i] <= nums1[j] - nums2[j] + diff.
+// The equation nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff can be converted into nums1[i] - nums2[i] <= nums1[j] - nums2[j] + diff.
 
 // Go through each index j.
   // Record all past index i's differences (nums1[i] - nums2[i]).
