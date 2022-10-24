@@ -4,7 +4,7 @@
 // Return the maximum number of consecutive robots you can run such that the total cost does not exceed budget.
 
 
-// Solution: Sliding Window & Monotonic Decreasing Deque
+// Solution: Sliding Window & Monotonic Decreasing Queue
 
 // Maintain a sliding window where the total cost <= budget.
 // When the total cost exceeds the budget, move up the left pointer until it is within the budget.
