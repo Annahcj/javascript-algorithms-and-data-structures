@@ -46,17 +46,17 @@ var maximumScore = function(scores, edges) {
     let neighbors = [];
     let uHasUniqueNeighbor = false;
     for (let nei of max[u]) {
-      if (nei === u || nei === v) continue;
-      if (max[v].includes(nei)) neighbors.push(nei);
-      else if (!uHasUniqueNeighbor) { // get first neighbor of u which is not a neighbor of v
+      if (nei === u || nei === v) continue; // neighbors can't be the original nodes
+      if (max[v].includes(nei)) neighbors.push(nei); // get shared neighbors
+      else if (!uHasUniqueNeighbor) { // get maximum unique neighbor of u
         uHasUniqueNeighbor = true;
         neighbors.push(nei);
       }
     }
     let vHasUniqueNeighbor = false;
     for (let nei of max[v]) {
-      if (nei === u || nei === v) continue;
-      if (!max[u].includes(nei) && !vHasUniqueNeighbor) {
+      if (nei === u || nei === v) continue; // neighbors can't be the original nodes
+      if (!max[u].includes(nei) && !vHasUniqueNeighbor) { // get maximum unique neighbor of v
         vHasUniqueNeighbor = true;
         neighbors.push(nei);
         break;
