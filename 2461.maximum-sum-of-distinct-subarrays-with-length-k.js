@@ -9,11 +9,10 @@
 // Solution: Sliding Window w/ Two Pointers & Set
 
 // Maintain a sliding window of unique numbers with maximum size of k.
-// We can store the unique numbers in the window in a hashset.
-// When we move the right pointer up,
-  // Move the left pointer up until 
-    // all numbers are unique AND 
-    // the window size is less than or equal to k
+// We can store the numbers in the window in a hashset.
+// When we move the right pointer up, move the left pointer up until:
+  // 1. All numbers in the window are unique and 
+  // 2. The window size <= k.
 
 // Time Complexity: O(n) 246ms
 // Space Complexity: O(k) 71.5MB
