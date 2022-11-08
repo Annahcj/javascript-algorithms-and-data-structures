@@ -50,8 +50,8 @@ function merge(nums1, nums2) {
       res.push(nums1[i++]);
     } else if (i === nums1.length || nums2[j] > nums1[i]) {
       res.push(nums2[j++]);
-    } else if (nums1[i] === nums2[j]) {
-      let nums1IsLarger = nums1Larger(nums1, nums2, i, j);
+    } else if (nums1[i] === nums2[j]) { 
+      let nums1IsLarger = nums1Larger(nums1, nums2, i, j); // special case if digits are equal: find the array with the first larger digit
       if (nums1IsLarger) {
         res.push(nums1[i++]);
       } else {
@@ -62,7 +62,7 @@ function merge(nums1, nums2) {
   return res;
 }
 
-function getMax(arr1, arr2) {
+function getMax(arr1, arr2) { // compares and returns the larger out of arr1 and arr2
   let k = arr1.length;
   for (let i = 0; i < k; i++) {
     if (arr1[i] > arr2[i]) return arr1;
@@ -71,7 +71,7 @@ function getMax(arr1, arr2) {
   return arr1;
 }
 
-function nums1Larger(arr1, arr2, i, j) {
+function nums1Larger(arr1, arr2, i, j) { // return true if nums1 has the first larger digit
   while (i < arr1.length && j < arr2.length) {
     if (arr1[i] > arr2[j]) return true;
     else if (arr2[j] > arr1[i]) return false;
