@@ -14,7 +14,8 @@
 // Push each character into a stack.
 // Remove the last two characters from the stack while they are bad (e.g: 'e' and 'E' or 'E' and 'e')
 
-// To check whether two characters are bad (eE or Ee), check whether the difference between their character codes are equal to 32.
+// How to check whether two characters are bad (eE or Ee):
+  // If the difference between their character codes are equal to 32, they are bad.
   // 'a' -> 97, 'A' -> 65: difference = 32
 
 // Time Complexity: O(n) 77ms
