@@ -7,7 +7,7 @@
 // Return the number of different good strings that can be constructed satisfying these properties. Since the answer can be large, return it modulo 10^9 + 7.
 
 
-// Solution: DP
+// Solution 1: DP - Recursion w/ Memoization
 
 // Memoize each dp(len), where dp(len) = the number of good strings with length (high - len).
 // For each dp(len), get the sum of the number of ways for:
@@ -32,6 +32,28 @@ var countGoodStrings = function(low, high, zero, one) {
     ways = (ways + dp(len + one)) % MOD;
     return memo[len] = ways;
   }  
+};
+
+
+// Solution 2: Bottom-up DP
+
+// Iterative bottom-up version.
+
+// Time Complexity: O(high) 115ms
+// Space Complexity: O(high) 45.9MB
+var countGoodStrings = function(low, high, zero, one) {
+  let dp = Array(high + 1).fill(0), MOD = 10 ** 9 + 7, ways = 0;
+  dp[0] = 1;
+  for (let i = 1; i <= high; i++) {
+    if (i >= zero) {
+      dp[i] = (dp[i] + dp[i - zero]) % MOD;
+    }
+    if (i >= one) {
+      dp[i] = (dp[i] + dp[i - one]) % MOD;
+    }
+    if (i >= low) ways = (ways + dp[i]) % MOD;
+  }
+  return ways;
 };
 
 // Two test cases
