@@ -13,7 +13,7 @@
   // Find the smallest number of parts that we can split into a valid array.
   // Then, generate the final split array.
 
-// d = number of digits in message.length (<= 5)
+// n = message.length, d = number of digits in message.length (<= 5)
 // Time Complexity: O(nd) 240ms
 // Space Complexity: O(n) 60.4MB
 var splitMessage = function(message, limit) {
