@@ -6,7 +6,7 @@
 // A subsequence is derived from another sequence arr by deleting any number of elements (including none) from arr, without changing the order of the remaining elements. For example, [3, 5, 8] is a subsequence of [3, 4, 5, 6, 7, 8].
 
 
-// Solution: DP - Recursion w/ Memoization
+// Solution 1: DP - Recursion w/ Memoization
 
 // Let's say a sequence of length 3 is (i, j, k).
 // Use a hashmap to store the index of each arr[i].
@@ -39,6 +39,32 @@ var lenLongestFibSubseq = function(arr) {
     }
     return memo[i][j] = 2;
   }
+};
+
+
+// Solution 2: Bottom Up DP
+
+// The same concept as solution 1, except we are going bottom-up instead of top-down and using iteration instead of recursion.
+// Go through each (j, k) and try to find the previous number in the sequence (i), which we can find by arr[k] - arr[j].
+
+// Time Complexity: O(n^2) 630ms
+// Space Complexity: O(n^2)  76.3MB
+var lenLongestFibSubseq = function(arr) {
+  let n = arr.length, dp = Array(n).fill(0).map(() => Array(n));
+  let map = new Map(), ans = 0;
+  for (let j = 0; j < n - 1; j++) {
+    for (let k = j + 1; k < n; k++) {
+      let diff = arr[k] - arr[j];
+      if (!map.has(diff)) dp[j][k] = 2;
+      else {
+        let i = map.get(diff);
+        dp[j][k] = dp[i][j] + 1;
+      }
+      ans = Math.max(ans, dp[j][k]);
+    }
+    map.set(arr[j], j);
+  }
+  return ans < 3 ? 0 : ans;
 };
 
 // Two test cases
