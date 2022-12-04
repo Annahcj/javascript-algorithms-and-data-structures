@@ -16,6 +16,7 @@
 // 2. While there are still colors to eliminate, eliminate colors that have no other colors inside its rectangle.
   // If we reach a point where there are still colors left but we can't eliminate any of them, then we have a dependency cycle. Return false.
 
+// m = number of rows, n = number of columns, k = number of colors
 // Time Complexity: O(mn * k^2) 190ms
 // Space Complexity: O(k) 48.1MB
 var isPrintable = function(targetGrid) {
