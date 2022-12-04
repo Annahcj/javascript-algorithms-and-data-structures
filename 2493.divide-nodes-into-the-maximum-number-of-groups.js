@@ -13,7 +13,7 @@
 // 2. Find the groups of connected nodes.
 // 3. Find the maximum groups to divide for each connected group.
   // Use level-by-level BFS to find the maximum depth of the group.
-  // How to detect an odd-lengthed cycle: Cycles are bound to meet in the middle as we traverse the edges of the cycle, so if the level of a neighbor node is equal to the current level, the cycle is odd-lengthed.
+  // How to detect an odd-lengthed cycle: Cycles are bound to meet in the middle as we traverse the edges of the cycle (because we are traversing nodes level-by-level), so if the level of a neighbor node is equal to the current level, the cycle is odd-lengthed.
 
 // n = number of nodes, m = number of edges
 // Time Complexity: O(n * (n + m)) 639ms
