@@ -7,7 +7,7 @@
 // Test cases are generated such that partitioning exists.
 
 
-// Solution: Max Right & Min Left
+// Solution 1: Max Right & Min Left
 
 // For each index i, keep track of:
   // 1. The maximum number on the left or at index i
@@ -29,6 +29,30 @@ var partitionDisjoint = function(nums) {
     maxLeft = Math.max(maxLeft, nums[i]);
     if (maxLeft <= minRight[i + 1]) return i + 1;
   }
+};
+
+// Solution 2: O(1) space
+
+// Keep track of:
+  // 1. currMax: the maximum number in the left side of the current partition
+  // 2. max: the current maximum of all numbers from 0 to the current index
+
+// When nums[i] < currMax, the current partition is invalid.
+// Otherwise, we don't need to update currMax because the order of numbers don't matter unless numbers on the right < maximum on the left.
+
+// Time Complexity: O(n) 136ms
+// Space Complexity: O(1)  52.6MB
+var partitionDisjoint = function(nums) {
+  let n = nums.length, currMax = nums[0], max = currMax;
+  let left = 1;
+  for (let i = 1; i < n; i++) {
+    max = Math.max(max, nums[i]);
+    if (nums[i] < currMax) {
+      currMax = max;
+      left = i + 1;
+    }
+  }
+  return left;
 };
 
 // Two test cases
