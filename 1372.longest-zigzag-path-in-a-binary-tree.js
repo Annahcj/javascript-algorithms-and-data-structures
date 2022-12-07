@@ -17,25 +17,24 @@
   // 2. We go in the opposite direction and start a new zigzag path.
 // Record the maximum path length out of all choices.
 
-// Time Complexity: O(n) 186ms
-// Space Complexity: O(n) 63.7MB
+// Time Complexity: O(n) 322ms
+// Space Complexity: O(n) 92.8MB
 var longestZigZag = function(root) {
   let maxLength = 0;
   dfs(root, 'left');
-  dfs(root, 'right');
   return maxLength - 1;
   
   function dfs(node, dir) {
     if (!node) return 0;
     if (dir === 'left') {
       let keepGoing = 1 + dfs(node.left, 'right');
-      let rightRight = dfs(node.right, 'right');
-      maxLength = Math.max(maxLength, keepGoing, rightRight);
+      let rightLeft = 1 + dfs(node.right, 'left');
+      maxLength = Math.max(maxLength, keepGoing, rightLeft);
       return keepGoing;
     } else { 
       let keepGoing = 1 + dfs(node.right, 'left');
-      let leftLeft = dfs(node.left, 'left');
-      maxLength = Math.max(maxLength, keepGoing, leftLeft);
+      let leftRight = 1 + dfs(node.left, 'right');
+      maxLength = Math.max(maxLength, keepGoing, leftRight);
       return keepGoing;
     }
   }
