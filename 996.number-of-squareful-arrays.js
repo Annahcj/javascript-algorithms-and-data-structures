@@ -8,9 +8,8 @@
 
 // Brute force using backtracking.
 // How to handle duplicate permutations:
-  // When we add a new number to the sequence,
-  // use a set to keep track of which numbers we have used.
-    // For e.g: The current sequence is [5], the remaining numbers left are [2,2]. We never want to take [5,2] more than once.
+  // When we add a new number to the sequence, use a set to keep track of which numbers we have used.
+  // For e.g: The current sequence is [5], the remaining numbers left are [2,2]. We never want to take [5,2] more than once at this level.
 
 // Time Complexity: O(n!) 71ms
 // Space Complexity: O(n) 42.8MB
@@ -54,10 +53,7 @@ function isPerfectSquare(num) {
   // Go through every nums[i] where prevNum + nums[i] is a perfect square
   // Count the number of permuations that are successful
 
-// How to handle duplicate permutations:
-  // When we add a new number to the sequence,
-  // use a set to keep track of which numbers we have used.
-    // For e.g: The current sequence is [5], the remaining numbers left are [2,2]. We never want to take [5,2] more than once.
+// We can handle duplicate numbers in the same way as in solution 1: using a set to keep track of which numbers we have used at the current level.
 
 // Time Complexity: O(2^n * n * n) 67ms
 // Space Complexity: O(2^n * n) 41.9MB
@@ -79,7 +75,7 @@ var numSquarefulPerms = function(nums) {
     let ans = 0, used = new Set();
     for (let i = 0; i < n; i++) {
       if ((mask >> i) & 1) continue; // have already used nums[i]
-      if (used.has(nums[i])) continue; // already used this number 
+      if (used.has(nums[i])) continue; // already used this number at this level
       if (!isPerfectSquare(prevNum + nums[i])) continue; 
       let newMask = mask | (1 << i);
       ans += dp(newMask, nums[i]);
