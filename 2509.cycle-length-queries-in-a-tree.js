@@ -22,6 +22,7 @@
 
 // To find the length of the cycle:
   // We know that if a > b, a is on a deeper level than b (because all nodes at level x will be smaller than nodes at level x + 1).
+  // If a > b, move a up to the parent node. Otherwise move b up to the parent node.
   // To find the parent node: Math.floor(x / 2)
   // Traverse to the parents of each node until both a and b are equal (find the lowest common ancestor).
   // Keep track of the number of times we traversed a parent node.
