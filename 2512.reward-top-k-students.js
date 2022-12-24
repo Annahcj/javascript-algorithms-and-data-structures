@@ -8,7 +8,7 @@
 // Solution: Hashset & Sorting
 
 // Store positive and negative words in hashsets for quick lookup.
-// Split each report by spaces and check whether each word is in the positive or negative hashset.
+// Split each report by spaces and check whether each word is in the positive or negative words hashset.
 // After getting the score for each student, we can sort by the score and return the first k students.
 
 // n = number of students, m = number of words in each report[i], w = number of positive and negative words
