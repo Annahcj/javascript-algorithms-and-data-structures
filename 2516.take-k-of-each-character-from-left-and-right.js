@@ -8,7 +8,7 @@
 // Instead of taking characters on the left and right side, try to take the maximum window in the center (the part we will not be taking).
 // Maintain a sliding window of characters where each character count does not exceed count[i] - k.
   // Keep moving the right pointer forward.
-  // When the character count exceeds count[i] - k, move the left pointer up.
+  // When a character count in the window exceeds count[i] - k, move the left pointer up.
 
 // Time Complexity: O(n) 88ms
 // Space Complexity: O(1) 44.6MB
