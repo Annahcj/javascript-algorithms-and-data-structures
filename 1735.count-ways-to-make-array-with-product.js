@@ -47,7 +47,7 @@ var waysToFillArray = function(queries) {
       let nCr = BigInt(combs[n + count - 1][count]);
       res *= nCr;
     }
-    answer.push(res % BigInt(MOD));
+    answer.push(Number(res % BigInt(MOD)));
   }
   return answer;
 };
