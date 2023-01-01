@@ -3,7 +3,7 @@
 // An integer val divides nums if nums % val == 0.
 
 
-// Solution: Modulo
+// Solution: Modulo 10
 
 // Find the last digit of the number: n % 10.
 // Use Math.floor(n / 10) to remove the last digit.
