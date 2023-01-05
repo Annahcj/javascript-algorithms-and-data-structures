@@ -13,7 +13,7 @@
   // multiples of 5: contributes Math.floor(n / 5) factors of 5
   // multiples of 25: contributes another Math.floor(n / 25) factors of 5
   // multiples of 125: contributes another Math.floor(n / 125) factors of 5
-  // ... and so on for all multiples of 5 that are smaller than or equal to n
+  // ... and so on for all powers of 5 that are smaller than or equal to n
 
 // Time Complexity: O(log_5(n)) 95ms
 // Space Complexity: O(1) 42.1MB
