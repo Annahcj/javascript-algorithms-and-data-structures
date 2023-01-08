@@ -21,9 +21,9 @@ var maximumCount = function(nums) {
 
 // Solution 2: Binary Search
 
-// Since nums is sorted, we can use two binary searches:
-  // 1. Find the rightmost negative number.
-  // 2. Find the leftmost positive number.
+// Since nums is sorted, we can use binary search:
+  // 1. Binary search for the index of the rightmost negative number.
+  // 2. Binary search for the index of the leftmost positive number.
 // Based on the indexes we can find the amount of negative and positive numbers.
 
 // Time Complexity: O(log(n)) 64ms
