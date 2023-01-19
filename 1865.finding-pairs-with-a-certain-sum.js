@@ -10,7 +10,7 @@
 
 // Solution: Hashmap
 
-// Since we know that nums1 <= 1000, we can take advantage of the smaller size.
+// Since we know that the length of nums1 <= 1000, we can take advantage of the smaller size.
 // Keep track of the occurances of each nums2[i] in a hashmap.
 
 // count:
