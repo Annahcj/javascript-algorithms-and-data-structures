@@ -12,7 +12,7 @@
 
 // Use a hashmap to keep track of the number at each index: {index: number, index: number, ...}
 // Use a min heap to keep track of the indexes of each number: {number: min heap, number: min heap, ...}
-// The heaps can store expired indexes, so we can use lazy removal (remove the top of the heap while the number at index has been updated).
+// The heaps can store expired indexes, so we can use lazy removal (remove the index from the top of the heap while the number at that index has changed).
 
 // n = number of calls
 // Time Complexity: 1119ms
