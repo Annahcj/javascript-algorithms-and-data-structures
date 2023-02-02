@@ -14,8 +14,8 @@
   // the ordering of the nodes (even level -> strictly increasing, odd level -> strictly decreasing)
 
 // n = number of nodes
-// Time Complexity: O(n) 239ms
-// Space Complexity: O(n/2) 74.5MB
+// Time Complexity: O(n) 279ms
+// Space Complexity: O(n/2) 74.8MB
 var isEvenOddTree = function(root) {
   let queue = [root], level = 0;
   while (queue.length) {
@@ -33,14 +33,19 @@ var isEvenOddTree = function(root) {
 };
 
 function isEvenOdd(nodes, level) {
-  if (level % 2 === 0 && nodes[0].val % 2 === 0) return false;
-  if (level % 2 === 1 && nodes[0].val % 2 === 1) return false;
+  if (!isCorrectEvenOdd(nodes[0].val, level)) return false;
   for (let i = 1; i < nodes.length; i++) {
-    if (level % 2 === 0) {
-      if (nodes[i].val % 2 === 0 || nodes[i - 1].val >= nodes[i].val) return false;
-    } else {
-      if (nodes[i].val % 2 === 1 || nodes[i - 1].val <= nodes[i].val) return false;
+    if (!isCorrectEvenOdd(nodes[i].val, level) || !isCorrectOrdering(nodes[i - 1].val, nodes[i].val, level)) {
+      return false;
     }
   }
   return true;
+}
+
+function isCorrectEvenOdd(val, level) {
+  return val % 2 !== level % 2;
+}
+
+function isCorrectOrdering(val1, val2, level) {
+  return level % 2 === 0 ? val1 < val2 : val1 > val2;
 }
