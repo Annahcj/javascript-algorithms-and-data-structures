@@ -8,10 +8,10 @@
 
 // Solution: Greedy - Counting & Sorting
 
-// 1. Get the difference between occurances in basket1 and basket2.
+// 1. Get the differences between occurances of numbers in basket1 and basket2.
 // 2. Go through the difference counts.
   // If the difference is not divisible by 2, then it is impossible to distribute them evenly across two baskets.
-  // Otherwise, add the number (differenceCount number of times) to an array "values".
+  // Otherwise, add the number (differenceCount / 2 number of times) to an array "values".
 // 3. Sort the values in asc order.
 // 4. Go through the first half of the values. 
   // We only need to consider the first half since the smaller numbers will always be the minimum of each pair.
