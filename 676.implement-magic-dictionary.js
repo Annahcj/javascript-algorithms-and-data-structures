@@ -6,7 +6,7 @@
   // bool search(String searchWord) Returns true if you can change exactly one character in searchWord to match any string in the data structure, otherwise returns false.
 
 
-// Solution: Trie
+// Solution 1: Trie
 
 // Add all the words into a trie.
 // search:
@@ -66,6 +66,56 @@ class TrieNode {
     this.isWordEnd = false;
   }
 }
+
+
+// Solution 2: Count Edited Strings 
+
+// Keep track of the following:
+  // count: hashmap of the count of occurances for each 'xxx_xxx' string.
+  // dict: hashset of the original words in the dictionary.
+
+// buildDict:
+  // add all words into the hashset.
+  // for each word, 
+    // go through each character and replace the character with an underscore: e.g: 'xxx_xxx' 
+    // add to the count for the edited string.
+
+// search:
+  // go through each character in searchWord and replace the character with an underscore: e.g: 'xxx_xxx'
+  // return true if either of the following statements are true:
+    // 1. The searchWord exists in the dictionary and the count of the edited string > 1 (every word in the dictionary is unique, so if the count is larger than 1 that means we have at least one different word)
+    // 2. The searchWord doesn't exist in the dictionary and the count of the edited string > 0.
+
+// n = number of words in the dictionary, m = max length of a word
+// Time Complexity: 207ms
+  // buildDict: O(n * m^2)
+  // search: O(m^2) per call
+// Space Complexity: O(n * m^2) 55.6MB
+var MagicDictionary = function() {
+  this.count = new Map();
+  this.dict = new Set();
+};
+
+MagicDictionary.prototype.buildDict = function(dictionary) {
+  for (let word of dictionary) {
+    this.dict.add(word);
+    for (let i = 0; i < word.length; i++) {
+      let edited = word.slice(0, i) + '_' + word.slice(i + 1);
+      this.count.set(edited, (this.count.get(edited) || 0) + 1);
+    }
+  }
+};
+
+MagicDictionary.prototype.search = function(searchWord) {
+  let hasSameWord = this.dict.has(searchWord);
+  for (let i = 0; i < searchWord.length; i++) {
+    let edited = searchWord.slice(0, i) + '_' + searchWord.slice(i + 1);
+    if ((hasSameWord && this.count.get(edited) > 1) || (!hasSameWord && this.count.has(edited))) {
+      return true;
+    } 
+  }
+  return false;
+};
 
 // A few test cases
 let magicDictionary = new MagicDictionary();
