@@ -7,7 +7,7 @@
   // answer[1] is the maximum number of moves you can play.
 
 
-// Solution: Greedy
+// Solution: 
 
 // Minimum moves:
   // If two stones' positions have a difference <= 2, we only need 1 move.
