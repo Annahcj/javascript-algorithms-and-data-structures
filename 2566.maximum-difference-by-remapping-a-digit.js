@@ -6,7 +6,7 @@
 // Solution:
 
 // Max number: Change the first non-9 digit at the most significant place (leftmost) to 9. 
-// Min number: Change the first digit at the most significant place (leftmost) to 0.
+// Min number: Change the first digit (leftmost) to 0.
 // Note that we change all occurances of the digit that we choose.
 
 // Time Complexity: O(log(n)) 63ms
