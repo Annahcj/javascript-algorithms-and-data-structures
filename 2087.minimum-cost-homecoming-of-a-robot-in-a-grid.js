@@ -12,7 +12,7 @@
 // Count the total cost crossing each row/column in between the house and the robot.
 
 // m = number of rows in between start and end rows, n = number of columns in between start and end columns
-// Time Complexity: O(mn) 90ms
+// Time Complexity: O(m + n) 90ms
 // Space Complexity: O(1) 54.4MB
 var minCost = function(startPos, homePos, rowCosts, colCosts) {
   let [startRow, startCol] = startPos;
