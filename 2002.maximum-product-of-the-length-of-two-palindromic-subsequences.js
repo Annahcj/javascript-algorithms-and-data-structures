@@ -13,7 +13,7 @@
 // When we reach the end of s, check if both subsequences are valid palindromes and record the maximum product of the subsequence lengths.
 
 // n = length of s
-// Time Complexity: O(3^n) 892ms
+// Time Complexity: O(3^n * n) 892ms
 // Space Complexity: O(n) 50.2MB
 var maxProduct = function(s) {
   let res = 0;
