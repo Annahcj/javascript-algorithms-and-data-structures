@@ -10,7 +10,7 @@
 // Sort the array in descending order.
 
 // Time Complexity: O(n log(n)) 223ms
-// Space Complexity: O(n) 54.6MB
+// Space Complexity: O(log(n)) (space for sorting) 54.6MB
 var maxScore = function(nums) {
   nums.sort((a, b) => b - a);
   let prefixSum = 0, score = 0;
