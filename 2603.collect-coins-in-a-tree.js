@@ -14,6 +14,8 @@
 
 // From here, the answer is (the number of nodes left over - 1) * 2, since each edge will be traversed exactly twice.
 
+// Note: The time complexity is assuming we use a real queue (where .shift is O(1)) and not an array (where .shift is O(n)).
+
 // n = number of nodes, m = number of edges
 // Time Complexity: O(n + m) 583ms
 // Space Complexity: O(n + m) 83.3MB
