@@ -9,7 +9,8 @@
 // Solution: DP w/ Monotonic Stacks & Binary Search
 
 // Maintain monotonic decreasing stacks per row and column.
-// Each stack of indices is in decreasing order of steps. Pop off the indices from the back of the stack while the steps are greater than the dp[i][j], since there is no purpose in keeping larger indices with a larger number of steps.
+// Each stack of indices is in decreasing order of steps. 
+// Pop off the indices from the back of the stack while the steps are greater than the dp[i][j], since there is no purpose in keeping larger indices with a larger number of steps.
 
 // Go through the grid from bottom to top, right to left, and populate each dp[i][j].
 // For each grid[i][j], 
