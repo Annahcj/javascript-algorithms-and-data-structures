@@ -6,7 +6,7 @@
 // Return the minimum number of cells you need to visit to reach the bottom-right cell (m - 1, n - 1). If there is no valid path, return -1.
 
 
-// Solution: Monotonic Stacks w/ Binary Search
+// Solution: DP w/ Monotonic Stacks & Binary Search
 
 // Maintain monotonic decreasing stacks per row and column.
 // Each stack of indices is in decreasing order of steps. Pop off the indices from the back of the stack while the steps are greater than the dp[i][j], since there is no purpose in keeping larger indices with a larger number of steps.
