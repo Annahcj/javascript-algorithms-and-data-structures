@@ -1,113 +1,104 @@
 // 2157. Groups of Strings
 
 
-// Solution: [TLE] Bitmasks & Union Find
+// Solution: Union Find & Bitmasks
 
-// This solution passed 95/97 test cases.
-// In the contest, I tried to optimize it by getting rid of the inner loop for the replacing.
-// If we remove a character from s1 and s2, it is equivalent to replacing a character.
-// However, the solution below runs faster on LeetCode than the 'optimized' one.
+// Note: If we remove a character from s1 and s2, it is equivalent to replacing a character. This saves us from looping through 26*26 times to replace each character with every character.
 
-// 1. Generate the bitmasks representing each string. Add them to a map associated to their indices.
-// 2. For each string, try the three operations:
-  // Loop through 0 to 26, and flip the ith bit.
-  // Replace: If the bit was removed, loop through 0 to 26 and add a bit back.
-  // If any of these modified bitmasks are present in the map, get the indices and connect them to the current index using union find.
-// 3. Using the information from the union find, find the parent of each index and keep track of the biggest group size and the number of groups.
+// 1. Go through each word and get the bitmask representation.
+  // Map each bitmask to one word (we keep one as the root and connect words on the fly, so we just need one word as the connection point).
+  // Keep a separate map replacedMap where we keep all combinations of words after removing one character.
+  // Connecting words on the fly: If two words contain the same characters, we know they are connected. For replacing, if two words contain the same characters after deleting one character from both words, they are connected.
 
-// Time Complexity: O(n * 26 * 26)
-// Space Complexity: O(n)
+// 2. Go through each word again and try to add/remove any of the letters from the bitmask.
+  // Add: Try to add any non-existing character and union the current word with the word stored in the map.
+  // Remove: Try to remove any character and union the current word with the word stored in the map.
+
+// 3. Group the words by parent and count the number of groups and the maximum group size.
+
+// n = number of words
+// Time Complexity: O(n * 26) 564ms
+// Space Complexity: O(n * 26) 100.5MB
 var groupStrings = function(words) {
-  let n = words.length, masks = Array(n), map = new Map();
-  for (var i = 0; i < n; i++) {
-    let mask = 0;
-    for (var char of words[i]) {
-      let charCode = char.charCodeAt() - 97;
-      mask |= (1 << charCode);
+  let map = new Map(), replacedMap = new Map();
+  let n = words.length, bitmasks = Array(n), uf = new UnionFind(n);
+  for (let i = 0; i < n; i++) {
+    let bitmask = getBitmask(words[i]);
+    bitmasks[i] = bitmask; // save it so we can re-use later
+    if (!map.has(bitmask)) map.set(bitmask, i);
+    else uf.union(i, map.get(bitmask)); // union on the fly
+    
+    for (let j = 0; j < 26; j++) {
+      if (!((bitmask >> j) & 1)) continue; // word doesn't contain jth character
+      let newBitmask = bitmask ^ (1 << j); // new bitmask after removing jth character
+      if (!replacedMap.has(newBitmask)) replacedMap.set(newBitmask, i);
+      else uf.union(i, replacedMap.get(newBitmask)); // union on the fly
     }
-    masks[i] = mask;
-    if (!map.has(mask)) map.set(mask, []);
-    map.get(mask).push(i);
-  }  
-
-  let uf = new UnionFind(n);
-
-  for (i = 0; i < n; i++) {
-    let mask = masks[i];
-    for (var j = 0; j < 26; j++) {
-      let bit = (mask >> j) & 1;
-      let flipped = mask ^ (1 << j), connected = map.get(flipped);
-      if (bit === 1) {
-        // replace: remove a letter, then add a letter
-        for (var k = 0; k < 26; k++) {
-          let bitK = (flipped >> k) & 1;
-          if (bitK === 1) continue;
-          let replaced = flipped ^ (1 << k), connectedIdxs = map.get(replaced);
-          if (!connectedIdxs) continue;
-          for (var idx of connectedIdxs) {
-            uf.union(i, idx);
-          }
-        }
-      }
-
-      if (!connected) continue;
-      for (var s2 of connected) { // connect the two strings
-        uf.union(i, s2);
+  }
+  
+  for (let i = 0; i < n; i++) {
+    let bitmask = bitmasks[i];
+    for (let j = 0; j < 26; j++) {
+      if (!((bitmask >> j) & 1)) { 
+        let added = bitmask | (1 << j); // add character j to this word
+        if (map.has(added)) uf.union(i, map.get(added));
+      } else {
+        let removed = bitmask ^ (1 << j); // remove character j from this word
+        if (map.has(removed)) uf.union(i, map.get(removed));
       }
     }
   }
-  let maxGroupSize = 0;
-  for (var i = 0; i < n; i++) { // get the number of groups and the maximum group size
+  
+  let groupSize = {}, numGroups = 0, maxGroupSize = 0;
+  for (let i = 0; i < n; i++) {
     let parent = uf.find(i);
-    maxGroupSize = Math.max(maxGroupSize, uf.getSize(parent));
-  } 
-  return [uf.count, maxGroupSize];
-}; 
+    if (!groupSize[parent]) groupSize[parent] = 1, numGroups++;
+    else groupSize[parent]++;
+    maxGroupSize = Math.max(maxGroupSize, groupSize[parent]);
+  }
+  return [numGroups, maxGroupSize];
+};
+
+function getBitmask(word) {
+  let bitmask = 0;
+  for (let char of word) {
+    let charcode = char.charCodeAt() - 97;
+    bitmask |= (1 << charcode);
+  }
+  return bitmask;
+}
 
 class UnionFind {
   constructor(size) {
     this.root = Array(size);
-    this.rank = Array(size);
-    this.size = Array(size); // size of each group
-    this.count = size; // total count of groups
+    this.rank = Array(size)
     for (var i = 0; i < size; i++) {
-      this.size[i] = 1;
       this.root[i] = i;
       this.rank[i] = 1;
     }
   }
-  // recursively finding the root of x, setting roots of all along the path to the root from bottom up.
   find(x) {
     if (this.root[x] === x) {
       return x;
     }
     return this.root[x] = this.find(this.root[x]);
   }
-  // choose side whose rank (height) is smaller to set as root out of (x, y)
-  // if the heights are equal, set it either way (set x as root for simplicity) and increase rank of x by one.
   union(x, y) {
     let rootX = this.find(x);
     let rootY = this.find(y);
     if (rootX !== rootY) {
       if (this.rank[rootX] > this.rank[rootY]) {
         this.root[rootY] = rootX;
-        this.size[rootX] += this.size[rootY];
       } else if (this.rank[rootX] < this.rank[rootY]) {
         this.root[rootX] = rootY;
-        this.size[rootY] += this.size[rootX];
       } else {
         this.root[rootY] = rootX;
         this.rank[rootX]++;
-        this.size[rootX] += this.size[rootY];
       }
-      this.count--;
     }
   }
   connected(x, y) {
     return this.find(x) === this.find(y);
-  }
-  getSize(x) {
-    return this.size[x];
   }
 }
 
