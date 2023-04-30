@@ -1,0 +1,34 @@
+// 1980. Find Unique Binary String
+// Given an array of strings nums containing n unique binary strings each of length n, return a binary string of length n that does not appear in nums. If there are multiple answers, you may return any of them.
+
+
+// Solution 1: Enumeration
+
+// Go through each combination of binary strings (0 to 2^n) and return the first one which nums does not already contain.
+
+// Time Complexity: O(2^n) 55ms
+// Space Complexity: O(n) 41.8MB
+var findDifferentBinaryString = function(nums) {
+  nums = new Set(nums);
+  let n = nums.size;
+  for (let i = 0; i < (1 << n); i++) {
+    let str = i.toString(2), finalStr = str + '0'.repeat(n - str.length); // pad with extra zeros
+    if (!nums.has(finalStr)) return finalStr;
+  }
+};
+
+
+// Solution 2: Flip ith bit of the ith string
+
+// Flip the ith bit of the ith string.
+// This ensures the final string will not be the same as any of the binary strings since at least one bit is different.
+
+// Time Complexity: O(n^2) 47ms
+// Space Complexity: O(1) 42.4MB
+var findDifferentBinaryString = function(nums) {
+  let n = nums.length, res = "";
+  for (let i = 0; i < n; i++) {
+    res += nums[i][i] === '0' ? '1' : '0';
+  }
+  return res;
+};
