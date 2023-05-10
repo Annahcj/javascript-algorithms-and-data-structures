@@ -2,48 +2,26 @@
 // Given a positive integer n, generate an n x n matrix filled with elements from 1 to n2 in spiral order.
 
 
-// Solution: Layer by Layer Approach
+// Solution: Simulation
 
-// We loop layer by layer, keeping two variables start and end indicating the boundaries of the next layer.
-// Set start to 0, and end to n - 1.
-// Loop while start is smaller than or equal to end and set each value of the matrix.
-  // The start position is matrix[start][start]
-  // Loop through the upper row (left-right)
-  // Loop through the rightmost column (up-bottom)
-  // Loop through the bottom row (right-left)
-  // Loop through the leftmost column (bottom-up)
-  // Increment start by one, and decrement end by one.
+// Go through the matrix layer by layer from out to in.
+// For each layer, we traverse the four borders.
+  // 1. Top border from left to right.  
+  // 2. Right border from top down.
+  // 3. Bottom border from right to left.
+  // 4. Left border from bottom up.
 
-// Time Complexity: O(n^2) 68ms
-// Space Complexity: O(1) (not including output) 38.9MB
+// Time Complexity: O(n^2) 57ms
+// Space Complexity: O(1) (not including output) 41.7MB
 var generateMatrix = function(n) {
-  let mat = Array(n);
-  for (var i = 0; i < n; i++) mat[i] = Array(n);
-  let start = 0, end = n - 1;  
-  let num = 1;
-  while (start <= end) {
-    console.log(start, end)
-    i = start;
-    for (var j = start; j <= end; j++) {
-      mat[i][j] = num;
-      num++;
-    }
-    j = end;
-    for (i = start + 1; i <= end; i++) {
-      mat[i][j] = num;
-      num++;
-    }
-    i = end;
-    for (j = end - 1; j >= start; j--) {
-      mat[i][j] = num;
-      num++;
-    }
-    j = start;
-    for (i = end - 1; i > start; i--) {
-      mat[i][j] = num;
-      num++;
-    }
-    start++, end--;
+  let mat = Array(n).fill(0).map(() => Array(n));
+  let layer = 0, num = 1;
+  while (num <= n * n) {
+    for (let col = layer; col < n - layer && num <= n * n; col++) mat[layer][col] = num++;
+    for (let row = layer + 1; row < n - layer && num <= n * n; row++) mat[row][n - layer - 1] = num++;
+    for (let col = n - layer - 2; col >= layer && num <= n * n; col--) mat[n - layer - 1][col] = num++;
+    for (let row = n - layer - 2; row >= layer + 1 && num <= n * n; row--) mat[row][layer] = num++;
+    layer++;
   }
   return mat;
 };
