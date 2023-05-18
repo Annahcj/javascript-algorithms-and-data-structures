@@ -8,7 +8,7 @@
 // Solution: Recursion
 
 // As we use a function, remove it from the array using .shift()
-// Fill an array of length n with calls to the recursive function.
+// Fill an array of length n calls to the recursive function.
 // When a promise resolves, it will be replaced by the next upcoming function.
 // In the recursive function, we recursively call itself once the promise resolves.
 
