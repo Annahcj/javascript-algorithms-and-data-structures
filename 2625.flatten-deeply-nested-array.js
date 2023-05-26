@@ -7,19 +7,25 @@
 
 // Solution: Recursion
 
-// Recursively traverse the arr while keeping track of the depth (using n).
-// Recursively flatten the array level by level while n > 0. By using the spread operator, we flatten the array by 1 level.
+// We push to the result array on the fly instead of spreading to bring the time complexity to O(n).
 
-// Time Complexity: O(n) 209ms
-// Space Complexity: O(n) 73.1MB
+// n = length of arr, d = depth of arr
+// Time Complexity: O(n) 115ms
+// Space Complexity: O(d) (not including output) 62.9MB
 var flat = function (arr, n) {
-  if (n === 0) return arr;
-  let flattened = [];
-  for (let el of arr) {
-    if (Array.isArray(el)) flattened.push(...flat(el, n - 1));
-    else flattened.push(el);
+  const res = [];
+  flatten(arr, n);
+  return res;
+  
+  function flatten(arr, n) {
+    for (const element of arr) {
+      if (n === 0 || !Array.isArray(element)) {
+        res.push(element);
+      } else {
+        flatten(element, n - 1);
+      } 
+    }
   }
-  return flattened;
 };
 
 // Two test cases
