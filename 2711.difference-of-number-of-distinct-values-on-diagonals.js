@@ -14,7 +14,7 @@
 // Precompute the prefix sum: for each diagonal, start from the top left and bottom right and store the prefix sum of distinct values from both directions
 
 // Time Complexity: O(mn) 174ms
-// Space Complexity: O(min(m, n)^2) 54.1MB
+// Space Complexity: O(mn) 54.1MB
 var differenceOfDistinctValues = function(grid) {
   let m = grid.length, n = grid[0].length;
   let topLeft = precomputeTopLeft(grid);
