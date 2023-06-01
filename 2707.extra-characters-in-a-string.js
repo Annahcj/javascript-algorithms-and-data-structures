@@ -54,6 +54,7 @@ class TrieNode {
 // Solution 2: Iterative DP & Hashset
 
 // Bottom up iterative DP.
+// dp[i] = minimum number of characters left over for the substring from index 0 to index i - 1.
 // Use a hashset to store the words in the dictionary.
 
 // n = length of s, m = number of words in dictionary, k = max(dictionary[i].length)
