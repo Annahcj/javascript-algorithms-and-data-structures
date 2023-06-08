@@ -11,7 +11,7 @@
 // Time Complexity: O(m log(n)) 64ms
 // Space Complexity: O(1) 43.9MB
 var countNegatives = function(grid) {
-  let m = grid.length, n = grid[0].length, negatives = 0;
+  let m = grid.length, negatives = 0;
   for (let i = 0; i < m; i++) {
     negatives += getNegatives(grid[i]);
   }
