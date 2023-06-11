@@ -5,7 +5,7 @@
 // Return the minimum cost to collect chocolates of all types, given that you can perform as many operations as you would like.
 
 
-// Solution: 
+// Solution: Try All Rotations
 
 // Keep track of the minimum state of nums[i] for any number of rotations <= r.
 // Find the number of rotations which results in the minimum total cost: (x * rotations) + sum of min cost of each nums[i] for every i
