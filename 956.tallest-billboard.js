@@ -33,8 +33,8 @@
   // currMaxStart becomes 2 + 3 = 5 (currMaxStart + diff)
 
 // n = length of rods, m = sum(rods[i])
-// Time Complexity: O(n * min(m, 2^n)) 139ms
-// Space Complexity: O(min(m, 2^n)) 49MB
+// Time Complexity: O(n * min(m, 3^n)) 139ms
+// Space Complexity: O(min(m, 3^n)) 49MB
 var tallestBillboard = function(rods) {
   let dp = {0: 0};
   for (let rod of rods) {
