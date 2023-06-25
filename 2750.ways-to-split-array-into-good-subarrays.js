@@ -5,10 +5,10 @@
 // A subarray is a contiguous non-empty sequence of elements within an array.
 
 
-// Solution: Mutiply Index Differences
+// Solution: Multiply Index Differences
 
 // 1. Collect the indexes of all 1's.
-// 2. Mutiply the index difference between each adjacent pair of 1's.
+// 2. Multiply the index difference between each adjacent pair of 1's.
 
 // e.g: 010001
 
