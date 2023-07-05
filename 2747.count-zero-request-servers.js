@@ -18,7 +18,7 @@
   // Keep track of the global count of active servers.
 
 // k = number of logs, m = number of queries
-// Time Complexity: O(m log(m) + k log(k)) 463ms
+// Time Complexity: O(m log(m) + k log(k) + n) 463ms
 // Space Complexity: O(n + m) 118.5MB
 var countServers = function(n, logs, x, queries) {
   queries = queries.map((time, idx) => [time, idx]).sort((a, b) => a[0] - b[0]);
