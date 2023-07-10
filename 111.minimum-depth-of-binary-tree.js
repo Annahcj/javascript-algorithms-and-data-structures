@@ -52,7 +52,9 @@ var minDepth = function(root) {
 // Use level-by-level BFS to find the minimum depth of a leaf node.
 // Once we find a leaf node, we can return the current depth.
 
-// Note: Here we use an array as a queue, which results in O(n) time complexity for .shift(). If we use a real queue the time complexity will be O(n)
+// Note: 
+  // Here we use an array as a queue, which results in O(n) time complexity for .shift(), with O(n^2) total time complexity.
+  // If we use a real queue the total time complexity will be O(n).
 
 // Time Complexity: O(n) 215ms
 // Space Complexity: O(n) 98.7MB
