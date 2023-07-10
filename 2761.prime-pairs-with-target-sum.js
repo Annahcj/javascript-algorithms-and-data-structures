@@ -1,4 +1,4 @@
-// 6916. Prime Pairs With Target Sum
+// 2761. Prime Pairs With Target Sum
 // You are given an integer n. We say that two integers x and y form a prime number pair if:
   // 1 <= x <= y <= n
   // x + y == n
