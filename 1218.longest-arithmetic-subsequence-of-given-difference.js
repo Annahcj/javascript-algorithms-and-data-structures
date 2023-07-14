@@ -5,7 +5,7 @@
 
 // Solution: DP w/ Hashmap
 
-// Use a hashmap 'dp' to keep track of the longest arithmetic subsequence ending with nums[i].
+// Keep track of a hashmap 'dp', where dp[num] to keep track of the longest arithmetic subsequence ending with num.
 
 // Time Complexity: O(n) 125ms
 // Space Complexity: O(n) 52.8MB
