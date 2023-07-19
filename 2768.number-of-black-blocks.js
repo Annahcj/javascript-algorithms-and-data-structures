@@ -13,7 +13,7 @@
 
 // For each coordinate, go through each of the 4 submatrices that it is part of.
   // For each submatrix, count the number of black cells in each of the 4 submatrices based on which coordinates are currently in our hashset.
-// Then, we can update the counts in arr as we go (decrement arr[blackCells] and increment arr[blackCells + 1]).
+// Then, we can update the counts in arr based on the count of black cells in each submatrix (decrement arr[blackCells] and increment arr[blackCells + 1]).
 
 // k = number of coordinates
 // Time Complexity: O(4k) 1144ms
