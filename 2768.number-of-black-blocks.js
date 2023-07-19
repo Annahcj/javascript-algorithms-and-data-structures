@@ -16,7 +16,7 @@
 // Then, we can update the counts in arr based on the count of black cells in each submatrix (decrement arr[blackCells] and increment arr[blackCells + 1]).
 
 // k = number of coordinates
-// Time Complexity: O(4k) 1144ms
+// Time Complexity: O(16k) 1144ms
 // Space Complexity: O(k) 90.1MB
 var countBlackBlocks = function(m, n, coordinates) {
   let arr = Array(5).fill(0), used = new Set();
