@@ -4,7 +4,7 @@
 // Students must be placed in seats in good condition.
 
 
-// Solution: DP - Recursion w/ Memoization
+// Solution 1: DP - Recursion w/ Memoization
 
 // Memoize each dp(row, prevRowMask), where
   // row = the row number
@@ -64,6 +64,55 @@ function getPossibleRows(seats, prevRowMask) {
       backtrack(col + 1, (rowMask << 1) | 1); // student takes the seat
     }
   }
+}
+
+// Solution 2: DP - Iterative
+
+// Populate dp, where dp[i + 1][mask] = the maximum number of students in a valid seating plan from row 0 to i, where mask represents the bitmask of students in row i (0 = empty or broken, 1 = student)
+
+// Time Complexity: O(m^2 * 2^n * 2^n) 172ms
+// Space Complexity: O(m * 2^n) 44.5MB
+var maxStudents = function(seats) {
+  let m = seats.length, n = seats[0].length;
+  let dp = Array(m + 1).fill(0).map(() => Array(1 << n).fill(-1));
+  let maxStudents = 0;
+  dp[0][0] = 0;
+  
+  for (let i = 0; i < m; i++) {
+    for (let prevRowMask = 0; prevRowMask < (1 << n); prevRowMask++) {
+      if (dp[prevRowMask] === -1) continue;
+      for (let rowMask = 0; rowMask < (1 << n); rowMask++) {
+        if (seatingRowIsValid(seats, prevRowMask, rowMask, i)) {
+          let students = countStudents(rowMask);
+          dp[i + 1][rowMask] = Math.max(dp[i + 1][rowMask], students + dp[i][prevRowMask]);
+          maxStudents = Math.max(maxStudents, dp[i + 1][rowMask]);
+        }
+      }
+    }
+  }
+  return maxStudents;
+};
+
+function countStudents(rowMask) {
+  let students = 0;
+  while (rowMask > 0) {
+    students += (rowMask & 1);
+    rowMask >>= 1;
+  }
+  return students;
+}
+
+function seatingRowIsValid(seats, prevRowMask, rowMask, row) {
+  let n = seats[0].length;
+  for (let j = 0; j < n; j++) {
+    let currSeatTaken = (rowMask >> (n - j - 1)) & 1;
+    if (currSeatTaken && seats[row][j] === '#') return false; // invalid seating - taking a broken seat
+    let upperLeftIsTaken = j > 0 && ((prevRowMask >> (n - j)) & 1);
+    let upperRightIsTaken = j < n - 1 && ((prevRowMask >> (n - j - 2)) & 1);
+    let leftIsTaken = j > 0 && ((rowMask >> (n - j)) & 1);
+    if (currSeatTaken && (upperLeftIsTaken || upperRightIsTaken || leftIsTaken)) return false;
+  }
+  return true;
 }
 
 // Two test cases
