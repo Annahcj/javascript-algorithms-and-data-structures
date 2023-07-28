@@ -4,48 +4,28 @@
 // Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
 
 
-// Solution 1: Recursion
+// Solution: DP - Recursion w/ Memoization
 
-// turn: 
-  // 1: player 1, a positive amount
-  // -1: player 2, a negative amount
-// set two pointers, start and end.
-// for each turn, pick the best outcome out of
-  // 1 (choiceA). picking the first one
-  // 2 (choiceB). picking the last one
-// If it's player 1's turn, return the maximum out of choiceA and choiceB, 
-// otherwise return the minimum out of choiceA and choiceB since we are a using negative number to indicate player 2's points.
+// Memoize each dp(i, j), where i and j are the left and right pointers in nums (since we only take from the start or end of the current state of nums).
+// For each dp(i, j), we return the maximum score out of either taking from the start or end (nums[i] or nums[j]).
+  // nums[i] - dp(i + 1, j)
+  // nums[j] - dp(i, j - 1)
+  // Note: We subtract the result since that is the total score difference of the opposite player. By subtracting, we keep the difference in scores.
 
-// Time Complexity: O(2^n) 312ms
-// Space Complexity: O(n) 44.7MB
+// Time Complexity: O(n^2) 53ms
+// Space Complexity: O(n^2) 42MB
 var PredictTheWinner = function(nums) {
-  return recurse(0, nums.length - 1, 1) >= 0; // positive means player 1 wins, negative means player 2 wins.
-  function recurse(start, end, turn) {
-    if (start === end) return nums[start] * turn;
-    let choiceA = recurse(start + 1, end, -turn) + nums[start] * turn;
-    let choiceB = recurse(start, end - 1, -turn) + nums[end] * turn;
-    return turn === 1 ? Math.max(choiceA, choiceB) : Math.min(choiceA, choiceB);
-  }  
-};
-
-// Solution 2: Recursion w/ Memoization
-
-// The same as solution 1, except we use a hashmap to keep track of the results so that we don't have to compute them again.
-
-// Time Complexity: O(n^2) 60ms
-// Space Complexity: O(n^2) 40.9MB
-var PredictTheWinner = function(nums) {
-  let memo = {};
-  return recurse(0, nums.length - 1, 1) >= 0;
-  function recurse(start, end, turn) {
-    if (memo[`${start},${end},${turn}`] !== undefined) return memo[`${start},${end},${turn}`];
-    if (start === end) return nums[start] * turn;
-    let choiceA = recurse(start + 1, end, -turn) + nums[start] * turn;
-    let choiceB = recurse(start, end - 1, -turn) + nums[end] * turn;
-    let bestChoice = Math.max(choiceA * turn, choiceB * turn) * turn;
-    memo[`${start},${end},${turn}`] = bestChoice;
-    return bestChoice;
-  }  
+  let n = nums.length, memo = Array(n).fill(0).map(() => Array(n).fill(null));
+  let res = dp(0, n - 1);
+  return res >= 0;
+  
+  function dp(i, j) {
+    if (i > j) return 0;
+    if (i === j) return nums[i];
+    if (memo[i][j] !== null) return memo[i][j];
+    
+    return memo[i][j] = Math.max(nums[i] - dp(i + 1, j), nums[j] - dp(i, j - 1));
+  }
 };
 
 // Two test cases to run function on
