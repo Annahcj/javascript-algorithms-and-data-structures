@@ -4,40 +4,33 @@
 // Note that the batteries cannot be recharged.
 // Return the maximum number of minutes you can run all the n computers simultaneously.
 
-
 // Solution: Binary Search
 
-// 1. sort batteries in desc order
-// 2. get sum of the batteries (loose upper bound)
-// 3. binary search for the biggest n where the batteries can run more than or equal to (mid * n) minutes simultaneously.
+// Proof: 
+  // Because we take Math.min(minTime, batteries[i]), if (sum >= minTime * n), then we know that there are at least n batteries.
+  // If there are at least n batteries and the sum of the battery times >= minTime * n, we can rearrange them however we want for the n computers to fulfill minTime per computer.
 
-// m = sum of batteries
-// Time Complexity: O(m log(m)) 248ms
-// Space Complexity: O(log(n)) (sorting algo) 55MB
+// n = number of computers, m = sum of batteries
+// Time Complexity: O(m log(m)) 104ms
+// Space Complexity: O(log(n)) (space for sorting) 54MB
 var maxRunTime = function(n, batteries) {
-  batteries.sort((a, b) => b - a);
-  let sum = 0;
-  for (var i = 0; i < batteries.length; i++) {
-    sum += batteries[i];
-  }
-  
-  let low = 1, high = sum;
+  let low = 0, high = batteries.reduce((sum, time) => sum + time);
   while (low < high) {
     let mid = Math.ceil((low + high) / 2);
-    if (isEnough(mid)) low = mid; // mid could be the final answer, but we still try to find a larger number of minutes
+    if (isEnough(n, batteries, mid)) low = mid;
     else high = mid - 1;
   }
   return low;
-
-  function isEnough(minutes) {
-    let count = 0;
-    for (var bat of batteries) {
-      count += Math.min(bat, minutes); // can't take more than 'minutes' for each battery
-      if (count >= minutes * n) return true; // time optimization, break early if condition is already met.
-    }
-    if (count >= minutes * n) return true;
-  }
 };
+
+function isEnough(n, batteries, minTime) {
+  let sum = 0;
+  for (let i = 0; i < batteries.length; i++) {
+    sum += Math.min(minTime, batteries[i]);
+    if (sum >= minTime * n) return true;
+  }
+  return false;
+}
 
 // Two test cases to run function on
 console.log(maxRunTime(2, [3,3,3])) // 4
