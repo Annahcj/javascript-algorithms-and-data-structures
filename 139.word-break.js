@@ -17,17 +17,17 @@
   // Add the 'curr' index to visited (so we don't have to go over it more than once)
 // If there is nothing left in the queue and we have got to the end, return false.
 
-// Time Complexity: O(n^2) 96ms
-// Space Complexity: O(wordDict + n) 41.3MB
+// n = length of s, m = total characters in wordDict
+// Time Complexity: O(n^3 + m) 96ms
+  // O(n^2) for queue processing * O(n) for string concatenation.
+// Space Complexity: O(n + m) 41.3MB
 var wordBreak = function(s, wordDict) {
-  let words = new Set(wordDict);
-  let visited = {};
-  let queue = [0];
+  let words = new Set(wordDict), visited = {}, queue = [0];
   while (queue.length) {
     let curr = queue.shift();
     if (!visited[curr]) {
       let word = "";
-      for (var i = curr; i < s.length; i++) {
+      for (let i = curr; i < s.length; i++) {
         word += s[i];
         if (words.has(word)) {
           if (i === s.length - 1) return true;
@@ -41,7 +41,7 @@ var wordBreak = function(s, wordDict) {
 };
 
 
-// Solution 2: Dynamic Programming
+// Solution 2: DP & Hashset
 
 // Thoughts:
 // Use an array to keep track of substrings that match words in wordDict (true or false).
@@ -104,14 +104,15 @@ var wordBreak = function(s, wordDict) {
       // break 
 // Return the last item of dp  
 
-// Time Complexity: O(n^2) 80ms
-// Space Complexity: O(n) 40.9MB
+// n = length of s, m = total characters in wordDict
+// Time Complexity: O(n^3 + m) 80ms
+// Space Complexity: O(n + m) 40.9MB
 var wordBreak = function(s, wordDict) {
   let words = new Set(wordDict);
   let dp = Array(s.length + 1).fill(false);
   dp[0] = true;
-  for (var end = 1; end <= s.length; end++) {
-    for (var start = 0; start < end; start++) {
+  for (let end = 1; end <= s.length; end++) {
+    for (let start = 0; start < end; start++) {
       if (dp[start] && words.has(s.slice(start, end))) {
         dp[end] = true;
         break;
@@ -120,57 +121,67 @@ var wordBreak = function(s, wordDict) {
   }
   return dp[dp.length - 1];
 };
-  
-// Solution 3: Trie w/ Recursion & Memoization
+ 
 
+// Solution 3: DP & Trie
+
+// Add all words into a trie to save time when searching for words.
+// The advantages of a trie are:
+  // 1. We can stop iterating straight away when we don't find a match.
+  // 2. The way we iterate through means that we don't need to create a substring each time. This saves O(n) additional time on top of the time complexity.
+
+// Memoize each dp(i), where dp(i) = whether the substring from i to n - 1 can be separated into valid dictionary words.
+// For each dp(i), iterate through the trie and stop the iteration if the trie has no matches.
+
+// n = length of s, m = total characters in the wordDict
+// Time Complexity: O(n^2 + m) 62ms
+// Space Complexity: O(n + m) 45.3MB
 var wordBreak = function(s, wordDict) {
-  let trie = new Trie(wordDict);
-  let memo = Array(s.length);
-  return recurse(0);
-
-  function recurse(idx) {
-    if (memo[idx] !== undefined) return memo[idx];
-    if (idx === s.length) return true;
-    let node = trie.root.children;
-    // dfs to find all words that match from idx
-    let ans = false;
-    let i = idx;
-    while (node[s[i]]) {
-      node = node[s[i]];
-      // if node is a word, recurse at index + 1 (next index to start searching again)
-      if (node.wordEnd) {
-        // if recurse(i + 1) returns true, set ans to true
-        if (recurse(i + 1)) ans = true;
-      }
+  let n = s.length, trie = new Trie();
+  for (let word of wordDict) {
+    trie.add(word);
+  }
+  let memo = Array(n).fill(null);
+  return dp(0);
+  
+  function dp(i) {
+    if (i === n) return true;
+    if (memo[i] !== null) return memo[i];
+    
+    let node = trie.root;
+    for (let j = i; j < n; j++) {
       node = node.children;
-      i++;
+      if (!node[s[j]]) break;
+      node = node[s[j]];
+      if (node.isWordEnd && dp(j + 1)) {
+        return memo[i] = true;
+      }
     }
-    // memoize ans and return it for earlier calls
-    memo[idx] = ans;
-    return ans;
+    return memo[i] = false;
   }
 };
+
+class Trie {
+  constructor() {
+    this.root = new TrieNode();
+  }
+  add(word) {
+    let node = this.root;
+    for (let char of word) {
+      node = node.children;
+      if (!node[char]) node[char] = new TrieNode();
+      node = node[char];
+    }
+    node.isWordEnd = true;
+  }
+}
+
 class TrieNode {
   constructor() {
     this.children = {};
-    this.wordEnd = false;
+    this.isWordEnd = false;
   }
 }
-class Trie {
-  constructor(words) {
-    this.root = new TrieNode();
-    for (var word of words) {
-      let node = this.root;
-      for (var char of word) {
-        node = node.children;
-        if (!node[char]) node[char] = new TrieNode();
-        node = node[char];
-      }
-      node.wordEnd = true;
-    }
-  }
-}
-
 
 // Four test cases to run function on
 console.log(wordBreak("abaabbbbbbbbbbbbaaa", ["a","b"])) // true
