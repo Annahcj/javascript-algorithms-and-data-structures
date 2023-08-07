@@ -4,45 +4,40 @@
   // The first integer of each row is greater than the last integer of the previous row.
 
 
-// Solution: Binary Search 
+// Solution: Two Binary Searches
 
-// Binary Search for a row where target is bigger than or equal to the first number AND target is smaller than or equal to the last number.
-// When we find a row that matches the criterias, binary search to check whether the row contains target.
+// 1. Binary search for the row where the target is between first and last integer of row.
+// 2. Binary search through the row for the target.
 
-// Time Complexity: O(log(m) + log(n)) 64ms
-// Space Complexity: O(1) 39.9MB
+// Time Complexity: O(log(m) + log(n)) 55ms
+// Space Complexity: O(1) 41.5MB
 var searchMatrix = function(matrix, target) {
   let m = matrix.length, n = matrix[0].length;
-  let start = 0, end = m - 1;
-  while (start <= end) {
-    let mid = Math.floor((start + end) / 2);
-    if (target < matrix[mid][0]) {
-      end = mid - 1;
-    } else if (target > matrix[mid][n - 1]) {
-      start = mid + 1;
-    } else {
-      return search(matrix[mid]);
-    }
+  let row = binarySearchForRow(matrix, target);
+  if (!row) return false;
+  let low = 0, high = n - 1;
+  while (low <= high) {
+    let mid = Math.floor((low + high) / 2);
+    if (row[mid] === target) return true;
+    else if (row[mid] < target) low = mid + 1;
+    else high = mid - 1;
   }
   return false;
-
-  function search(arr) {
-    let start = 0, end = n - 1;
-    while (start <= end) {
-      let mid = Math.floor((start + end) / 2);
-      if (arr[mid] < target) {
-        start = mid + 1;
-      } else if (arr[mid] > target) {
-        end = mid - 1;
-      } else {
-        return true;
-      }
-    }
-    return false;
-  }
 };
 
-// Three test cases to run function on
+function binarySearchForRow(matrix, target) {
+  let m = matrix.length, n = matrix[0].length;
+  let low = 0, high = m - 1;
+  while (low <= high) {
+    let mid = Math.floor((low + high) / 2);
+    if (matrix[mid][0] <= target && matrix[mid][n - 1] >= target) return matrix[mid];
+    else if (matrix[mid][n - 1] < target) low = mid + 1;
+    else high = mid - 1;
+  }
+  return null;
+}
+
+// Three test cases
 console.log(searchMatrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3)) // true
 console.log(searchMatrix([[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13)) // false
 console.log(searchMatrix([[1]], 2)) // false
