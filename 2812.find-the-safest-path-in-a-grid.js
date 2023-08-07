@@ -13,7 +13,7 @@
 
 // 1. Use multi-source BFS to find each cell's minimum distance to a thief. We start the BFS at the thief cells and expand outwards.
 // 2. Binary search for the maximum possible minSafeness factor. 
-  // To check whether a minSafeness is possible, use BFS to check whether there exists a valid path from (0,0) to (n-1,n-1) using only cells with safeness >= minSafeness.
+  // To check whether a minSafeness is possible, use BFS to check whether there exists a valid path from (0, 0) to (n-1, n-1) using only cells with safeness >= minSafeness.
 
 // Time Complexity: O(n^2 log(n^2)) 512ms
 // Space Complexity: O(n^2) 91.4MB
