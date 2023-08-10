@@ -7,7 +7,7 @@
 // Note: A subarray is a contiguous non-empty sequence of elements within an array.
 
 
-// Solution: DP
+// Solution 1: DP
 
 // Memoize each dp(start, end), where dp(start, end) = whether the subarray (start, end) has a valid split.
 // For each dp(start, end), try each split index:
@@ -41,6 +41,23 @@ var canSplitArray = function(nums, m) {
     }
     return memo[start][end] = false;
   }
+};
+
+// Solution 2: Greedy
+
+// We can keep splitting the array into an array of length 1 and an array with the rest of the elements.
+// Ultimately, this will only be possible if there exists a subarray of length 2 with a sum >= m, since all numbers are positive, the subarray sum will only get larger as the subarray size grows.
+// Return true if there exists any nums[i] + nums[i + 1] >= m.
+
+// Time Complexity: O(n) 53ms
+// Space Complexity: O(1) 43.7MB
+var canSplitArray = function(nums, m) {
+  let n = nums.length;
+  if (n <= 2) return true;
+  for (let i = 0; i < n - 1; i++) {
+    if (nums[i] + nums[i + 1] >= m) return true;
+  }
+  return false;
 };
 
 // Two test cases
