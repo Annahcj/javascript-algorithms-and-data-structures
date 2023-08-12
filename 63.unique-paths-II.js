@@ -5,28 +5,32 @@
 // An obstacle and space is marked as 1 and 0 respectively in the grid.
 
 
-// Solution: Dynamic Programming
+// Solution: DP
 
-// Time Complexity: O(nm) 76ms
-// Space Complexity: O(nm) 39.8MB
+// Populate a matrix dp, where dp[i][j] = number of unique paths to each cell (i, j) from (0, 0).
+// For each dp[i][j],
+  // If obstacleGrid[i][j] is an obstacle, there are no ways to reach this cell (dp[i][j] = 0).
+  // Otherwise, dp[i][j] = dp[i - 1][j] + dp[i][j - 1] (ways from the left and top cell).
+
+// At the end, return dp[m - 1][n - 1].
+
+// m = number of rows, n = number of columns
+// Time Complexity: O(mn) 65ms
+// Space Complexity: O(mn) 42.7MB
 var uniquePathsWithObstacles = function(obstacleGrid) {
-  let n = obstacleGrid.length, m = obstacleGrid[0].length;
-  let dp = Array(n);
-  for (var i = 0; i < n; i++) dp[i] = Array(m);
-  // if first obstacleGrid row is [0,1,0,0], dp row will be -> [1,0,0,0]
-  // if not obstacle, set to 1. otherwise once there is an obstacle, any cell after it on the row cannot be reached, so set all after an obstacle to 0.
-  for (var j = 0; j < m; j++) dp[0][j] = obstacleGrid[0][j] === 1 || (j > 0 && dp[0][j - 1] === 0) ? 0 : 1;
-  // same for the first column -> once obstacle is reached, any cell after it will be 0 (cannot be reached)
-  for (i = 0; i < n; i++) dp[i][0] = obstacleGrid[i][0] === 1 || (i > 0 && dp[i - 1][0] === 0) ? 0 : 1;
-  for (i = 1; i < n; i++) {
-    for (j = 1; j < m; j++) {
-      // if obstacle, set to 0
-      if (obstacleGrid[i][j] === 1) dp[i][j] = 0;
-      // otherwise take upper and left
-      else dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+  let m = obstacleGrid.length, n = obstacleGrid[0].length;
+  if (obstacleGrid[0][0] === 1 || obstacleGrid[m - 1][n - 1]) return 0;
+  let dp = Array(m).fill(0).map(() => Array(n).fill(0));
+  dp[0][0] = 1;
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === 0 && j === 0) continue;
+      if (obstacleGrid[i][j] === 1) continue;
+      if (i > 0) dp[i][j] += dp[i - 1][j];
+      if (j > 0) dp[i][j] += dp[i][j - 1];
     }
   }
-  return dp[n - 1][m - 1];
+  return dp[m - 1][n - 1];
 };
 
 // Two test cases to run function on
