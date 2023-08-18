@@ -5,37 +5,32 @@
 // Given the integer n and the array roads, return the maximal network rank of the entire infrastructure.
 
 
-// Solution: Adjacency List
+// Solution: Brute Force w/ Sets
 
-// 1. Convert roads to a graph which keeps the roads for each city in a hashmap (additionally count the number of roads for each city)
-// 2. Loop through each pair for cities where i < j, find the maximal network rank. 
-  // Note: If the two cities are connected, subtract one from their total rank.
+// For each node, keep track of direct neighbors in a hashset.
+// Go through each pair of nodes and count the number of roads.
+  // If the two nodes are directly connected to each other, subtract 1 from the total count of roads.
 
-// Time Complexity: O(n^2) 92ms
-// Space Complexity: O(V + E) 46.3MB
+// n = number of nodes, m = number of roads
+// Time Complexity: O(n^2 + m) 94ms
+// Space Complexity: O(n + m) 49.9MB
 var maximalNetworkRank = function(n, roads) {
-  let graph = {};
-  for (var i = 0; i < n; i++) {
-    graph[i] = {degrees: 0};
-  }  
-  for (var [x, y] of roads) {
-    graph[x][y] = true;
-    graph[y][x] = true;
-    graph[x].degrees++;
-    graph[y].degrees++;
+  let directNeighbors = Array(n).fill(0).map(() => new Set());
+  for (let [a, b] of roads) {
+    directNeighbors[a].add(b);
+    directNeighbors[b].add(a);
   }
   let maxRank = 0;
-  for (i = 0; i < n; i++) {
-    for (var j = i + 1; j < n; j++) {
-      let rank = graph[i].degrees + graph[j].degrees;
-      if (graph[i][j]) rank--;
-      maxRank = Math.max(maxRank, rank);
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      let areDirectNeighbors = directNeighbors[i].has(j);
+      maxRank = Math.max(maxRank, directNeighbors[i].size + directNeighbors[j].size - (areDirectNeighbors ? 1 : 0));
     }
   }
   return maxRank;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(maximalNetworkRank(4, [[0,1],[0,3],[1,2],[1,3]])) // 4
 console.log(maximalNetworkRank(5, [[0,1],[0,3],[1,2],[1,3],[2,3],[2,4]])) // 5
 console.log(maximalNetworkRank(8, [[0,1],[1,2],[2,3],[2,4],[5,6],[5,7]])) // 5
