@@ -6,7 +6,7 @@
 
 // Solution: Kruskal's Algorithm
 
-// Do an initial Kruskal's Algorithm to get the n edges in the MST.
+// Do an initial Kruskal's Algorithm to get the minimum cost.
 // Go through each edge and run Kruskal's algorithm twice to check whether the edge is critial or pseudo-critical.
   // Critical: If the minimum cost WITHOUT using this edge is greater than the minimum, then the edge is critical.
   // Pseudo-critical: If the minimum cost using this edge is the same as the minimum and is not critical, the edge is pseudo-critical.
