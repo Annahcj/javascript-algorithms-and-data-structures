@@ -6,113 +6,96 @@
 
 // Solution: Kruskal's Algorithm
 
-// create two functions: kruskal and kruskalWith
-// kruskal: performs kruskal's algorithm without a specific edge 
-// kruskalWith: connect specified edge first, then perform kruskal's algorithm without that specified edge
+// Do an initial Kruskal's Algorithm to get the n edges in the MST.
+// Go through each edge and run Kruskal's algorithm twice to check whether the edge is critial or pseudo-critical.
+  // Critical: If the minimum cost WITHOUT using this edge is greater than the minimum, then the edge is critical.
+  // Pseudo-critical: If the minimum cost using this edge is the same as the minimum and is not critical, the edge is pseudo-critical.
 
-// Algorithm:
-// Give each edge its edge number/index (the index of the original order it was in)
-// edges[i] = [nodeX, nodeY, weight, edgeNumber]
-// Sort the edges by weight 
-// Get the cost of building original MST "mstCost" (kruskal(-1), meaning don't skip any edges)
-// Loop through each edge in edges (pointer = i)
-  // mstWithout = kruskal(i) (cost of MST without using edge[i])
-  // if mstWithout is bigger than mstCost, push edges[i][3] into critical
-  // otherwise,
-    // mstWith = kruskalWith(i) (cost of MST USING edge[i])
-    // if mstWith is equal to mstCost, push edges[i][3] into pseudoCritical
-
-// Return [critical, pseudoCritical]
-
-// Time Complexity: O(n log(n) + n^2) 152ms
-  // O(n) give each edge an edge number
-  // O(n log(n)) sort the edges by weight
-  // O(n^2) kruskal's algorithm for each edge
-// Space Complexity: O(n) 47.9MB
+// n = number of nodes, m = number of edges
+// Time Complexity: O(m^2) 185ms
+// Space Complexity: O(n + m) 53.1MB
 var findCriticalAndPseudoCriticalEdges = function(n, edges) {
-  let size = edges.length;
-  for (var i = 0; i < edges.length; i++) {
-    edges[i].push(i);
-  }
-  // edges[i] = [nodeX, nodeY, weight, edgeNumber]
-  edges = edges.sort((a, b) => a[2] - b[2]);
-  let critical = [], nonCritical = [];
-  let mstCost = kruskal(-1, size);
-  for (var i = 0; i < edges.length; i++) {
-    let mstWithout = kruskal(i);
-    if (mstWithout > mstCost) {
-      critical.push(edges[i][3]);
+  edges = edges.map((edge, index) => [...edge, index]).sort((a, b) => a[2] - b[2]);
+  let minCost = kruskalsExclusive(n, edges, -1), m = edges.length;
+  let critical = [], pseudoCritical = [];
+  for (let i = 0; i < m; i++) {
+    let originalIndex = edges[i][3];
+    let minCostWithoutEdge = kruskalsExclusive(n, edges, i);
+    let isCriticalEdge = minCostWithoutEdge > minCost;
+    if (isCriticalEdge) {
+      critical.push(originalIndex);
     } else {
-      let mstWith = kruskalWith(i);
-      if (mstWith === mstCost) {
-        nonCritical.push(edges[i][3]);
+      let minCostWithEdge = kruskalsInclusive(n, edges, i);
+      if (minCostWithEdge === minCost) {
+        pseudoCritical.push(originalIndex);
       }
     }
   }
-  return [critical, nonCritical];
-
-  function kruskal(index) {
-    let uf = new UnionFind(n);
-    let cost = 0, count = 0;
-    for (var i = 0; i < edges.length; i++) {
-      let [x, y, weight, idx] = edges[i];
-      if (i !== index && !uf.isConnected(x, y)) {
-        cost += weight;
-        count++;
-        uf.union(x, y);
-      }
-    }
-    return count === n - 1 ? cost : Infinity;
-  } 
-  function kruskalWith(index) {
-    let uf = new UnionFind(n);
-    uf.union(edges[index][0], edges[index][1]);
-    let cost = edges[index][2], count = 1;
-    for (var i = 0; i < edges.length; i++) {
-      if (i === index) continue;
-      let [x, y, weight, idx] = edges[i];
-      if (!uf.isConnected(x, y)) {
-        cost += weight;
-        count++;
-        uf.union(x, y);
-      }
-    }
-    return count === n - 1 ? cost : Infinity;
-  }
+  return [critical, pseudoCritical];
 };
+
+function kruskalsInclusive(n, edges, edgeToInclude) {
+  let m = edges.length, uf = new UnionFind(n), cost = edges[edgeToInclude][2];
+  uf.union(edges[edgeToInclude][0], edges[edgeToInclude][1]);
+  for (let i = 0; i < m; i++) {
+    if (i === edgeToInclude) continue;
+    let [a, b, weight] = edges[i];
+    if (!uf.isConnected(a, b)) {
+      uf.union(a, b);
+      cost += weight;
+    }
+  }
+  return uf.size === 1 ? cost : Infinity;
+}
+
+function kruskalsExclusive(n, edges, edgeToExclude) {
+  let m = edges.length, uf = new UnionFind(n), cost = 0;
+  for (let i = 0; i < m; i++) {
+    if (i === edgeToExclude) continue; 
+    let [a, b, weight] = edges[i];
+    if (!uf.isConnected(a, b)) {
+      uf.union(a, b);
+      cost += weight;
+    }
+  }
+  return uf.size === 1 ? cost : Infinity;
+}
 
 class UnionFind {
   constructor(size) {
     this.root = Array(size);
     this.rank = Array(size);
-    for (var i = 0; i < size; i++) {
+    this.size = size;
+    for (let i = 0; i < size; i++) {
       this.root[i] = i;
       this.rank[i] = 1;
     }
   }
   find(x) {
     if (this.root[x] === x) return x;
-    this.root[x] = this.find(this.root[x]);
-    return this.root[x];
+    return this.root[x] = this.find(this.root[x]);
   }
   union(x, y) {
     let rootX = this.find(x);
     let rootY = this.find(y);
+    if (rootX === rootY) return false;
     if (this.rank[rootX] > this.rank[rootY]) {
       this.root[rootY] = rootX;
     } else if (this.rank[rootX] < this.rank[rootY]) {
       this.root[rootX] = rootY;
     } else {
       this.root[rootY] = rootX;
-      this.rank[rootX] += this.rank[rootY];
+      this.rank[rootX]++;
     }
+    this.size--;
+    return true;
   }
   isConnected(x, y) {
     return this.find(x) === this.find(y);
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(findCriticalAndPseudoCriticalEdges(6, [[0,1,1],[1,2,1],[0,2,1],[2,3,4],[3,4,2],[3,5,2],[4,5,2]])) // [[3],[1,2,3,4,5]]
 console.log(findCriticalAndPseudoCriticalEdges(5, [[0,1,1],[1,2,1],[2,3,2],[0,3,2],[0,4,3],[3,4,3],[1,4,6]])) // [[0,1],[2,3,4,5]]
 console.log(findCriticalAndPseudoCriticalEdges(4, [[0,1,1],[1,2,1],[2,3,1],[0,3,1]])) // [[],[0,1,2,3]]
