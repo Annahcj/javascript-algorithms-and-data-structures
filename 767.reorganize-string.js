@@ -3,96 +3,93 @@
 // Return any possible rearrangement of s or return "" if not possible.
 
 
-// Solution: Count Char Frequency / Max Heap
+// Solution: Max Heap & Count Occurances
 
-// Logic:
-// First, check whether rearrangement is possible -> if the frequency of the most frequent character is bigger than the length of half the string, return "". 
-// ^^ It is technically (s.length + 1) / 2, because 'aab', is bigger than half, but since we can put 'a' first, it's still valid.
-// Otherwise, use a priority queue to put each character and its frequency, then take out one at a time while checking its not the same as the previous letter.
+// Count the occurances of each character in s.
+// If any count exceeds Math.ceil(s.length / 2), then there is no possible rearrangement.
+// Add the character counts to a max heap and greedily take the character with the current max count that is not the same as the previous character.
+  // If the character with the max count is the same as the previous character, take the character with the second largest count.
 
-// Algorithm:
-// Intiate a new MaxHeap, and a new map (for keeping frequencies)
-// Loop through s, store each frequency in map.
-// Loop through each key in frequency map, add it to the maxHeap.
-// If frequency of most frequency character is bigger than (s.length + 1) / 2, return "".
-// Otherwise, loop while heap is not empty
-  // Set curr to heap.remove() (current most frequent character)
-  // (curr[0] is the frequency, curr[1] is character)
-  // If curr[0] is not equal to the previous character in res (result)
-    // Add curr[1] to res
-    // If curr[0] is bigger than 1 (only if it has characters left), add it back into heap with frequency - 1.
-  // Otherwise,
-    // Set 'second' to heap.remove()
-    // Add second[1] to res
-    // If second[0] is bigger than 1, add it back into heap with frequency - 1.
-    // Add curr back to heap (we didn't use it so add it back untouched)
-// Return res.
-
-// Time Complexity: O(n log(n)) technically O(n + n log(n) + n log(n)) 88ms
-// Space Complexity: O(k) (maxHeap + char count map) 43.5MB
-  class MaxHeap {
-    constructor() {
-      this.values = [];
-    }
-    add(value) {
-      let pushed = this.values.push(value);
-      let currIdx = this.values.length - 1;
-      let parentIdx = Math.floor((currIdx - 1) / 2);
-      while (parentIdx >= 0 && this.values[parentIdx][0] < this.values[currIdx][0]) {
-        [this.values[parentIdx], this.values[currIdx]] = [this.values[currIdx], this.values[parentIdx]];
-        currIdx = parentIdx;
-        parentIdx = Math.floor((currIdx - 1) / 2);
-      }
-      return pushed;
-    }
-    remove() {
-      if (!this.values.length) return -1;
-      let currIdx = 0;
-      [this.values[0], this.values[this.values.length - 1]] = [this.values[this.values.length - 1], this.values[0]];
-      let removed = this.values.pop();
-      let leftIdx = currIdx * 2 + 1, rightIdx = currIdx * 2 + 2;
-      function getSmaller(vals, leftIdx, rightIdx) {
-        if (rightIdx < vals.length) {
-          if (vals[leftIdx][0] > vals[rightIdx][0]) {
-            return leftIdx;
-          } return rightIdx;
-        } else {
-          if (leftIdx < vals.length) return leftIdx;
-          return -1;
-        }
-      }
-      let smallerChild = getSmaller(this.values, leftIdx, rightIdx);
-      while (smallerChild > -1 && this.values[smallerChild][0] > this.values[currIdx][0]) {
-        [this.values[currIdx], this.values[smallerChild]] = [this.values[smallerChild], this.values[currIdx]];
-        currIdx = smallerChild;
-        leftIdx = currIdx * 2 + 1, rightIdx = currIdx * 2 + 2;
-        smallerChild = getSmaller(this.values, leftIdx, rightIdx);
-      }
-      return removed;
+// n = length of s, k = number of unique characters (26)
+// Time Complexity: O(nk) 87ms
+// Space Complexity: O(k) 47.5MB
+var reorganizeString = function(s) {
+  let n = s.length, counts = {};
+  for (let char of s) {
+    counts[char] = (counts[char] || 0) + 1;
+    if (counts[char] > Math.ceil(n / 2)) return "";
+  }
+  let heap = new Heap((a, b) => b[1] - a[1]); // [char, count]
+  let res = "";
+  for (let char in counts) {
+    heap.add([char, counts[char]]);
+  }
+  for (let i = 0; i < n; i++) {
+    let [maxChar, maxCharCount] = heap.remove();
+    if (!res.length || res[res.length - 1] !== maxChar) {
+      res += maxChar;
+      if (maxCharCount > 1) heap.add([maxChar, maxCharCount - 1]);
+    } else {
+      let [secondMaxChar, secondMaxCharCount] = heap.remove();
+      res += secondMaxChar;
+      if (secondMaxCharCount > 1) heap.add([secondMaxChar, secondMaxCharCount - 1]);
+      heap.add([maxChar, maxCharCount]);
     }
   }
-  var reorganizeString = function(s) {
-    let heap = new MaxHeap(), map = {};
-    for (var char of s) map[char] = (map[char] || 0) + 1;
-    for (var key in map) heap.add([map[key], key]);
-    let max = heap.values[0][0];
-    if (max > (s.length + 1) / 2) return "";
-    let res = "";
-    while (heap.values.length) {
-      let curr = heap.remove();
-      if (curr[1] !== res[res.length - 1]) {
-        res += curr[1];
-        if (curr[0] > 1) heap.add([curr[0] - 1, curr[1]]);
+  return res;
+};
+
+class Heap {
+  constructor(comparator = ((a, b) => a - b)) {
+    this.values = [];
+    this.comparator = comparator;
+    this.size = 0;
+  }
+  add(val) {
+    this.size++;
+    this.values.push(val);
+    let idx = this.size - 1, parentIdx = Math.floor((idx - 1) / 2);
+    while (parentIdx >= 0 && this.comparator(this.values[parentIdx], this.values[idx]) > 0) {
+      [this.values[parentIdx], this.values[idx]] = [this.values[idx], this.values[parentIdx]];
+      idx = parentIdx;
+      parentIdx = Math.floor((idx - 1) / 2);
+    }
+  }
+  remove() {
+    if (this.size === 0) return -1;
+    this.size--;
+    if (this.size === 0) return this.values.pop();
+    let removedVal = this.values[0];
+    this.values[0] = this.values.pop();
+    let idx = 0;
+    while (idx < this.size && idx < Math.floor(this.size / 2)) {
+      let leftIdx = idx * 2 + 1, rightIdx = idx * 2 + 2;
+      if (rightIdx === this.size) {
+        if (this.comparator(this.values[leftIdx], this.values[idx]) > 0) break;
+        [this.values[leftIdx], this.values[idx]] = [this.values[idx], this.values[leftIdx]];
+        idx = leftIdx;
+      } else if (this.comparator(this.values[leftIdx], this.values[idx]) < 0 || this.comparator(this.values[rightIdx], this.values[idx]) < 0) {
+        if (this.comparator(this.values[leftIdx], this.values[rightIdx]) <= 0) {
+          [this.values[leftIdx], this.values[idx]] = [this.values[idx], this.values[leftIdx]];
+          idx = leftIdx;
+        } else {
+          [this.values[rightIdx], this.values[idx]] = [this.values[idx], this.values[rightIdx]];
+          idx = rightIdx;
+        }
       } else {
-        let second = heap.remove();
-        res += second[1];
-        if (second[0] > 1) heap.add([second[0] - 1, second[1]]);
-        heap.add(curr);
+        break;
       }
     }
-    return res; 
-  };
+    return removedVal;
+  }
+  top() {
+    return this.values[0];
+  }
+  isEmpty() {
+    return this.size === 0;
+  }
+}
   
-  // Two test cases to run function on
-  console.log(reorganizeString("aab")) // "aba"
-  console.log(reorganizeString("aaab")) // ""
+// Two test cases 
+console.log(reorganizeString("aab")) // "aba"
+console.log(reorganizeString("aaab")) // ""
