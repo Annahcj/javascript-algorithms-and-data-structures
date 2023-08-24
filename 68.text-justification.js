@@ -2,77 +2,74 @@
 // Given an array of strings words and a width maxWidth, format the text such that each line has exactly maxWidth characters and is fully (left and right) justified.
 
 
-// Solution 1: Process Line by Line
+// Solution: 
 
-// Loop through words, calculating total width as we go,
-// if total width exceeds maxWidth, 
-  // if the number of words is only one, we left justify it, meaning we simply add the word, plus (maxWidth - wordLength) number of spaces after it.
-  // if number of words is more than one
-    // we generate a sentence from start to i - 1 (since it exceeds, we can't use the current word we are on)
-    // to calculate spaces for each word: divide maxWidth by number of words, and round it down.
-    // to calculate extra spaces (if spaces cannot be evenly distributed): get modular of maxWidth / num words
-    // while we still have extra spaces, add current word + avg spaces + 1, and decrement extra spaces.
-// for the last line, it must be left justified, so we just add the words together connected by one space and append the correct number of spaces at the end.
-// (as we generate each line, we push it into the result array)
-// return the result array.
+// Go through words[i] from left to right.
+// Keep track of the current count of words and count of characters of the words.
+  // wordCount = number of words in the current sentence
+  // charCount = number of characters for the words in the current sentence
 
-// Time Complexity: O(n) (length of words) 68ms
-// Space Complexity: O(1) 38.9MB
+// To calculate whether it's possible for a subarray of words to be grouped in one sentence, add the current charCount to the number of words - 1 (since we take minimum of one space in between words).
+// If adding words[i] to the current sentence makes the minimum sentence length exceed maxWidth, then we need to create a sentence up to the previous word.
+  // To get the number of spaces between two words: Math.ceil(totalSpaces / (number of words - 1))
+  // We keep updating totalSpaces and wordCount as we process each word in the sentence.
+
+// Time Complexity: O(n) 53ms
+// Space Complexity: O(n) 42.5MB
 var fullJustify = function(words, maxWidth) {
-    let lineLength = 0, start = 0;
-    let result = [];
-    let numSpaces, totalSpaces, spaces, remainder, sentence;
-    for (var i = 0; i < words.length; i++) {
-      lineLength += words[i].length + 1;
-      if (lineLength - 1 > maxWidth) {
-        lineLength = lineLength - words[i].length - 2;
-        numSpaces = i - 1 - start;
-        totalSpaces = maxWidth - lineLength;
-        spaces = Math.floor(totalSpaces / numSpaces);
-        remainder = totalSpaces % numSpaces;
-        if (!numSpaces) {
-          // left justification / only one word in a line
-          result.push(words[i - 1] + ' '.repeat(totalSpaces));
-        } else {
-          // normal spacing
-          sentence = '';
-          for (var j = start; j < i - 1; j++) {
-            if (remainder > 0) {
-              sentence += words[j] + ' '.repeat(spaces + 2);
-              remainder--;
-            } else {
-              sentence += words[j] + ' '.repeat(spaces + 1);
-            }
-          }
-          sentence += words[j];
-          result.push(sentence);
-        }
-        lineLength = words[i].length + 1, start = i;
-      }
+  let n = words.length, wordCount = 0, charCount = 0, sentences = [];
+  for (let i = 0; i < n; i++) {
+    let newWordCount = wordCount + 1;
+    let newCharCount = charCount + words[i].length;
+    // if adding words[i] to the current sentence makes the character count + the count of adding one space in between each word exceeds maxWidth, then we need to split the sentence
+    if (newCharCount + newWordCount - 1 > maxWidth) {
+      sentences.push(getSentence(words, maxWidth, i - wordCount, i - 1, charCount));
+      wordCount = 0;
+      charCount = 0;
     }
-    sentence = '', lineLength = 0;
-    // for last line
-    for (var k = start; k < i - 1; k++) {
-      lineLength += words[k].length + 1;
-      sentence += words[k] + ' ';
-    }
-    // for last word of last line
-    lineLength += words[i - 1].length;
-    sentence += words[i - 1];
-    // spacing for end of last line
-    sentence += ' '.repeat(maxWidth - lineLength);
-    result.push(sentence);
-    return result;
-  };
+    wordCount++;
+    charCount += words[i].length;
+  }
+  let lastSentence = getLeftJustifiedSentence(words, maxWidth, n - wordCount, n - 1);
+  sentences.push(lastSentence);
+  return sentences;
+};
+
+// returns [words[start], ..., words[end]] evenly separated by spaces
+// edge case: if there is only one word, the space will be added to the end
+function getSentence(words, maxWidth, start, end, charCount) {
+  if (start === end) return getLeftJustifiedSentence(words, maxWidth, start, end);
+  let totalSpaces = maxWidth - charCount;
+  let sentence = words[start];
+  let wordCount = end - start;
+  for (let i = start + 1; i <= end; i++) {
+    let spaces = Math.ceil(totalSpaces / wordCount);
+    sentence += " ".repeat(spaces) + words[i];
+    totalSpaces -= spaces;
+    wordCount--;
+  }
+  return sentence;
+}
+
+// returns [words[start], ..., words[end]] separated by one space, with spaces padded at the end
+function getLeftJustifiedSentence(words, maxWidth, start, end) {
+  let sentence = words[start];
+  let charCount = words[start].length;
+  for (let i = start + 1; i <= end; i++) {
+    sentence += ' ' + words[i];
+    charCount += words[i].length + 1;
+  }
+  return sentence + ' '.repeat(maxWidth - charCount);
+}
   
-  // Two test cases to run function on
-  console.log(fullJustify(["This", "is", "an", "example", "of", "text", "justification."], 16)) // [
-  //    "This    is    an",
-  //    "example  of text",
-  //    "justification.  "
-  // ]
-  console.log(fullJustify(["What","must","be","acknowledgment","shall","be"], 16)) // [
-  //   "What   must   be",
-  //   "acknowledgment  ",
-  //   "shall be        "
-  // ]
+// Two test cases 
+console.log(fullJustify(["This", "is", "an", "example", "of", "text", "justification."], 16)) // [
+//    "This    is    an",
+//    "example  of text",
+//    "justification.  "
+// ]
+console.log(fullJustify(["What","must","be","acknowledgment","shall","be"], 16)) // [
+//   "What   must   be",
+//   "acknowledgment  ",
+//   "shall be        "
+// ]
