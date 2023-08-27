@@ -4,30 +4,46 @@
 // If the frog's last jump was k units, its next jump must be either k - 1, k, or k + 1 units. The frog can only jump in the forward direction.
 
  
-// Solution: Recursion w/ Memoization and Hashmap
+// Solution: DP - Recursion w/ Memoization
 
-// 1. Add all stones to a set so we can check whether a certain stone exists
-// 2. Use recursion and memoization to check whether we can reach the last stone
+// Memoize each dp(i, k), where
+  // i = number of stones we have used
+  // k = the units of the last jump
 
-// Time Complexity: O(n^2) 132ms
-// Space Complexity: O(n^2) 51.9MB
+// Use a hashmap to store the stone index for each valid position.
+// Because the number of stones can be much less than the number of positions, it's optimal to use the stone index instead of the position.
+
+// For each dp(i, k),   
+  // Try to jump either k - 1, k, or k + 1 units forward.
+  // Base case: If we reach the last stone, return true.
+
+// Time Complexity: O(n^2) 222ms 
+// Space Complexity: O(n^2) 139.7MB
 var canCross = function(stones) {
-  let set = new Set();
-  for (var stone of stones) set.add(stone);
-  let memo = {}, lastStone = stones[stones.length - 1];
-  if (!set.has(1)) return false; // the first jump must be 1, so if 1 doesn't exist, the answer must be false.
-  return recurse(1, 1);
-
-  function recurse(stone, k) {
-    if (!set.has(stone) || k === 0) return false; // if the stone doesn't exist or k is 0, return false.
-    if (memo[`${stone},${k}`] !== undefined) return memo[`${stone},${k}`]; // return if we have been in this situation before
-    if (stone === lastStone) return true; // reached the last stone, return true.
-    let ans = recurse(stone + k - 1, k - 1) || recurse(stone + k, k) || recurse(stone + k + 1, k + 1); // check k - 1, k, and k + 1.
-    memo[`${stone},${k}`] = ans; // save in memo
-    return ans;
+  let n = stones.length, indexes = {};
+  for (let i = 0; i < n; i++) {
+    indexes[stones[i]] = i;
+  }
+  if (stones[1] !== 1) return false;
+  let memo = Array(n).fill(0).map(() => Array(n).fill(null));
+  return dp(1, 1);
+  
+  function dp(i, k) {
+    if (i === n - 1) return true;
+    if (memo[i][k] !== null) return memo[i][k];
+    
+    let jumps = [k - 1, k, k + 1];
+    for (let jumpAmount of jumps) {
+      if (jumpAmount === 0) continue;
+      let nextPosition = stones[i] + jumpAmount;
+      if (indexes[nextPosition] !== undefined && dp(indexes[nextPosition], jumpAmount)) {
+        return memo[i][k] = true;
+      }
+    }
+    return memo[i][k] = false;
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(canCross([0,1,3,5,6,8,12,17])) // true
 console.log(canCross([0,1,2,3,4,8,9,11])) // false
