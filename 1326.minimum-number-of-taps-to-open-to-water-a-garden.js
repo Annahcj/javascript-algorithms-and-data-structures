@@ -1,56 +1,75 @@
 // 1326. Minimum Number of Taps to Open to Water a Garden
 
 
-// Solution: Greedy Approach
+// Solution 1: Greedy w/ Sorting
 
-// set arr to a new array of size n + 1, filled with 0's
-// (construct intervals -> for ranges[i], left bound is i - ranges[i], right bound is i + ranges[i])
-// set left to Math.max(0, i - ranges[i]) (we only need to water from 0 to n)
-// set right to Math.min(n, i + ranges[i]) (we don't need to go past n)
-// set arr[left] to Math.max(arr[left], right)
-// (arr[i] is equal to maximum index we can get to, not extra distance])
+// Turn the ranges into intervals with [start, end].
+// The problem now becomes getting the minimum number of overlapping intervals.
+// Sort the intervals by start index.
 
-// set currReach to 0, maxReach to 0, openTaps to 0, and i to 0 (pointer)
-// loop while i is smaller than n + 1 AND currReach is smaller than n
-  // increment openTaps by one
-  // loop while i is smaller than n + 1 AND i is smaller than or equal to currReach
-    // maxReach is Math.max(maxReach, arr[i])
-    // increment i by one
-  // if currReach is equal to maxReach (we can't move forward at all)
-    // return -1 (unreachable)
-  // update currReach to maxReach
-// Return openTaps
+// Keep track of the end index of the previous interval we took.
+// For the next interval, we want to take the interval within the range of the last interval, with the greatest end index.
+// Loop through all upcoming intervals where the start index <= the previous end index and record the maximum intervals[i][1].
 
-// Time Complexity: O(n) 72ms
-// Space Complexity: O(n) 41.4MB
+// Time Complexity: O(n log(n)) 68ms
+// Space Complexity: O(n) 47.1MB
 var minTaps = function(n, ranges) {
-  let arr = Array(n + 1).fill(0);
-  for (var i = 0; i < ranges.length; i++) {
-    if (ranges[i] === 0) continue;
-    let left = Math.max(0, i - ranges[i]);
-    let right = Math.min(n, i + ranges[i]);
-    arr[left] = Math.max(arr[left], right);
-  }  
-  let currReach = 0, maxReach = 0, openTaps = 0;
-  i = 0;
-  // loop while i is smaller than n + 1 AND we haven't reached target (n)
-  while (i < n + 1 && currReach < n) {
-    openTaps++;
-    // loop while within range of current reach and i is within bounds -> to find the next maximum reach/position
-    while (i < n + 1 && currReach >= i) {
-      maxReach = Math.max(maxReach, arr[i]);
+  let intervals = [];
+  for (let i = 0; i <= n; i++) {
+    let start = Math.max(0, i - ranges[i]);
+    let end = Math.min(n, i + ranges[i]);
+    if (start === end) continue;
+    intervals.push([start, end]);
+  }
+  intervals.sort((a, b) => a[0] - b[0]);
+  let maxEnd = 0, i = 0, intervalsTaken = 0;
+  while (maxEnd < n) {
+    let newMaxEnd = maxEnd;
+    while (i < intervals.length && maxEnd >= intervals[i][0]) {
+      newMaxEnd = Math.max(newMaxEnd, intervals[i][1]);
       i++;
     }
-    // if we can't move forward at all
-    if (currReach === maxReach) return -1;
-    currReach = maxReach;
+    if (maxEnd === newMaxEnd) return -1;
+    maxEnd = newMaxEnd;
+    intervalsTaken++;
   }
-  return openTaps;
+  return intervalsTaken;
 };
 
-// Five test cases to run function on
+
+// Solution 2: Greedy w/o Sorting
+
+// Go through each ranges[i] and calculate the start and end of the range.
+// For each start index, record the maximum end index: maxEnd[i] = maximum end index with an interval starting at i
+
+// Keep track of the end index of the previous interval we took.
+// For the next interval, we want to take the interval within the range of the last interval, with the greatest end index.
+// Loop through all upcoming points where i <= the previous end index and record the maximum maxEnd[start].
+
+// Time Complexity: O(n) 53ms
+// Space Complexity: O(n) 43.9MB
+var minTaps = function(n, ranges) {
+  let maxEnd = Array(n + 1).fill(0);
+  for (let i = 0; i <= n; i++) {
+    let start = Math.max(0, i - ranges[i]);
+    let end = Math.min(n, i + ranges[i]);
+    if (start === end) continue;
+    maxEnd[start] = Math.max(maxEnd[start], end);
+  }
+  let prevMaxEnd = 0, i = 0, intervalsTaken = 0;
+  while (prevMaxEnd < n) {
+    let newMaxEnd = prevMaxEnd;
+    while (i <= n && prevMaxEnd >= i) {
+      newMaxEnd = Math.max(newMaxEnd, maxEnd[i]);
+      i++;
+    }
+    if (prevMaxEnd === newMaxEnd) return -1;
+    prevMaxEnd = newMaxEnd;
+    intervalsTaken++;
+  }
+  return intervalsTaken;
+};
+
+// Two test cases
 console.log(minTaps(5, [3,4,1,1,0,0])) // 1
 console.log(minTaps(3, [0,0,0,0])) // -1
-console.log(minTaps(7, [1,2,1,0,2,1,0,1])) // 3
-console.log(minTaps(8, [4,0,0,0,0,0,0,0,4])) // 2
-console.log(minTaps(8, [4,0,0,0,4,0,0,0,4])) // 1
