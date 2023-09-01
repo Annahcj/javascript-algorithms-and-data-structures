@@ -6,52 +6,42 @@
 
 // Count the number of bits for each number from 0 to n.
 
-// Time Complexity: O(32n) 96ms
-// Space Complexity: O(1) 44.7MB
+// Time Complexity: O(n log(n)) 75ms
+// Space Complexity: O(1) 47.5MB
 var countBits = function(n) {
-  let bits = [];
-  for (var i = 0; i <= n; i++) {
-    bits.push(countBits(i));
-  }  
-  return bits;
-
-  function countBits(num) {
-    let ans = 0;
-    for (var i = 0; i < 32; i++) {
-      // check whether the last bit of num is 1
-      ans += (num & 1);
-      // shift off the last bit
-      num >>= 1;
-    }
-    return ans;
+  let ans = Array(n + 1);
+  for (let i = 0; i <= n; i++) {
+    ans[i] = countOnes(i);
   }
+  return ans;
 };
 
-// Solution 2: Dynamic Programming 
+function countOnes(num) {
+  let ones = 0;
+  while (num > 0) {
+    ones += (num & 1);
+    num >>= 1;
+  }
+  return ones;
+}
 
-// This solution almost reminds me of the coin problem.
-// Create a dp array the size of n + 1, filled with 0's.
-// Loop through from 1 to n
-  // if offset * 2 is equal to i,
-    // update offset to offset * 2
-  // set dp[i] to dp[i - offset] + 1
-// Return dp.
 
-// Time Complexity: O(n) 100ms
-// Space Complexity: O(1) 44.5MB
+// Solution 2: DP
+
+// Use the previously computed results to calculate the answer for each number.
+// For each number i, reuse the result from ans[i >> 1]. If the rightmost bit of i is 1, then we need to increment the result by 1.
+// The idea: We shift all bits right by 1 to remove the rightmost bit. If that rightmost bit is 1, then we add one to our result.
+
+// Time Complexity: O(n) 66ms
+// Space Complexity: O(n) 47.4MB
 var countBits = function(n) {
-  let dp = Array(n+1).fill(0);
-  let offset = 1;
-  for (var i = 1; i <= n; i++) {
-    // offset: keep track of the latest 'double' -> 1,2,4,8,16,32,64,128...
-    if (offset * 2 === i) {
-      offset *= 2;
-    }
-    dp[i] = dp[i - offset] + 1;
-  }  
-  return dp;
+  let ans = Array(n + 1).fill(0);
+  for (let i = 1; i <= n; i++) {
+    ans[i] = ans[i >> 1] + (i & 1);
+  }
+  return ans;
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(countBits(2)) // [0,1,1]
 console.log(countBits(5)) // [0,1,1,2,1,2]
