@@ -4,34 +4,21 @@
 // Return true if there is a cycle in the linked list. Otherwise, return false.
 
 
-// Solution: Two Pointers / Slow & Fast Runner Algorithm
+// Solution: Slow & Fast Pointers
 
-// Logic:
-// We set two pointers, slow and fast, to both point at head initially.
-// The fast runner goes at 2x speed of the slow runner.
-// If there is no cycle, the slow runner will never catch up to the fast runner.
-// However, if there is a cycle, the fast runner will reach it first, then will end up being caught in the cycle until the slow runner catches up,
-// and they both end up at the same position.
+// The fast pointer goes at 2x speed of the slow pointer.
+// If there is a cycle, the slow and fast pointers will meet at some point.
+// We can be certain they will meet because the distance between the two pointers increases by 1 each time. 
+// They meet when the distance between them becomes n, which is 0 in a cycle. This is why the time complexity is O(n).
 
-// Algorithm:
-// Set slow to head, fast to head
-// Loop while slow AND fast AND fast.next
-  // set slow to slow.next
-  // set fast to fast.next.next
-  // if slow is equal to fast,
-    // return true (found a cycle)
-// If the loop finishes, return false (no cycle)
-
-// Time Complexity: O(n) 119ms
-// Space Complexity: O(1) 41.6MB
+// Time Complexity: O(n) 66ms
+// Space Complexity: O(1) 44.8MB
 var hasCycle = function(head) {
   let slow = head, fast = head;
-  while (slow && fast && fast.next) {
+  while (fast && fast.next) {
     slow = slow.next;
     fast = fast.next.next;
-    if (slow === fast) {
-      return true;
-    }
-  } 
-  return false; 
+    if (slow === fast) return true;
+  }
+  return false;
 };
