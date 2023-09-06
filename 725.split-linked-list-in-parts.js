@@ -4,56 +4,39 @@
 // The parts should be in the order of occurrence in the input list, and parts occurring earlier should always have a size greater than or equal to parts occurring later.
 // Return an array of the k parts.
 
-// LeetCode provided ListNode
-function ListNode(val, next) {
-  this.val = (val===undefined ? 0 : val)
-  this.next = (next===undefined ? null : next)
-}
+// Solution: Two Passes
 
-// Function which turns an array into a linked list - FOR TESTING PURPOSES ONLY!
-function makeLL(arr) {
-  let head = new ListNode(), node = head;
-  for (var num of arr) {
-    node.next = new ListNode(num);
-    node = node.next;
-  }
-  return head.next;
-}
+// 1. Get the length of the list.
+// 2. Split the list into k chunks.
+  // The number of nodes in one chunk = Math.ceil(n / k)
+  // Update n and k on the fly.
 
-
-// Solution: 
-
-// Time Complexity: O(n) 80ms
-// Space Complexity: O(n) 41.2MB (the output we return, can be considered O(1) since output is compulsory)
+// Time Complexity: O(n + k) 68ms
+// Space Complexity: O(k) 44.1MB
 var splitListToParts = function(head, k) {
-  let length = 0;
-  let node = head;
-  // get length of the linked list
-  while (node) {
-    length++;
-    node = node.next;
-  }
-  // extra: parts that need to be 1 node longer, size: smaller size of each part (for the nodes with extra length, add one)
-  let extra = (length % k) - 1, size = Math.floor(length / k);
-  let res = [];
-  for (var i = 0; i < k; i++) {
-    // listSize: size of current list
-    let listSize = size, list = new ListNode(), ref = list;
-    if (i <= extra) listSize++;
-    let j = 0;
-    // loop through the ll and add it to the new list
-    while (j < listSize && head) {
-      list.next = new ListNode(head.val);
-      list = list.next;
+  let n = getSize(head), chunks = [];
+  for (let i = k - 1; i >= 0; i--) {
+    let chunkSize = Math.ceil(n / k), chunkHead = head;
+    for (let j = 1; j < chunkSize; j++) {
       head = head.next;
-      j++;
     }
-    // push the new part into res
-    res.push(ref.next);
+    if (head) {
+      let next = head.next;
+      head.next = null; // cut off connection to next chunk
+      head = next; 
+    }
+    chunks.push(chunkHead);
+    n -= chunkSize;
+    k--;
   }
-  return res;
+  return chunks;
 };
 
-// Two test cases to run function on
-console.log(splitListToParts(makeLL([1,2,3]), 5)) // [[1],[2],[3],[],[]]
-console.log(splitListToParts(makeLL([1,2,3,4,5,6,7,8,9,10]), 3)) // [[1,2,3,4],[5,6,7],[8,9,10]]
+function getSize(head) {
+  let size = 0;
+  while (head) {
+    size++;
+    head = head.next;
+  }
+  return size;
+}
