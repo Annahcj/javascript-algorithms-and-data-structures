@@ -25,25 +25,14 @@
   // 3. Calculate and record the minimum cost to turn all the counts into the same weights.
 
 // n = number of nodes, m = number of edges, q = number of queries
-// Time Complexity: O(n log(n) + m + q log(n)) 545ms
-// Space Complexity: O(n log(n) + m + q) 94.9MB
+// Time Complexity: O(n log(n) + m + q log(n)) 587ms
+// Space Complexity: O(n log(n) + m + q) 102.4MB
 var minOperationsQueries = function(n, edges, queries) {
   let [directParents, counts, depths] = getParentsAndPrefixCounts(n, edges);
-  let maxDepth = Math.ceil(Math.log2(n)), p = Array(maxDepth + 1).fill(0).map(() => Array(n).fill(-1));
-  // precomputation for binary lifting
-  for (let node = 0; node < n; node++) {
-    p[0][node] = directParents[node];
-  }
-  for (let pow2 = 1; pow2 <= maxDepth; pow2++) {
-    for (let node = 0; node < n; node++) {
-      let halfParent = p[pow2 - 1][node]; 
-      p[pow2][node] = halfParent === -1 ? -1 : p[pow2 - 1][halfParent]; 
-    }
-  }
-  
+  let lcaModule = new LCA(n, directParents, depths);
   let ans = [];
   for (let [a, b] of queries) {
-    let lca = getLCA(p, depths, maxDepth, a, b);
+    let lca = lcaModule.getLCA(a, b);
     let countsA = diffCounts(counts[a], counts[lca]), countsB = diffCounts(counts[b], counts[lca]);
     let totalCounts = addCounts(countsA, countsB);
     let edgesInPath = depths[a] - depths[lca] + depths[b] - depths[lca];
@@ -70,32 +59,6 @@ function diffCounts(countsA, countsLCA) {
     diff[i] = countsA[i] - countsLCA[i];
   }
   return diff;
-}
-
-function getLCA(p, depths, maxDepth, a, b) {
-  if (depths[a] > depths[b]) {
-    let temp = a;
-    a = b;
-    b = temp;
-  }
-
-  // bring both nodes up to the same depth
-  let depthDiff = depths[b] - depths[a];
-  for (let i = 0; i <= maxDepth; i++) {
-    if ((depthDiff >> i) & 1) {
-      b = p[i][b]; // move b up to the 2^ith parent
-    }
-  }
-  if (a === b) return a;
-
-  // move both nodes up by 2^ith levels if the 2^ith parents are not equal
-  for (let i = maxDepth; i >= 0; i--) { // this decrements so that we can jump the nodes up incrementally
-    if (p[i][a] !== p[i][b]) { // if 2^ith parents of both nodes are not equal, we can safely both move up  
-      a = p[i][a];
-      b = p[i][b];
-    }
-  }
-  return p[0][a];
 }
 
 function getParentsAndPrefixCounts(n, edges) {
@@ -125,6 +88,50 @@ function getParentsAndPrefixCounts(n, edges) {
     }
   }
   return [directParents, prefixCounts, depths];
+}
+
+class LCA {
+  constructor(n, directParents, depths) {
+    this.maxDepth = Math.ceil(Math.log2(n));
+    this.p = Array(this.maxDepth + 1).fill(0).map(() => Array(n).fill(-1));
+    this.depths = depths;
+
+    // precomputation for binary lifting
+    for (let node = 0; node < n; node++) {
+      this.p[0][node] = directParents[node];
+    }
+    for (let pow2 = 1; pow2 <= this.maxDepth; pow2++) {
+      for (let node = 0; node < n; node++) {
+        let halfParent = this.p[pow2 - 1][node]; 
+        this.p[pow2][node] = halfParent === -1 ? -1 : this.p[pow2 - 1][halfParent]; 
+      }
+    }
+  }
+  getLCA(a, b) {
+    if (this.depths[a] > this.depths[b]) {
+      let temp = a;
+      a = b;
+      b = temp;
+    }
+
+    // bring both nodes up to the same depth
+    let depthDiff = this.depths[b] - this.depths[a];
+    for (let i = 0; i <= this.maxDepth; i++) {
+      if ((depthDiff >> i) & 1) {
+        b = this.p[i][b]; // move b up to the 2^ith parent
+      }
+    }
+    if (a === b) return a;
+
+    // move both nodes up by 2^ith levels if the 2^ith parents are not equal
+    for (let i = this.maxDepth; i >= 0; i--) { // this decrements so that we can jump the nodes up incrementally
+      if (this.p[i][a] !== this.p[i][b]) { // if 2^ith parents of both nodes are not equal, we can safely both move up  
+        a = this.p[i][a];
+        b = this.p[i][b];
+      }
+    }
+    return this.p[0][a];
+  }
 }
 
 // Two test cases
