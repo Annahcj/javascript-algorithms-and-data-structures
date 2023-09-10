@@ -4,7 +4,7 @@
 // Since the answer may be too large, return it modulo 10^9 + 7.
 
 
-// Solution: Math - Permutations
+// Solution 1: Math - Permutations
 
 // pickups: n!
 // deliveries: (1 * 3 * 5 * 7 * ...) n times
@@ -44,7 +44,41 @@ var countOrders = function(n) {
   return ans;
 };
 
-// Four test cases to run function on
+
+// Solution 2: Combinatorics w/ Modular Inverse 
+
+// Formula: 2n! / 2^n
+// Reasoning: All possible permutations divided by different internal orderings of each pickup/delivery pair.
+
+// To avoid integer overflow and incorrect results when using modulo, we need to use BigInt and modular inverse to calculate the division result correctly.
+
+// Time Complexity: O(2n) 52ms
+// Space Complexity: O(1) 44.1MB
+var countOrders = function(n) {
+  let perms = 1n, MOD = 1000000007n;
+  for (let i = 1; i <= 2 * n; i++) {
+    perms = (perms * BigInt(i)) % MOD;
+  }  
+  let permsToExclude = 1n;
+  for (let i = 0; i < n; i++) {
+    permsToExclude = (permsToExclude * 2n) % MOD;
+  }
+  return (perms * modPow(permsToExclude, Number(MOD) - 2, MOD)) % MOD;
+};
+
+function modPow(x, y, mod) { 
+  let currPow = x, ans = 1n;
+  while (y > 0) {
+    if (y & 1) {
+      ans = (ans * currPow) % mod;
+    }
+    currPow = (currPow * currPow) % mod;
+    y >>= 1;
+  }
+  return ans;
+}
+
+// Four test cases
 console.log(countOrders(1)) // 1
 console.log(countOrders(2)) // 6
 console.log(countOrders(5)) // 113400
