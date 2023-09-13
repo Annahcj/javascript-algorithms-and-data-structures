@@ -6,34 +6,43 @@
 // Return the minimum number of candies you need to have to distribute the candies to the children.
 
 
-// Solution: Two Pass
+// Solution: Two Passes
 
-// 1. Left to right: calculate the minimum candies to be more than left neighbor (who has higher rating).
-// 2. Right to left: calculate the minimum candies to be more than right neighbor (who has higher rating).
-// 3. [Part of the second loop]: Calculate the sum of max(left[i], right[i]).
+// Go through ratings in two passes, 
+  // From left to right, satisfy ascending ratings (ratings[i] > ratings[i - 1], e.g: [1,2])
+  // From right to left, satisfy ascending ratings (ratings[i] > ratings[i + 1], e.g: [2,1])
+  // When doing the second pass, take the maximum value out of the two passes.
 
 // e.g: [2,1,2,3]
 // l:   [1,1,2,3]
-// r:   [2,1,1,1]
-// max: [2,1,2,3], sum = 8
+// r:   [2,1,2,3]
+// sum = 8
 
-// Time Complexity: O(n) 126ms
-// Space Complexity: O(n) 47.1MB
+// Doubt: 
+  // It can seem like we could possibly override the left results when going from right to left, but in fact only the peaks of the mountains change (places where ratings[i] > ratings[i - 1] will never change on the second pass)
+  // If only the peaks of the mountains change, then the condition of ratings[i] > ratings[i - 1] will still be met because the mountain peak getting bigger will only satisfy this condition even more.
+
+// Time Complexity: O(n) 61ms
+// Space Complexity: O(n) 45.9MB
 var candy = function(ratings) {
-  let n = ratings.length;
-  let left = Array(n).fill(1), right = Array(n).fill(1);
-  for (var i = 1; i < n; i++) {
-    if (ratings[i] > ratings[i - 1]) left[i] = left[i - 1] + 1;
+  let n = ratings.length, left = Array(n).fill(1);
+  for (let i = 1; i < n; i++) {
+    if (ratings[i] > ratings[i - 1]) {
+      left[i] = left[i - 1] + 1;
+    }
   }
-  
-  let ans = Math.max(left[n - 1], 1);
-  for (i = n - 2; i >= 0; i--) {
-    if (ratings[i] > ratings[i + 1]) right[i] = right[i + 1] + 1;
-    ans += Math.max(left[i], right[i]);
+  let right = left[n - 1], candies = right;
+  for (let i = n - 2; i >= 0; i--) {
+    if (ratings[i] > ratings[i + 1]) {
+      right = Math.max(right + 1, left[i]);
+    } else {
+      right = Math.max(1, left[i]);
+    }
+    candies += right;
   }
-  return ans;
+  return candies;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(candy([1,0,2])) // 5
 console.log(candy([1,2,2])) // 4
