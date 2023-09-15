@@ -4,57 +4,43 @@
 // Return the minimum cost to make all points connected. All points are connected if there is exactly one simple path between any two points.
 
 
-// Solution 1: Kruskal's Algorithm 
+// Solution 1: Kruskal's Algorithm
 
-// Idea:
-// Use min heap to pick unconnected edges with the smallest weight
-// Use union find to check whether edges are connected
+// Kruskal's algorithm to find the cost of the minimum spanning tree (n - 1 edges).
 
-// Algorithm:
-// n = points.length
-// From the points, loop through each unique pair
-  // calculate the manhattan distance, or cost -> abs(x1 - x2) + abs(y1 - y2)
-  // add [i, j, cost] to a min heap.
-// Set uf to new UnionFind with a size of n
-// ans = 0 (answer to return)
-// Loop while the heap is not empty and the number of edges we take is less than n - 1 (the min number of edges for a minimum spanning tree)
-  // remove [x, y, cost] from the heap
-  // if x and y are not connected
-    // connect x and y (union)
-    // increment ans by cost
-    // increment count by one
-// Return ans
+// 1. Get the edges from each pair of points and compute the cost.
+// 2. Sort the edges by cost.
+// 3. Process the edges in sorted order.
+  // If the two nodes aren't connected yet, use the edge.
+  // Use union find to check whether two nodes are connected.
 
-// Time Complexity: O(n * n log(n * n)) 780ms
-// Space Complexity: O(n * n) 90.2MB
+// Time Complexity: O(n^2 log(n^2)) 2296ms
+// Space Complexity: O(n^2) 189.6MB
 var minCostConnectPoints = function(points) {
-  let n = points.length;
-  let heap = new MinHeap();
-  for (var i = 0; i < n; i++) {
-    for (var j = i + 1; j < n; j++) {
+  let n = points.length, edges = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
       let cost = Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1]);
-      heap.add([i, j, cost]);
+      edges.push([i, j, cost]);
+      edges.push([j, i, cost]);
     }
   }
-  let uf = new UnionFind(n), count = 0;
-  let ans = 0;
-  while (!heap.isEmpty() && count < n - 1) {
-    let [x, y, cost] = heap.remove();
-    if (!uf.connected(x, y)) {
+  edges.sort((a, b) => a[2] - b[2]);
+  let uf = new UnionFind(n), minCost = 0;
+  for (let [x, y, cost] of edges) {
+    if (!uf.isConnected(x, y)) {
       uf.union(x, y);
-      ans += cost;
-      count++;
+      minCost += cost;
     }
   }
-  return ans;
+  return minCost;
 };
 
-// Union Find with Union by Rank + Path Compression
 class UnionFind {
-  constructor(size) {
-    this.root = Array(size);
-    this.rank = Array(size);
-    for (var i = 0; i < size; i++) {
+  constructor(n) {
+    this.root = Array(n);
+    this.rank = Array(n);
+    for (let i = 0; i < n; i++) {
       this.root[i] = i;
       this.rank[i] = 1;
     }
@@ -64,108 +50,108 @@ class UnionFind {
     return this.root[x] = this.find(this.root[x]);
   }
   union(x, y) {
-    let rootX = this.find(x);
-    let rootY = this.find(y);
-    if (rootX !== rootY) {
-      if (this.rank[rootX] > this.rank[rootY]) {
-        this.root[rootY] = rootX;
-      } else if (this.rank[rootX] < this.rank[rootY]) {
-        this.root[rootX] = rootY;
-      } else {
-        this.root[rootY] = rootX;
-        this.rank[rootX] += this.rank[rootY];
-      }
+    let rootX = this.find(x), rootY = this.find(y);
+    if (rootX === rootY) return false;
+    if (this.rank[rootX] < this.rank[rootY]) {
+      this.root[rootX] = rootY;
+    } else if (this.rank[rootX] > this.rank[rootY]) {
+      this.root[rootY] = rootX;
+    } else {
+      this.root[rootY] = rootX;
+      this.rank[rootX]++;
     }
+    return true;
   }
-  connected(x, y) {
+  isConnected(x, y) {
     return this.find(x) === this.find(y);
   }
 }
 
-// Min Heap
-class MinHeap {
-  constructor() {
+
+// Solution 2: Prim's Algorithm
+
+// 1. Pick any point as the starting point (we'll pick 0 here).
+// 2. Compute the costs of all edges from node 0 and store them in a min heap.
+// 3. While we haven't visited all the nodes, 
+  // Use the edge at the top of the min heap (with the minimum cost) if we haven't visited the node y yet.
+  // Compute the costs of all edges from node y and store them in the min heap for the next iteration.
+
+// Time Complexity: O(n^2 log(n^2)) 460ms
+// Space Complexity: O(n^2) 138.8MB
+var minCostConnectPoints = function(points) {
+  let n = points.length, minHeap = new Heap((a, b) => a[2] - b[2]);
+  for (let i = 1; i < n; i++) {
+    let cost = Math.abs(points[i][0] - points[0][0]) + Math.abs(points[i][1] - points[0][1]);
+    minHeap.add([0, i, cost]);
+  }
+  let seen = Array(n).fill(false), nodesLeft = n - 1, minCost = 0;
+  seen[0] = true;
+  while (nodesLeft > 0) {
+    let [_x, y, cost] = minHeap.remove();
+    if (seen[y]) continue;
+    seen[y] = true;
+    nodesLeft--;
+    minCost += cost;
+    for (let i = 0; i < n; i++) {
+      if (seen[i]) continue; // we only want edges to unvisited nodes
+      let cost = Math.abs(points[y][0] - points[i][0]) + Math.abs(points[y][1] - points[i][1]);
+      minHeap.add([y, i, cost]);
+    }
+  }
+  return minCost;
+};
+
+class Heap {
+  constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
+    this.comparator = comparator;
+    this.size = 0;
   }
   add(val) {
+    this.size++;
     this.values.push(val);
-    let idx = this.values.length - 1;
-    let parentIdx = Math.floor((idx - 1) / 2);
-    while (parentIdx >= 0 && this.values[idx][2] < this.values[parentIdx][2]) {
+    let idx = this.size - 1, parentIdx = Math.floor((idx - 1) / 2);
+    while (parentIdx >= 0 && this.comparator(this.values[parentIdx], this.values[idx]) > 0) {
       [this.values[parentIdx], this.values[idx]] = [this.values[idx], this.values[parentIdx]];
       idx = parentIdx;
       parentIdx = Math.floor((idx - 1) / 2);
     }
-    return val;
   }
   remove() {
-    if (!this.values.length) return -1;
-    if (this.values.length === 1) return this.values.pop();
-    let value = this.values[0];
-    let popped = this.values.pop();
-    this.values[0] = popped;
+    if (this.size === 0) return -1;
+    this.size--;
+    if (this.size === 0) return this.values.pop();
+    let removedVal = this.values[0];
+    this.values[0] = this.values.pop();
     let idx = 0;
-    let leftIdx = idx * 2 + 1, rightIdx = idx * 2 + 2;
-    let childIdx = getChild(this.values, leftIdx, rightIdx);
-    function getChild(vals, leftIdx, rightIdx) {
-      let end = vals.length - 1;
-      if (leftIdx > end && rightIdx > end) return -1;
-      if (rightIdx > end) return leftIdx;
-      if (vals[leftIdx][2] < vals[rightIdx][2]) return leftIdx;
-      return rightIdx;
+    while (idx < this.size && idx < Math.floor(this.size / 2)) {
+      let leftIdx = idx * 2 + 1, rightIdx = idx * 2 + 2;
+      if (rightIdx === this.size) {
+        if (this.comparator(this.values[leftIdx], this.values[idx]) > 0) break;
+        [this.values[leftIdx], this.values[idx]] = [this.values[idx], this.values[leftIdx]];
+        idx = leftIdx;
+      } else if (this.comparator(this.values[leftIdx], this.values[idx]) < 0 || this.comparator(this.values[rightIdx], this.values[idx]) < 0) {
+        if (this.comparator(this.values[leftIdx], this.values[rightIdx]) <= 0) {
+          [this.values[leftIdx], this.values[idx]] = [this.values[idx], this.values[leftIdx]];
+          idx = leftIdx;
+        } else {
+          [this.values[rightIdx], this.values[idx]] = [this.values[idx], this.values[rightIdx]];
+          idx = rightIdx;
+        }
+      } else {
+        break;
+      }
     }
-    while (childIdx > -1 && this.values[idx][2] > this.values[childIdx][2]) {
-      [this.values[idx], this.values[childIdx]] = [this.values[childIdx], this.values[idx]];
-      idx = childIdx;
-      leftIdx = idx * 2 + 1, rightIdx = idx * 2 + 2;
-      childIdx = getChild(this.values, leftIdx, rightIdx);
-    }
-    return value;
+    return removedVal;
+  }
+  top() {
+    return this.values[0];
   }
   isEmpty() {
-    return this.values.length === 0;
+    return this.size === 0;
   }
 }
 
-// Solution 2: Prim's Algorithm
-
-// 1. Pick a starting vertex (0, can be anything but 0 just for simplicity)
-// 2. Find the vertice with the minimum weight out of all edges going to non-visited vertices
-// 3. From the optimal edge we just picked, repeat step 2.
-// Repeat steps 2 & 3 until we have constructed a minimum spanning tree (or found n - 1 vertices)
-
-// Time Complexity: O(n * n log(n * n)) 712ms
-// Space Complexity: O(n * n) 89.7MB
-var minCostConnectPoints = function(points) {
-  let n = points.length;
-  let heap = new MinHeap();
-  for (var i = 1; i < n; i++) {
-    let cost = Math.abs(points[0][0] - points[i][0]) + Math.abs(points[0][1] - points[i][1]);
-    heap.add([0, i, cost]);
-  }
-  let count = 0, ans = 0;
-  let visited = {};
-  visited[0] = true;
-  while (!heap.isEmpty() && count < n - 1) {
-    let [x, y, cost] = heap.remove();
-    if (!visited[y]) {
-      ans += cost;
-      visited[y] = true;
-      for (var j = 0; j < n; j++) {
-        if (!visited[j]) {
-          let cost = Math.abs(points[y][0] - points[j][0]) + Math.abs(points[y][1] - points[j][1]);
-          heap.add([y, j, cost]);
-        }
-      }
-      count++;
-    }
-  }
-  return ans;
-};
-
-// Five test cases to run function on
+// Two test cases
 console.log(minCostConnectPoints([[0,0],[2,2],[3,10],[5,2],[7,0]])) // 20
 console.log(minCostConnectPoints([[3,12],[-2,5],[-4,1]])) // 18
-console.log(minCostConnectPoints([[0,0],[1,1],[1,0],[-1,1]])) // 4
-console.log(minCostConnectPoints([[-1000000,-1000000],[1000000,1000000]])) // 4000000
-console.log(minCostConnectPoints([[0,0]])) // 0
