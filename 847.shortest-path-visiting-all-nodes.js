@@ -12,35 +12,32 @@
 // For each node we visit, mark the bit (from the right) as 1. 
   // e.g: if the node is 2, we mark the bit 00010 as 1, and set the new mask to be: oldMask | (1 << node)
 
-// Time Complexity: O(2^n) 160ms
-// Space Complexity: O(2^n) 51MB
+// n = number of nodes, m = max(graph[i].length) 
+// Time Complexity: O(2^n * n * m) 74ms
+// Space Complexity: O(2^n) 49.5MB 
 var shortestPathLength = function(graph) {
-  let n = graph.length, fullBitmask = (1 << n) - 1;
-  let queue = [], visited = new Set();
-  for (var i = 0; i < n; i++) {
+  let n = graph.length, fullMask = (1 << n) - 1;
+  let queue = [], seen = Array(n).fill(0).map(() => Array(1 << n).fill(false));
+  for (let i = 0; i < n; i++) {
     queue.push([i, 1 << i]);
-    visited.add(`${i},${1 << i}`);
+    seen[i][1 << i] = true;
   }
-
-  let steps = 0;
+  let length = 0;
   while (queue.length) {
-    let next = [];
-    while (queue.length) {
-      let [node, bitmask] = queue.pop();
-      if (bitmask === fullBitmask) return steps;
-      for (var neighbor of graph[node]) {
-        let newBitmask = bitmask | (1 << neighbor);
-        if (!visited.has(`${neighbor},${newBitmask}`)) {
-          next.push([neighbor, newBitmask]);
-          visited.add(`${neighbor},${newBitmask}`);
-        }
+    for (let i = queue.length - 1; i >= 0; i--) {
+      let [node, mask] = queue.shift();
+      if (mask === fullMask) return length;
+      for (let nei of graph[node]) {
+        let newMask = mask | (1 << nei);
+        if (seen[nei][newMask]) continue;
+        seen[nei][newMask] = true;
+        queue.push([nei, newMask]);
       }
     }
-    queue = next;
-    steps++;
+    length++;
   }
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(shortestPathLength([[1,2,3],[0],[0],[0]])) // 4
 console.log(shortestPathLength([[1],[0,2,4],[1,3,4],[2],[1,2]])) // 4
