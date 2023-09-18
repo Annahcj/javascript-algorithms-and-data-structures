@@ -6,42 +6,48 @@
 // Return the indices of the k weakest rows in the matrix ordered from weakest to strongest.
 
 
-// Solution 1: Linear Search & Max Heap
+// Solution: Max Heap & Binary Search to count soliders
 
-// 1. Get the count of soldiers in each row and store them in an array 'count'.
-// 2. Use a max heap to keep track of the k weakest rows.
-  // When the size of the heap > k, remove the strongest row.
-// 3. Extract the k rows from the heap, add them to the result array in reverse order.
+// Precompute the count of 1's for each row.
+// Use binary search to find the index of the last 1.
 
-// m = number of rows, n = number of columns
-// Time Complexity: O(mn + m log(k)) 92ms
-// Space Complexity: O(m + k) 45.9MB
+// Use a max heap to keep track of the k weakest rows.
+// If the size of the heap exceeds k, remove the strongest row from the heap.
+// At the end, extract the k rows from the heap and return them after reversing.
+
+// Time Complexity: O(m log(n) * m log(k)) 75ms
+// Space Complexity: O(m + k) 45.3MB
 var kWeakestRows = function(mat, k) {
-  let m = mat.length, n = mat[0].length;
-  let count = Array(m).fill(0);
+  let m = mat.length, count = Array(m);
   for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      count[i] += mat[i][j];
+    count[i] = getCount(mat[i]);
+  }
+  let maxHeap = new Heap((a, b) => count[a] === count[b] ? b - a : count[b] - count[a]);
+  for (let i = 0; i < m; i++) {
+    maxHeap.add(i);
+    if (maxHeap.size > k) {
+      maxHeap.remove();
     }
   }
-
-  let heap = new PriorityQueue((a, b) => {
-    if (count[a] === count[b]) return b - a;
-    return count[b] - count[a];
-  })
-  for (let i = 0; i < m; i++) {
-    heap.add(i);
-    if (heap.size > k) heap.remove();
+  let weakestRows = [];
+  for (let i = 0; i < k; i++) {
+    weakestRows.push(maxHeap.remove());
   }
-  
-  let res = Array(k);
-  for (let i = k - 1; i >= 0; i--) {
-    res[i] = heap.remove();
-  }
-  return res;
+  return weakestRows.reverse();
 };
 
-class PriorityQueue {
+// binary search for the index of the last 1
+function getCount(row) {
+  let low = 0, high = row.length - 1;
+  while (low < high) {
+    let mid = Math.ceil((low + high) / 2);
+    if (row[mid] === 1) low = mid;
+    else high = mid - 1;
+  }
+  return row[low] === 1 ? low + 1 : 0;
+}
+
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -92,41 +98,6 @@ class PriorityQueue {
   }
 }
 
-
-// Solution 2: Binary Search & Max Heap
-
-// The same as solution 1, but we use binary search to find the number of soldiers for each row.
-
-// Time Complexity: O(m log(n) + m log(k)) 93ms
-// Space Complexity: O(m + k) 46MB
-var kWeakestRows = function(mat, k) {
-  let m = mat.length, n = mat[0].length;
-  let count = Array(m).fill(0);
-  for (let i = 0; i < m; i++) {
-    let low = 0, high = n - 1;
-    while (low < high) {
-      let mid = Math.ceil((low + high) / 2);
-      if (mat[i][mid] === 1) low = mid;
-      else high = mid - 1;
-    }
-    count[i] = mat[i][low] ? low + 1 : low;
-  }
-  
-  let heap = new PriorityQueue((a, b) => {
-    if (count[a] === count[b]) return b - a;
-    return count[b] - count[a];
-  })
-  for (let i = 0; i < m; i++) {
-    heap.add(i);
-    if (heap.size > k) heap.remove();
-  }
-  
-  let res = Array(k);
-  for (let i = k - 1; i >= 0; i--) {
-    res[i] = heap.remove();
-  }
-  return res;
-};
-
-// A test case to run function on
+// Two test cases
 console.log(kWeakestRows([[1,1,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,1,1,1]], 3)) // [2,0,3]
+console.log(kWeakestRows([[1,0,0,0],[1,1,1,1],[1,0,0,0],[1,0,0,0]], 2)) // [0,2]
