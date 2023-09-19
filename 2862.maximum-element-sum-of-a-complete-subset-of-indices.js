@@ -6,7 +6,7 @@
 // A perfect square is a number that can be expressed as the product of an integer by itself.
 
 
-// Solution: Prime Factorization
+// Solution 1: Prime Factorization
 
 // The product of a pair of elements is a perfect square when the sum of occurances of each prime factor is even.
 // All numbers in a subset must have the same odd/even count for each prime factor.
@@ -55,6 +55,40 @@ function getPrimeFactorCounts(num) {
   }
   return primeFactorCounts;
 }
+
+
+// Solution 2: Precompute Perfect Squares
+
+// Building on top of solution 1, we can observe that there is a pattern to the numbers that have the same odd/even prime factor counts. 
+// Numbers with the same odd/even prime factor counts will be just perfect squares multiplied by any number "i" that isn't a perfect square.
+  // perfect squares: [1,4,9,16,25]
+  // 2: [2,8,18,32,50]
+  // 3: [3,12,27,48,75]
+  // ... and so on for all numbers that aren't a perfect square
+
+// 1. Precompute the perfect squares, where each perfect square represents an index in nums.
+// 2. For each index i, take it as the special number to multiply all the perfect squares. 
+// Get the sum of numbers at each perfect square index after multiplying by i and record the maximum sum.
+
+// Time Complexity: O(n sqrt(n)) 77ms
+// Space Complexity: O(sqrt(n)) 46MB
+var maximumSum = function(nums) {
+  let n = nums.length, perfectSquares = [];
+  for (let i = 1; i * i <= n; i++) {
+    perfectSquares.push(i * i);
+  }
+  let ans = 0;
+  for (let i = 0; i < n; i++) { // special number "i" to multiply the perfect squares
+    let sum = 0;
+    for (let j = 0; j < perfectSquares.length; j++) {
+      let index = perfectSquares[j] * (i + 1) - 1;
+      if (index >= n) break;
+      sum += nums[index];
+    }
+    ans = Math.max(ans, sum);
+  }
+  return ans;
+};
 
 // Two test cases
 console.log(maximumSum([8,7,3,5,7,2,4,9])) // 16
