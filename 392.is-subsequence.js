@@ -21,45 +21,40 @@ var isSubsequence = function(s, t) {
 // Solution 2: Follow-up Solution -> Hashmap for Indices
 
 // When we get lots of incoming s, we only have to process t once.
-// To process each s, the time complexity is O(n log(n)) where n is the length of s.
+// To process each s, the time complexity will be O(n log(m)) where n is the length of s.
 
-// 1. Save the indices for each character of t in a frequency array (index 0 = a, index 1 = b, ...): [[0,2],[1],[]...] = "aba"
-// 2. Compare s with t.
-  // When s[i] is not equal to t[j], binary search for the index of the next s[i] in t.
+// 1. Save the indices for each character of t grouped by character (e.g: "aba" = [[0,2],[1],[]...])
+// 2. Go through each index in s and keep track of the pointer in t
+  // Binary search through indexesT[charcode] for the lowest index that is larger than the current index in t.
 
 // n = s.length, m = t.length
-// Time Complexity: O(m + n log(n)) 68ms
-// Space Complexity: O(m) 43.5MB
+// Time Complexity: O(m + n log(m)) 48ms
+// Space Complexity: O(m) 42MB
 var isSubsequence = function(s, t) {
-  let indices = Array(26).fill(0).map(() => []);
-  let n = s.length, m = t.length;
-  for (let j = 0; j < m; j++) {
-    indices[t.charCodeAt(j) - 97].push(j);
+  let indexesT = Array(26).fill(0).map(() => []);
+  for (let i = 0; i < t.length; i++) {
+    indexesT[t.charCodeAt(i) - 97].push(i);
   }
-
-  let i = 0, j = 0;
-  while (i < n && j < m) {
-    if (s[i] === t[j]) i++, j++;
-    else {
-      let nextIdx = getNextIndex(j, indices[s.charCodeAt(i) - 97]);
-      if (nextIdx === -1) return false;
-      j = nextIdx;
-    }
+  for (let i = 0, j = -1; i < s.length; i++) {
+    let nextIndex = getNextIndex(indexesT[s.charCodeAt(i) - 97], j);
+    if (nextIndex === -1) return false;
+    j = nextIndex;
   }
-  return i === n;
+  return true;
 };
 
-// binary search for the first index larger than idx
-function getNextIndex(idx, indices) {
-  let low = 0, high = indices.length - 1;
+// find lowest index that is larger than prevIndex
+function getNextIndex(indexes, prevIndex) {
+  if (!indexes.length) return -1;
+  let low = 0, high = indexes.length - 1;
   while (low < high) {
     let mid = Math.floor((low + high) / 2);
-    if (indices[mid] > idx) high = mid;
+    if (indexes[mid] > prevIndex) high = mid;
     else low = mid + 1;
   }
-  return indices[low] > idx ? indices[low] : -1;
+  return indexes[low] > prevIndex ? indexes[low] : -1;
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(isSubsequence("abc", "ahbgdc")) // true
 console.log(isSubsequence("axc", "ahbgdc")) // false
