@@ -6,44 +6,35 @@
 // Return the length of the longest possible word chain with words chosen from the given list of words.
 
 
-// Solution: Sort & LIS
+// Solution: Sorting & Hashmap
 
-// 1. Sort words in increasing order of length.
-// 2. Find longest increasing subsequence (but instead of increasing, find words that are one character different)
-  // loop through words (pointer = i)
-    // loop backwards from i - 1 to 0 (pointer = j)
-      // if words[j] is one character away from words[i], update dp[i] to be Math.max(dp[i], dp[j] + 1)
-// dp[i] denotes the longest word chain up to i.
-// Return the maximum length in dp.
+// 1. Sort the words by shortest length.
+// 2. Go through the sorted words and keep track of the longest chain length ending at each word.
+  // Try to create a new word removing one character from it.
+  // If the map contains that word with one character removed, the new length of the chain is map.get(oneCharRemoved) + 1
+  // Return the maximum chain length.
 
-// n = number of words, s = length of each word
-// Time Complexity: O(nss) 116ms
-// Space Complexity: O(ns) 46.4MB
+// n = number of words, m = max(words[i].length)
+// Time Complexity: O(nm^2) 78ms
+// Space Complexity: O(nm) 49MB
 var longestStrChain = function(words) {
   words.sort((a, b) => a.length - b.length);
-  function pred(word1, word2) {
-    let i = 0, j = 0;
-    while (i < word1.length && j < word2.length) {
-      if (word1[i] !== word2[j]) {
-        return word1.substr(i) === word2.substr(j + 1);
-      } else i++, j++;
-    }
-    return j === word1.length;
-  }
-  let dp = Array(words.length).fill(1);
-  for (var i = 0; i < words.length; i++) {
-    for (var j = i - 1; j >= 0; j--) {
-      if (words[j].length + 1 === words[i].length) {
-        if (pred(words[j], words[i])) dp[i] = Math.max(dp[i], dp[j] + 1);
+  let map = new Map(), n = words.length, maxChainLength = 0;
+  for (let i = 0; i < n; i++) {
+    let chainLength = 1;
+    for (let j = 0; j < words[i].length; j++) {
+      let oneCharRemoved = words[i].slice(0, j) + words[i].slice(j + 1);
+      if (map.has(oneCharRemoved)) {
+        chainLength = Math.max(chainLength, map.get(oneCharRemoved) + 1);
       }
     }
+    map.set(words[i], chainLength);
+    maxChainLength = Math.max(maxChainLength, chainLength);
   }
-  let maxLen = 0;
-  for (var len of dp) maxLen = Math.max(maxLen, len);
-  return maxLen;
+  return maxChainLength;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(longestStrChain(["a","b","ba","bca","bda","bdca"])) // 4
 console.log(longestStrChain(["xbc","pcxbcf","xb","cxbc","pcxbc"])) // 5
 console.log(longestStrChain(["abcd","dbqca"])) // 1
