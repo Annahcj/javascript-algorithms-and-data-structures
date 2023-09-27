@@ -7,6 +7,8 @@
 
 // Solution: Store Lengths
 
+// Logic: Reduce k when the kth character is part of a repeated string. The goal is to find the character in the original non-repeated string.
+
 // Store the length of the decoded string at each s[i]. The decoded length takes into account repetition.
   // lengths[i] = length of the decoded string ending at s[i].
 
