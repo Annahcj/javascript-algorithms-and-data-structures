@@ -3,50 +3,27 @@
 // Return the maximum product you can get.
 
 
-// Solution 1: Recursion w/ Memoization
+// Solution: DP
 
-// Time Complexity: O(n^2) 72ms
-// Space Complexity: O(n) 39.1MB
-var integerBreak = function(n) {
-  let memo = Array(n);
-  return maxProduct(n, 0);
+// Populate dp, where dp[i] = maximum product for all combinations of numbers summing up to i.
+// For each sum i, go through each possible number to add to the sequence to sum up to i: dp[j] * (i - j).
+// Record the maximum dp[i].
 
-  function maxProduct(n, k) {
-    // if memo already contains n, return memo[n]
-    if (memo[n] !== undefined) return memo[n];
-    // if we have the correct sum,
-    if (n === 0) {
-      // if k is smaller than 2, return 0 (not valid - anything multiplied by it will also be 0), otherwise return 1 (valid)
-      return k >= 2 ? 1 : 0;
-    }
-    let ans = 0;
-    // try adding all possibilities from 1 to n, taking the maximum product
-    for (var i = 1; i <= n; i++) {
-      ans = Math.max(ans, maxProduct(n - i, k + 1) * i);
-    }
-    // save in memo, and return for earlier calls
-    memo[n] = ans;
-    return ans;
-  }
-};
-
-// Solution 2: Dynamic Programming
-
-// Time Complexity: O(n^2) 76ms
-// Space Complexity: O(n) 38.7MB
+// Time Complexity: O(n^2) 51ms
+// Space Complexity: O(n) 41.8MB
 var integerBreak = function(n) {
   let dp = Array(n + 1).fill(0);
-  // set dp[2] to 1 (the best choice is 1 + 1 -> 1 * 1 = 1)
-  dp[2] = 1;
-  for (var i = 3; i <= n; i++) {
-    for (var j = 1; j < i; j++) {
-      // keep it the same, or max(j, dp[j]) * max(i - j, dp[i - j]) because now we have two items
-      dp[i] = Math.max(dp[i], Math.max(j, dp[j]) * Math.max(i - j, dp[i - j]));
+  dp[0] = 1;
+  for (let i = 1; i <= n; i++) {
+    for (let j = i - 1; j >= 0; j--) {
+      if (i === n && j === 0) continue; // k must be >= 2
+      let currNum = i - j;
+      dp[i] = Math.max(dp[i], dp[j] * currNum);
     }
   }
   return dp[n];
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(integerBreak(2)) // 1
 console.log(integerBreak(10)) // 36
