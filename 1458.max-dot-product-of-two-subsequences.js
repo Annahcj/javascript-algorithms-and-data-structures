@@ -6,6 +6,10 @@
 
 // Solution 1: DP - Recursion w/ Memoization
 
+// Two edge cases:
+  // 1. nums1 has only negative numbers and nums2 has only positive numbers: return the smallest negative pair product.
+  // 2. nums1 has only positive numbers and nums2 has only negative numbers: return the smallest negative pair product.
+
 // Memoize each dp(i, j), where 
   // i = index in nums1
   // j = index in nums2
@@ -16,32 +20,47 @@
   // 3. Move i forward only
   // 4. Move j forward only
 
-// To deal with the case where the final answer will be negative, we take nums1[i] * nums2[j] if there are no better scores.
-  // If moving i or j forward results in 0, we don't take that path.
-  // You may think: What happens if the result is 0 but the subsequences are not empty? In that case, we would have at least one pair with a positive product, in which case taking only the positive products will result in a non-negative/non-zero score.
-
 // n = length of nums1, m = length of nums2
-// Time Complexity: O(nm) 103ms
-// Space Complexity: O(nm) 48.2MB
+// Time Complexity: O(nm) 96ms
+// Space Complexity: O(nm) 46MB
 var maxDotProduct = function(nums1, nums2) {
   let n = nums1.length, m = nums2.length;
-  let memo = Array(n).fill(0).map(() => Array(m).fill(-1));
+  let maxNums1 = -Infinity, minNums1 = Infinity;
+  let maxNums2 = -Infinity, minNums2 = Infinity;
+  for (let i = 0; i < n; i++) {
+    maxNums1 = Math.max(maxNums1, nums1[i]);
+    minNums1 = Math.min(minNums1, nums1[i]);
+  }
+  for (let i = 0; i < m; i++) {
+    maxNums2 = Math.max(maxNums2, nums2[i]);
+    minNums2 = Math.min(minNums2, nums2[i]);
+  }
+  if (maxNums1 < 0 && minNums2 > 0) {
+    return maxNums1 * minNums2;
+  }
+  if (minNums1 > 0 && maxNums2 < 0) {
+    return minNums1 * maxNums2;
+  }
+  let memo = Array(n).fill(0).map(() => Array(m).fill(null));
   return dp(0, 0);
   
   function dp(i, j) {
     if (i === n || j === m) return 0;
-    if (memo[i][j] !== -1) return memo[i][j];
+    if (memo[i][j] !== null) return memo[i][j];
     
-    let ans = nums1[i] * nums2[j] + Math.max(0, dp(i + 1, j + 1));
-    let moveI = dp(i + 1, j), moveJ = dp(i, j + 1);
-    if (moveI !== 0) ans = Math.max(ans, moveI);
-    if (moveJ !== 0) ans = Math.max(ans, moveJ);
-    return memo[i][j] = ans;
-  } 
+    let takeBoth = nums1[i] * nums2[j] + dp(i + 1, j + 1);
+    let skipI = dp(i + 1, j);
+    let skipJ = dp(i, j + 1);
+    return memo[i][j] = Math.max(takeBoth, skipI, skipJ);
+  }
 };
 
 
 // Solution 2: Bottom Up DP
+
+// Two edge cases:
+  // 1. nums1 has only negative numbers and nums2 has only positive numbers: return the smallest negative pair product.
+  // 2. nums1 has only positive numbers and nums2 has only negative numbers: return the smallest negative pair product.
 
 // dp[i][j] = the maximum dot product where i = index in nums1 and j = index in nums2.
 // For each dp[i][j], we have four choices:
@@ -51,16 +70,32 @@ var maxDotProduct = function(nums1, nums2) {
   // 4. Move j forward only
 
 // n = length of nums1, m = length of nums2
-// Time Complexity: O(nm) 105ms
-// Space Complexity: O(nm) 49.4MB
+// Time Complexity: O(nm) 86ms
+// Space Complexity: O(nm) 49.3MB
 var maxDotProduct = function(nums1, nums2) {
   let n = nums1.length, m = nums2.length;
+  let maxNums1 = -Infinity, minNums1 = Infinity;
+  let maxNums2 = -Infinity, minNums2 = Infinity;
+  for (let i = 0; i < n; i++) {
+    maxNums1 = Math.max(maxNums1, nums1[i]);
+    minNums1 = Math.min(minNums1, nums1[i]);
+  }
+  for (let i = 0; i < m; i++) {
+    maxNums2 = Math.max(maxNums2, nums2[i]);
+    minNums2 = Math.min(minNums2, nums2[i]);
+  }
+  if (maxNums1 < 0 && minNums2 > 0) {
+    return maxNums1 * minNums2;
+  }
+  if (minNums1 > 0 && maxNums2 < 0) {
+    return minNums1 * maxNums2;
+  }
   let dp = Array(n).fill(0).map(() => Array(m).fill(0));
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < m; j++) {
       let moveBoth = i === 0 || j === 0 ? 0 : dp[i - 1][j - 1];
       dp[i][j] = nums1[i] * nums2[j] + Math.max(0, moveBoth);
-      if (i > 0) dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+      if (i > 0) dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]); 
       if (j > 0) dp[i][j] = Math.max(dp[i][j], dp[i][j - 1]);
     }
   }
