@@ -7,7 +7,27 @@
 // Return the minimum number of operations to make nums continuous.
 
 
-// Solution: Binary Search
+// Solution 1: Sliding Window
+
+// 1. Dedupe nums - remove all duplicates.
+// 2. Sort nums in asc order.
+// 3. Maintain a sliding window over the sorted nums where the diff between the left and right values <= n - 1.
+
+// Time Complexity: O(n log(n)) 228ms
+// Space Complexity: O(n) 75.2MB
+var minOperations = function(nums) {
+  let n = nums.length;
+  nums = [...new Set(nums)].sort((a, b) => a - b);
+  let minOperations = n;
+  for (let j = 0, i = 0; j < nums.length; j++) {
+    while (nums[j] - nums[i] >= n) i++;
+    minOperations = Math.min(minOperations, n - (j - i + 1));
+  }
+  return minOperations;
+};
+
+
+// Solution 2: Binary Search
 
 // 1. Sort and get the unique numbers from nums (make sure to get the length of nums before getting the unique numbers).
 // 2. Try each nums[i] as the start of a window of n increasing numbers.
@@ -72,7 +92,7 @@ var minOperations = function(nums) {
   }
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(minOperations([4,2,5,3])) // 0
 console.log(minOperations([1,2,3,5,6])) // 1
 console.log(minOperations([1,10,100,1000])) // 3
