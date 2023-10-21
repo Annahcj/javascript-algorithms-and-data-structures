@@ -3,29 +3,30 @@
 // A subsequence of an array is obtained by deleting some number of elements (can be zero) from the array, leaving the remaining elements in their original order.
 
 
-// Solution: DP w/ Montonic Decreasing Queue
+// Solution: Monotonic Decreasing Deque
 
-// dp[i] = sum of best subsequence ending at index i.
-// Maintain a monotonic decreasing queue (queue[0] is the max), implemented with a doubly linked list.
-// Keep the indices in the queue instead of the actual value so that removal is easier.
+// Maintain a monotonic decreasing deque of indices and maximum sums ([index, maximum sum]).
 
-// Time Complexity: O(n) 212ms
-// Space Complexity: O(n) 75.2MB
+// For each nums[i], 
+  // 1. Remove from the front of the deque while i - queue.front()'s index > k.
+  // 2. The maximum sum up to nums[i] = nums[i] + queue.front()'s max sum.
+  // 3. Remove from the back of the deque while queue.back()'s max sum <= dp[i].
+  // 4. Push the current index i to the back of the deque.
+
+// Time Complexity: O(n) 115ms
+// Space Complexity: O(k) 71.6MB
 var constrainedSubsetSum = function(nums, k) {
-  let queue = new Deque(), n = nums.length, dp = Array(n);
-  let res = -Infinity;
+  let n = nums.length, deque = new Deque(), ans = -Infinity;
   for (let i = 0; i < n; i++) {
-    while (queue.size && queue.front() < i - k) queue.shift(); // remove expired
-    let queueBest = queue.size ? dp[queue.front()] : 0, best = Math.max(nums[i], nums[i] + queueBest); // nums[i] by itself, or the best previous subsequence
-    dp[i] = best;
-    res = Math.max(res, dp[i]);
-    
-    while (queue.size && dp[queue.back()] <= best) queue.pop(); // pop out smaller to maintain decreasing
-    queue.push(i);
+    while (!deque.isEmpty() && i - deque.front()[0] > k) deque.shift();
+    let maxSum = deque.isEmpty() ? nums[i] : Math.max(nums[i], nums[i] + deque.front()[1]);
+    while (!deque.isEmpty() && deque.back()[1] <= maxSum) deque.pop();
+    deque.push([i, maxSum]);
+    ans = Math.max(ans, maxSum);
   }
-  return res;
+  return ans;
 };
-
+  
 class Deque {
   constructor() {
     this.head = new Node(null);
@@ -79,6 +80,7 @@ class Deque {
     return this.size === 0;
   }
 }
+  
 class Node {
   constructor(val) {
     this.val = val;
@@ -87,6 +89,6 @@ class Node {
   }
 }
 
-// Two test cases to run function on
+// Two test cases 
 console.log(constrainedSubsetSum([10,2,-10,5,20], 2)) // 37
 console.log(constrainedSubsetSum([-1,-2,-3], 1)) // -1
