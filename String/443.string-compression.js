@@ -39,30 +39,30 @@
 
 // Time Complexity: O(n) 72ms
 // Space Complexity: O(1) 40.6MB
-  var compress = function(chars) {
-    let idx = 0, prev = chars[0], count = 1;
-    for (var i = 1; i <= chars.length; i++) {
-      if (chars[i] === prev) {
-        count++;
-      } else  {
-        chars[idx] = prev;
-        idx++;
-        if (count > 1) {
-          count = count.toString();
-          for (var digit of count) {
-            chars[idx] = digit;
-            idx++;
-          }
+var compress = function(chars) {
+  let idx = 0, prev = chars[0], count = 1;
+  for (let i = 1; i <= chars.length; i++) {
+    if (chars[i] === prev) {
+      count++;
+    } else  {
+      chars[idx] = prev;
+      idx++;
+      if (count > 1) {
+        count = count.toString();
+        for (let digit of count) {
+          chars[idx] = digit;
+          idx++;
         }
-        prev = chars[i];
-        count = 1;
-      } 
-    }  
-    return idx;
-  };
-  
-  // Four test cases to run function on
-  console.log(compress(["a","a","b","b","c","c","c"])) // 6 -> ["a","2","b","2","c","3"]
-  console.log(compress(["a"])) // 1 -> ["a"]
-  console.log(compress(["a","b","b","b","b","b","b","b","b","b","b","b","b"])) // 4 -> ["a","b","1","2"]
-  console.log(compress(["a","a","a","b","b","a","a"])) // 6 -> ["a","3","b","2","a","2"]
+      }
+      prev = chars[i];
+      count = 1;
+    } 
+  }  
+  return idx;
+};
+
+// Four test cases 
+console.log(compress(["a","a","b","b","c","c","c"])) // 6 -> ["a","2","b","2","c","3"]
+console.log(compress(["a"])) // 1 -> ["a"]
+console.log(compress(["a","b","b","b","b","b","b","b","b","b","b","b","b"])) // 4 -> ["a","b","1","2"]
+console.log(compress(["a","a","a","b","b","a","a"])) // 6 -> ["a","3","b","2","a","2"]

@@ -2,7 +2,7 @@
 // Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
 
 
-// Solution 1: Cumulative Sum in One Pass
+// Solution: Cumulative Sum in One Pass
 
 // Declare a map to keep each sum and the occurance of each.
 // Loop through nums, update total sum.
@@ -19,18 +19,18 @@
 // Time Complexity: O(n) 128ms
 // Space Complexity: O(n) 49.7MB
 var subarraySum = function(nums, k) {
-    let map = {0: 1}, count = 0, sum = 0;
-    for (var i = 0; i < nums.length; i++) {
-      sum += nums[i];
-      if (map[sum - k]) {
-        count += map[sum - k];
-      }
-      map[sum] = (map[sum] || 0) + 1;
+  let map = {0: 1}, count = 0, sum = 0;
+  for (let i = 0; i < nums.length; i++) {
+    sum += nums[i];
+    if (map[sum - k]) {
+      count += map[sum - k];
     }
-    return count;
-  };
-  
-  // Three test cases to run function on
-  console.log(subarraySum([1,-1,0],0)) // 3
-  console.log(subarraySum([1,1,2], 2)) // 2
-  console.log(subarraySum([1,1,2,2,3,3], 6)) // 2
+    map[sum] = (map[sum] || 0) + 1;
+  }
+  return count;
+};
+
+// Three test cases to run function on
+console.log(subarraySum([1,-1,0],0)) // 3
+console.log(subarraySum([1,1,2], 2)) // 2
+console.log(subarraySum([1,1,2,2,3,3], 6)) // 2

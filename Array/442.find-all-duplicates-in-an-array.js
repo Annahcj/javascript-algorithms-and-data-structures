@@ -14,7 +14,7 @@
 // Space Complexity: O(1) 46.9MB
 var findDuplicates = function(nums) {
   let res = [];
-  for (var num of nums) {
+  for (let num of nums) {
     // We use num - 1 because the numbers are in the range 1 to n.
     // In order to make them fit in the array, we would need to subtract one.
     if (nums[Math.abs(num) - 1] < 0) res.push(Math.abs(num));
@@ -23,7 +23,7 @@ var findDuplicates = function(nums) {
   return res;
 };
 
-// Four test cases to run function on
+// Four test cases 
 console.log(findDuplicates([2,2])) // [2]
 console.log(findDuplicates([4,3,2,7,8,2,3,1])) // [2,3]
 console.log(findDuplicates([1,1,2])) // [1]
