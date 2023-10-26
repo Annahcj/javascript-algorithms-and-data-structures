@@ -40,47 +40,47 @@
 // n = total characters of every word
 // Time Complexity: O(n) 76ms
 // Space Complexity: O(1) 40.1MB
-  var expressiveWords = function(s, words) {
-    let count = 0;
-    let charArr = [[s[0], 1]], idx = 0;
-    for (var h = 1; h < s.length; h++) {
-      if (s[h] !== s[h - 1]) {
-        idx++;
-        charArr[idx] = [s[h], 0];
-      }
-      charArr[idx][1]++;
+var expressiveWords = function(s, words) {
+  let count = 0;
+  let charArr = [[s[0], 1]], idx = 0;
+  for (var h = 1; h < s.length; h++) {
+    if (s[h] !== s[h - 1]) {
+      idx++;
+      charArr[idx] = [s[h], 0];
     }
-    for (var word of words) {
-      count += isStretchy(word) ? 1 : 0;
-    }
-    return count;  
-  
-    function isStretchy(word) {
-      let i = 1, j = 0;
-      let charCount = 1;
-      if (word[0] !== charArr[0][0]) return false;
-      while (i < word.length) {
-        if (word[i] === word[i - 1]) charCount++;
-        else {
-          j++;
-          if (!charArr[j] || word[i] !== charArr[j][0] || (charCount !== charArr[j - 1][1] && charArr[j - 1][1] < 3) || charCount > charArr[j - 1][1]) {
-            return false;
-          }
-          charCount = 1;
+    charArr[idx][1]++;
+  }
+  for (var word of words) {
+    count += isStretchy(word) ? 1 : 0;
+  }
+  return count;  
+
+  function isStretchy(word) {
+    let i = 1, j = 0;
+    let charCount = 1;
+    if (word[0] !== charArr[0][0]) return false;
+    while (i < word.length) {
+      if (word[i] === word[i - 1]) charCount++;
+      else {
+        j++;
+        if (!charArr[j] || word[i] !== charArr[j][0] || (charCount !== charArr[j - 1][1] && charArr[j - 1][1] < 3) || charCount > charArr[j - 1][1]) {
+          return false;
         }
-        i++;
+        charCount = 1;
       }
-      if ((charCount !== charArr[j][1] && charArr[j][1] < 3) || charCount > charArr[j][1]) {
-        return false;
-      }
-      if (j < charArr.length - 1) return false;
-      return true;
+      i++;
     }
-  };
-  
-  // Five test cases to run function on
-  console.log(expressiveWords("heeellooo", ["heeelloooworld"])) // 0
-  console.log(expressiveWords("aaabbbaaa", ["a"])) // 0
-  console.log(expressiveWords("aaa", ["aaaa"])) // 0
-  console.log(expressiveWords("heeellooo", ["hello", "hi", "helo"])) // 1
-  console.log(expressiveWords("zzzzzyyyyy", ["zzyy","zy","zyy"])) // 3
+    if ((charCount !== charArr[j][1] && charArr[j][1] < 3) || charCount > charArr[j][1]) {
+      return false;
+    }
+    if (j < charArr.length - 1) return false;
+    return true;
+  }
+};
+
+// Five test cases 
+console.log(expressiveWords("heeellooo", ["heeelloooworld"])) // 0
+console.log(expressiveWords("aaabbbaaa", ["a"])) // 0
+console.log(expressiveWords("aaa", ["aaaa"])) // 0
+console.log(expressiveWords("heeellooo", ["hello", "hi", "helo"])) // 1
+console.log(expressiveWords("zzzzzyyyyy", ["zzyy","zy","zyy"])) // 3

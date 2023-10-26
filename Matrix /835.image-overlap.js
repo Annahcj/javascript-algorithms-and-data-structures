@@ -43,7 +43,7 @@ var largestOverlap = function(img1, img2) {
   }  
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(largestOverlap([[1,1,0],[0,1,0],[0,1,0]], [[0,0,0],[0,1,1],[0,0,1]])) // 3
 console.log(largestOverlap([[1]], [[1]])) // 1
 console.log(largestOverlap([[0]], [[0]])) // 0

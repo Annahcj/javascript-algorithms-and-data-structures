@@ -43,49 +43,49 @@
 
 // Time Complexity: O(mn) 344ms
 // Space Complexity: O(mn) (call stack) 57.9MB
-  var largestIsland = function(grid) {
-    let m = grid.length, n = grid[0].length;
-    let color = 2;
-    let islandsSize = {};
-    let maxArea = 0;
-    let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-    for (var i = 0; i < m; i++) {
-      for (var j = 0; j < n; j++) {
-        if (grid[i][j] === 1) {
-          islandsSize[color] = 0;
-          paint(i, j, color);
-          maxArea = Math.max(maxArea, islandsSize[color]);
-          color++;
-        };
-      }
-    }  
-    for (i = 0; i < m; i++) {
-      for (j = 0; j < n; j++) {
-        if (grid[i][j] === 0) {
-          let tempArea = 1;
-          let neighbors = {};
-          for (var h = 0; h < directions.length; h++) {
-            let [x, y] = [i + directions[h][0], j + directions[h][1]];
-            if (x >= 0 && y >= 0 && x < m && y < n && grid[x][y] > 1) {
-              if (!neighbors[grid[x][y]]) tempArea += islandsSize[grid[x][y]];
-              neighbors[grid[x][y]] = true;
-            } 
-            maxArea = Math.max(maxArea, tempArea);
-          }
+var largestIsland = function(grid) {
+  let m = grid.length, n = grid[0].length;
+  let color = 2;
+  let islandsSize = {};
+  let maxArea = 0;
+  let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+  for (var i = 0; i < m; i++) {
+    for (var j = 0; j < n; j++) {
+      if (grid[i][j] === 1) {
+        islandsSize[color] = 0;
+        paint(i, j, color);
+        maxArea = Math.max(maxArea, islandsSize[color]);
+        color++;
+      };
+    }
+  }  
+  for (i = 0; i < m; i++) {
+    for (j = 0; j < n; j++) {
+      if (grid[i][j] === 0) {
+        let tempArea = 1;
+        let neighbors = {};
+        for (var h = 0; h < directions.length; h++) {
+          let [x, y] = [i + directions[h][0], j + directions[h][1]];
+          if (x >= 0 && y >= 0 && x < m && y < n && grid[x][y] > 1) {
+            if (!neighbors[grid[x][y]]) tempArea += islandsSize[grid[x][y]];
+            neighbors[grid[x][y]] = true;
+          } 
+          maxArea = Math.max(maxArea, tempArea);
         }
       }
     }
-    return maxArea;
-    function paint(x, y, color) {
-      if (x < 0 || y < 0 || x === m || y === n || grid[x][y] !== 1) return;
-      grid[x][y] = color;
-      islandsSize[color]++;
-      for (var i = 0; i < directions.length; i++) paint(x + directions[i][0], y + directions[i][1], color);
-    }
-  };
-  
-  // Four test cases to run function on
-  console.log(largestIsland([[0,0,1],[1,1,0], [1,1,1]])) // 7
-  console.log(largestIsland([[1,0],[0,1]])) // 3
-  console.log(largestIsland([[1,1],[1,0]])) // 4
-  console.log(largestIsland([[1,1],[1,1]])) // 4
+  }
+  return maxArea;
+  function paint(x, y, color) {
+    if (x < 0 || y < 0 || x === m || y === n || grid[x][y] !== 1) return;
+    grid[x][y] = color;
+    islandsSize[color]++;
+    for (var i = 0; i < directions.length; i++) paint(x + directions[i][0], y + directions[i][1], color);
+  }
+};
+
+// Four test cases 
+console.log(largestIsland([[0,0,1],[1,1,0], [1,1,1]])) // 7
+console.log(largestIsland([[1,0],[0,1]])) // 3
+console.log(largestIsland([[1,1],[1,0]])) // 4
+console.log(largestIsland([[1,1],[1,1]])) // 4

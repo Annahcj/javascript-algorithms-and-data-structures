@@ -47,18 +47,19 @@
 // Space Complexity: O(n) 70.6MB
 var sumOfDistancesInTree = function(n, edges) {
   let graph = {};
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     graph[i] = [];
   }
-  for (var [a, b] of edges) {
+  for (let [a, b] of edges) {
     graph[a].push(b);
     graph[b].push(a);
   }
   let count = Array(n).fill(0), res = Array(n).fill(0);
   dfs(0, -1);
   dfs2(0, -1);
+
   function dfs(root, parent) {
-    for (var i of graph[root]) {
+    for (let i of graph[root]) {
       if (i === parent) continue;
       dfs(i, root);
       count[root] += count[i];
@@ -66,8 +67,9 @@ var sumOfDistancesInTree = function(n, edges) {
     }
     count[root]++;
   }
+
   function dfs2(root, parent) {
-    for (var i of graph[root]) {
+    for (let i of graph[root]) {
       if (i === parent) continue;
       res[i] = res[root] - count[i] + n - count[i];
       dfs2(i, root);
@@ -76,7 +78,7 @@ var sumOfDistancesInTree = function(n, edges) {
   return res;
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(sumOfDistancesInTree(6, [[0,1],[0,2],[2,3],[2,4],[2,5]])) // [8,12,6,10,10,10]
 console.log(sumOfDistancesInTree(1, [])) // [0]
 console.log(sumOfDistancesInTree(2, [[1,0]])) // [1,1]

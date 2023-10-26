@@ -2,7 +2,7 @@
 // Given the root of a binary tree, return the same tree where every subtree (of the given tree) not containing a 1 has been removed.
 
 
-// Solution 1: DFS Recursively
+// Solution: DFS Recursively
 
 // Thoughts:
 // What we need to do is go all the way down to the bottom of the tree, and check if there are subtrees with a value of 1 from bottom up.
@@ -21,14 +21,14 @@
 
 // Time Complexity: O(n) 60ms
 // Space Complexity: O(n) (call stack) 40.3MB
-  var pruneTree = function(root) {
-    return dfs(root) ? root : null;
-    function dfs(node) {
-      if (!node) return false;
-      let leftContains = dfs(node.left);
-      let rightContains = dfs(node.right);
-      if (!leftContains) node.left = null;
-      if (!rightContains) node.right = null;
-      return node.val === 1 || leftContains || rightContains;
-    }
-  };
+var pruneTree = function(root) {
+  return dfs(root) ? root : null;
+  function dfs(node) {
+    if (!node) return false;
+    let leftContains = dfs(node.left);
+    let rightContains = dfs(node.right);
+    if (!leftContains) node.left = null;
+    if (!rightContains) node.right = null;
+    return node.val === 1 || leftContains || rightContains;
+  }
+};

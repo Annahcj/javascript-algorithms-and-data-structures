@@ -69,6 +69,6 @@ var canVisitAllRooms = function(rooms) {
   return seen.reduce((acc, curr) => acc + curr, 0) === n;
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(canVisitAllRooms([[1],[2],[3],[]])) // true
 console.log(canVisitAllRooms([[1,3],[3,0,1],[2],[0]])) // false

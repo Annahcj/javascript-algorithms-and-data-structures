@@ -66,7 +66,7 @@ var scoreOfParentheses = function(s) {
   return ans;
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(scoreOfParentheses("()")) // 1
 console.log(scoreOfParentheses("()()")) // 2
 console.log(scoreOfParentheses("((())())")) // 6

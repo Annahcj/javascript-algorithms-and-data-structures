@@ -32,6 +32,6 @@ var isNStraightHand = function(hand, groupSize) {
   return true;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(isNStraightHand([1,2,3,6,2,3,4,7,8], 3)) // true
 console.log(isNStraightHand([1,2,3,4,5], 4)) // false

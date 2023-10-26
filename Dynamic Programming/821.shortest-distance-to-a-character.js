@@ -3,7 +3,7 @@
 // The distance between two indices i and j is abs(i - j), where abs is the absolute value function.
 
 
-// Solution 1: Two Pass
+// Solution: Two Pass
 
 // Keep a previous index (prev) which records the last recorded index of c, and an empty result array which we will return as the answer at the end.
 // Loop from left to right (pointer = i), 
@@ -18,19 +18,19 @@
 // Time Complexity: O(n) (technically O(2n)) 76ms
 // Space Complexity: O(n) (length of answer array) 41.3MB
 var shortestToChar = function(s, c) {
-    let result = [], prev = Infinity;
-    for (var i = 0; i < s.length; i++) {
-      if (s[i] === c) prev = i;
-      result.push(prev === Infinity ? Infinity : i - prev);
-    }
-    prev = Infinity;
-    for (var j = s.length - 1; j >= 0; j--) {
-      if (s[j] === c) prev = j;
-      result[j] = Math.min(result[j], prev - j);
-    }
-    return result;
-  };
-  
-  // Two test cases to run function on
-  console.log(shortestToChar("loveleetcode", "e")) // [3,2,1,0,1,0,0,1,2,2,1,0]
-  console.log(shortestToChar("aaab", "b")) // [3,2,1,0]
+  let result = [], prev = Infinity;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === c) prev = i;
+    result.push(prev === Infinity ? Infinity : i - prev);
+  }
+  prev = Infinity;
+  for (let j = s.length - 1; j >= 0; j--) {
+    if (s[j] === c) prev = j;
+    result[j] = Math.min(result[j], prev - j);
+  }
+  return result;
+};
+
+// Two test cases 
+console.log(shortestToChar("loveleetcode", "e")) // [3,2,1,0,1,0,0,1,2,2,1,0]
+console.log(shortestToChar("aaab", "b")) // [3,2,1,0]

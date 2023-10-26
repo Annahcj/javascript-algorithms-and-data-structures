@@ -62,7 +62,7 @@ var backspaceCompare = function(s, t) {
   return true;
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(backspaceCompare("ab#c", "ad#c")) // true
 console.log(backspaceCompare("ab##", "c#d#")) // true
 console.log(backspaceCompare("a#c", "b")) // false

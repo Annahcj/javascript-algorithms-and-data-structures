@@ -62,6 +62,6 @@ class TrieNode {
   }
 }
 
-// Two test cases to run function on
+// Two test cases 
 console.log(minimumLengthEncoding(["time","me","bell"])) // 10
 console.log(minimumLengthEncoding(["t"])) // 2

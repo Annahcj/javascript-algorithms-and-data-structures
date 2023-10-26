@@ -59,6 +59,6 @@ var longestMountain = function(arr) {
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(longestMountain([2,1,4,7,3,2,5])) // 5
 console.log(longestMountain([2,2,2])) // 0

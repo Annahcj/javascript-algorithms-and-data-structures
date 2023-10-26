@@ -81,6 +81,6 @@ var splitIntoFibonacci = function(num) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(splitIntoFibonacci("1101111")) // [11,0,11,11]
 console.log(splitIntoFibonacci("112358130")) // []

@@ -62,6 +62,6 @@ var numFactoredBinaryTrees = function(arr) {
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(numFactoredBinaryTrees([2,4])) // 3
 console.log(numFactoredBinaryTrees([2,4,5,10])) // 7

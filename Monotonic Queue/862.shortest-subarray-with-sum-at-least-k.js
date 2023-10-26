@@ -27,11 +27,11 @@
 // Space Complexity: O(n) 58.1MB
 var shortestSubarray = function(nums, k) {
   let sum = [0];
-  for (var i = 0; i < nums.length; i++) {
+  for (let i = 0; i < nums.length; i++) {
     sum[i + 1] = sum[i] + nums[i];
   }  
   let monoQ = [], ans = Infinity;
-  for (var i = 0; i < sum.length; i++) {
+  for (let i = 0; i < sum.length; i++) {
     while (monoQ.length && sum[i] <= sum[monoQ[monoQ.length - 1]]) {
       monoQ.pop();
     }
@@ -43,7 +43,7 @@ var shortestSubarray = function(nums, k) {
   return ans === Infinity ? -1 : ans;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(shortestSubarray([1], 1)) // 1
 console.log(shortestSubarray([1, 2], 4)) // -1
 console.log(shortestSubarray([2,-1,2], 3)) // 3

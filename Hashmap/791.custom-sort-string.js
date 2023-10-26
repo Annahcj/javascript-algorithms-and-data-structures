@@ -4,7 +4,7 @@
 // Return any permutation of str (as a string) that satisfies this property.
 
 
-// Solution 1: Map Order and Count Occurances
+// Solution: Map Order and Count Occurances
 
 // Traverse order and map each letter into 'map'
 // Traverse str and add occurance of each character in 'map', if it's not in map, then add to unsorted string.
@@ -14,19 +14,19 @@
 // Time Complexity: O(order.length + str.length) 64ms
 // Space Complexity: O(order.length) 39.3MB
 var customSortString = function(order, str) {
-    let map = {}, rest = '', ans = '';
-    for (var i = 0; i < order.length; i++) map[order[i]] = 1;
-    for (var j = 0; j < str.length; j++) {
-      if (map[str[j]]) map[str[j]]++;
-      else rest += str[j];
-    }
-    for (var char in map) {
-      ans += char.repeat(map[char] - 1);
-    }
-    return ans + rest;
-  };
-  
-  // Three test cases to run function on
-  console.log(customSortString("cba", "abcd")) // "cbad"
-  console.log(customSortString("acb", "ccaabb")) // "aaccbb"
-  console.log(customSortString("zyxwvutsrqponmlkjihgfedcba", "abcdefghijklmnopqrstuvwxyz")) // "zyxwvutsrqponmlkjihgfedcba"
+  let map = {}, rest = '', ans = '';
+  for (var i = 0; i < order.length; i++) map[order[i]] = 1;
+  for (var j = 0; j < str.length; j++) {
+    if (map[str[j]]) map[str[j]]++;
+    else rest += str[j];
+  }
+  for (var char in map) {
+    ans += char.repeat(map[char] - 1);
+  }
+  return ans + rest;
+};
+
+// Three test cases 
+console.log(customSortString("cba", "abcd")) // "cbad"
+console.log(customSortString("acb", "ccaabb")) // "aaccbb"
+console.log(customSortString("zyxwvutsrqponmlkjihgfedcba", "abcdefghijklmnopqrstuvwxyz")) // "zyxwvutsrqponmlkjihgfedcba"

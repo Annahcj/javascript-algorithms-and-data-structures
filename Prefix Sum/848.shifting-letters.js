@@ -6,7 +6,7 @@
 // Return the final string after all such shifts to s are applied.
 
 
-// Solutin: Prefix Sum / Cumulative Sum
+// Solution: Prefix Sum / Cumulative Sum
 
 // Update shifts -> loop from right to left, updating shifts[i] to be (shifts[i] + shifts[i + 1]) % 26
 // Build up final string -> loop from left to right, 
@@ -18,16 +18,16 @@
 // Space Complexity: O(n) 60.9MB
 var shiftingLetters = function(s, shifts) {
   let n = shifts.length, ans = '';
-  for (var i = n - 2; i >= 0; i--) {
+  for (let i = n - 2; i >= 0; i--) {
     shifts[i] = (shifts[i] + shifts[i + 1]) % 26;
   }
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     let code = (s.charCodeAt(i) - 97 + shifts[i]) % 26;
     ans += String.fromCharCode(code + 97);
   }
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases 
 console.log(shiftingLetters("abc", [3,5,9])) // "rpl"
 console.log(shiftingLetters("aaa", [1,2,3])) // "gfd"
