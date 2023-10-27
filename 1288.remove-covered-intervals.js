@@ -29,7 +29,7 @@ var removeCoveredIntervals = function(intervals) {
   return total;
 };
 
-// Three test cases to run function on
+// Three test cases 
 console.log(removeCoveredIntervals([[1,4],[3,6],[2,8]])) // 2
 console.log(removeCoveredIntervals([[1,4],[2,3]])) // 1
 console.log(removeCoveredIntervals([[1,6],[4,6],[4,8]])) // 2

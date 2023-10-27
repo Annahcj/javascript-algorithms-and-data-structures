@@ -5,7 +5,7 @@
 
 
 
-// Solution 1: Using a Stack
+// Solution: Using a Stack
 
 // Thoughts: 
 // We loop through s, if last element of stack is not equal to current element, push [curr char, 1] to the stack, 
