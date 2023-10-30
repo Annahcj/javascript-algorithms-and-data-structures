@@ -28,21 +28,21 @@ var canFinish = function(numCourses, prerequisites) {
   let graph = {};
   let indegrees = Array(numCourses).fill(0);
 
-  for (var [course, pre] of prerequisites) {
+  for (let [course, pre] of prerequisites) {
     if (!graph[pre]) graph[pre] = [];
     graph[pre].push(course);
     indegrees[course]++;
   }
 
   let queue = [];
-  for (var i = 0; i < indegrees.length; i++) {
+  for (let i = 0; i < indegrees.length; i++) {
     if (indegrees[i] === 0) queue.push(i);
   }  
 
   while (queue.length) {
     let currCourse = queue.shift();
     numCourses--;
-    for (var course of (graph[currCourse] || [])) {
+    for (let course of (graph[currCourse] || [])) {
       indegrees[course]--;
       if (indegrees[course] === 0) queue.push(course);
     }
@@ -51,6 +51,6 @@ var canFinish = function(numCourses, prerequisites) {
   return numCourses === 0 ? true : false;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(canFinish(2, [[1,0]])) // true
 console.log(canFinish(2, [[1,0],[0,1]])) // false

@@ -5,7 +5,7 @@
 // The matching should cover the entire input string (not partial).
 
 
-// Solution: Recursion w/ Memoization
+// Solution: DP - Recursion w/ Memoization
 
 // Filter pattern -> * matches the character before it any number of times, 
   // so for a string "c*a*b", we can filter it to be
@@ -18,13 +18,13 @@
 // Space Complexity: O(nm) 42.7MB
 var isMatch = function(s, p) {
   let filtered = [];
-  for (var i = 0; i < p.length; i++) {
+  for (let i = 0; i < p.length; i++) {
     if (p[i] !== '*') filtered.push([p[i], false]);
     else filtered[filtered.length - 1][1] = true;
   }
   p = filtered;
   let memo = Array(s.length + 1);
-  for (var i = 0; i <= s.length; i++) memo[i] = Array(p.length);
+  for (let i = 0; i <= s.length; i++) memo[i] = Array(p.length);
   return recurse(0, 0);
 
   function recurse(i, j) {
@@ -54,7 +54,7 @@ var isMatch = function(s, p) {
   }  
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(isMatch("aab", "c*a*b")) // true
 console.log(isMatch("aaaaa", ".*")) // true
 console.log(isMatch("aa", "..")) // true

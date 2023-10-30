@@ -29,15 +29,15 @@
 // Space Complexity: O(n) 42.8MB
 var alienOrder = function(words) {
   const graph = {}, indegrees = {};
-  for (var word of words) {
-    for (var char of word) { // initialize the indegrees and graph to avoid errors
+  for (let word of words) {
+    for (let char of word) { // initialize the indegrees and graph to avoid errors
       indegrees[char] = 0;
       graph[char] = [];
     }
   }
   let unique = Object.keys(indegrees).length; // get the number of unique characters
 
-  for (var i = 0; i < words.length - 1; i++) {
+  for (let i = 0; i < words.length - 1; i++) {
     let word1 = words[i], word2 = words[i + 1];
     let l = 0, r = 0;
     while (l < word1.length && r < word2.length) { // find first different character for adjacent words
@@ -51,7 +51,7 @@ var alienOrder = function(words) {
   }
 
   let queue = [];
-  for (var char in indegrees) {
+  for (let char in indegrees) {
     if (indegrees[char] === 0) queue.push(char); // find characters with an indegree of 0
   }
 
@@ -61,7 +61,7 @@ var alienOrder = function(words) {
     let char = queue.shift();
     ans += char;
     unique--;
-    for (var neighbor of graph[char]) { 
+    for (let neighbor of graph[char]) { 
       indegrees[neighbor]--;
       if (indegrees[neighbor] === 0) queue.push(neighbor);
     }
@@ -69,7 +69,7 @@ var alienOrder = function(words) {
   return unique === 0 ? ans : '';
 };
 
-// Five test cases to run function on
+// Five test cases
 console.log(alienOrder(["wrt","wrf","er","ett","rftt"])) // "wertf"
 console.log(alienOrder(["z","x"])) // "zx"
 console.log(alienOrder(["z","x","z"])) // ""

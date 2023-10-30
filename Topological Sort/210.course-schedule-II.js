@@ -34,11 +34,11 @@
 // Space Complexity: O(V + E) 41.4MB
 var findOrder = function(numCourses, prerequisites) {
   let indegrees = Array(numCourses).fill(0);
-  for (var [a, b] of prerequisites) {
+  for (let [a, _b] of prerequisites) {
     indegrees[a]++;
   }
   let queue = [];
-  for (var i = 0; i < numCourses; i++) {
+  for (let i = 0; i < numCourses; i++) {
     if (indegrees[i] === 0) queue.push(i);
   }
   let result = [];
@@ -46,7 +46,7 @@ var findOrder = function(numCourses, prerequisites) {
     let course = queue.shift();
     numCourses--;
     result.push(course);
-    for (var [a, b] of prerequisites) {
+    for (let [a, b] of prerequisites) {
       if (b === course) {
         indegrees[a]--;
         if (indegrees[a] === 0) {
@@ -58,7 +58,7 @@ var findOrder = function(numCourses, prerequisites) {
   return numCourses === 0 ? result : [];
 };
   
-// Three test cases to run function on
+// Three test cases
 console.log(findOrder(2, [[1,0]])) // [0,1]
 console.log(findOrder(4, [[1,0],[2,0],[3,1],[3,2]])) // [0,1,2,3] or [0,2,1,3]
 console.log(findOrder(1, [])) // [0]
