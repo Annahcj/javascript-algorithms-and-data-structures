@@ -18,13 +18,14 @@ var totalNQueens = function(n) {
   let total = 0;
   backtrack(0, {}, {}, {});
   return total;
+
   function backtrack(row, cols, lrDiag, rlDiag) {
     // base case: increase total count by one and return
     if (row === n) {
       total++;
       return;
     }
-    for (var col = 0; col < n; col++) {
+    for (let col = 0; col < n; col++) {
       let currLRDiag = row + col;
       let currRLDiag = row - col;
       if (cols[col] || lrDiag[currLRDiag] || rlDiag[currRLDiag]) {
@@ -41,6 +42,6 @@ var totalNQueens = function(n) {
   }  
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(totalNQueens(4)) // 2
 console.log(totalNQueens(1)) // 1

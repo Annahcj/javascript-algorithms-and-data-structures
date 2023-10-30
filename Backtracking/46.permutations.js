@@ -20,25 +20,26 @@
 
 // Time Complexity: O(n * n!) 84ms
 // Space Complexity: O(n!) 42.2MB
-  var permute = function(nums) {
-    let res = [];
-    let length = nums.length;
-    backtrack(nums, 0, length - 1);
-    return res;
-    function backtrack(arr, start, end) {
-      if (start === end) {
-        res.push([...arr]);
-      } else {
-        for (var i = start; i < length; i++) {
-          [arr[start], arr[i]] = [arr[i], arr[start]];
-          backtrack(arr, start + 1, end);
-          [arr[start], arr[i]] = [arr[i], arr[start]];
-        }
-      }
-    }  
-  };
+var permute = function(nums) {
+  let res = [];
+  let length = nums.length;
+  backtrack(nums, 0, length - 1);
+  return res;
   
-  // Three test cases to run function on
-  console.log(permute([1,2,3])) // [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
-  console.log(permute([0,1])) // [[0,1],[1,0]]
-  console.log(permute([1])) // [[1]]
+  function backtrack(arr, start, end) {
+    if (start === end) {
+      res.push([...arr]);
+    } else {
+      for (let i = start; i < length; i++) {
+        [arr[start], arr[i]] = [arr[i], arr[start]];
+        backtrack(arr, start + 1, end);
+        [arr[start], arr[i]] = [arr[i], arr[start]];
+      }
+    }
+  }  
+};
+
+// Three test cases
+console.log(permute([1,2,3])) // [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+console.log(permute([0,1])) // [[0,1],[1,0]]
+console.log(permute([1])) // [[1]]

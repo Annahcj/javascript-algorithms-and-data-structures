@@ -19,7 +19,7 @@
 // Time Complexity: O(k log(n)) 512ms
 // Space Complexity: O(n) 85.2MB
 var kSmallestPairs = function(nums1, nums2, k) {
-  let heap = new PriorityQueue((a, b) => (nums1[a[0]] + nums2[a[1]]) - (nums1[b[0]] + nums2[b[1]]));
+  let heap = new Heap((a, b) => (nums1[a[0]] + nums2[a[1]]) - (nums1[b[0]] + nums2[b[1]]));
   let n = nums1.length, m = nums2.length, res = [];
   let seen = new Set();
   heap.add([0, 0]);
@@ -39,7 +39,7 @@ var kSmallestPairs = function(nums1, nums2, k) {
   return res;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -90,6 +90,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(kSmallestPairs([1,7,11], [2,4,6], 3)) // [[1,2],[1,4],[1,6]]
 console.log(kSmallestPairs([1,1,2], [1,2,3], 2)) // [[1,1],[1,1]]

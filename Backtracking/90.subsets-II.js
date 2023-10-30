@@ -19,22 +19,23 @@
 
 // Time Complexity: O(n * 2^n) 80ms
 // Space Complexity: O(n) (call stack) 40.9MB
-  var subsetsWithDup = function(nums) {
-    nums = nums.sort((a, b) => a - b);
-    let subsets = [];
-    backtrack(0, []);
-    function backtrack(start, arr) {
-      subsets.push([...arr]);
-      for (var i = start; i < nums.length; i++) {
-        if (i > start && nums[i - 1] === nums[i]) continue;
-        arr.push(nums[i]);
-        backtrack(i + 1, arr);
-        arr.pop();
-      }
+var subsetsWithDup = function(nums) {
+  nums = nums.sort((a, b) => a - b);
+  let subsets = [];
+  backtrack(0, []);
+
+  function backtrack(start, arr) {
+    subsets.push([...arr]);
+    for (let i = start; i < nums.length; i++) {
+      if (i > start && nums[i - 1] === nums[i]) continue;
+      arr.push(nums[i]);
+      backtrack(i + 1, arr);
+      arr.pop();
     }
-    return subsets;
-  };
-  
-  // Two test cases to run function on
-  console.log(subsetsWithDup([1,2,2])) // [[],[1],[1,2],[1,2,2],[2],[2,2]]
-  console.log(subsetsWithDup([0])) // [[],[0]]
+  }
+  return subsets;
+};
+
+// Two test cases
+console.log(subsetsWithDup([1,2,2])) // [[],[1],[1,2],[1,2,2],[2],[2,2]]
+console.log(subsetsWithDup([0])) // [[],[0]]

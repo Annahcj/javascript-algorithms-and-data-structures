@@ -38,7 +38,7 @@ var getFactors = function(n) {
     }
     let lastNum = arr[arr.length - 1] || 2;
     let sqrt = Math.sqrt(num);
-    for (var i = lastNum; i <= sqrt; i++) {
+    for (let i = lastNum; i <= sqrt; i++) {
       if (num % i === 0) {
         arr.push(i);
         backtrack(num / i, arr);
@@ -53,7 +53,7 @@ var getFactors = function(n) {
   }
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(getFactors(1)) // []
 console.log(getFactors(12)) // [[2,6],[3,4],[2,2,3]]
 console.log(getFactors(37)) // []

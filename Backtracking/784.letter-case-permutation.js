@@ -38,6 +38,6 @@ var letterCasePermutation = function(s) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(letterCasePermutation("a1b2")) // ["a1b2","a1B2","A1b2","A1B2"]
 console.log(letterCasePermutation("3z4")) // ["3z4","3Z4"]

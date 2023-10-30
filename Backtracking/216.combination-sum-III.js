@@ -20,7 +20,7 @@ var combinationSum3 = function(k, n) {
       return;
     }
     if (arr.length > k || sum > n) return; // cannot possibly go any further, so we return.
-    for (var i = num; i <= 9; i++) { 
+    for (let i = num; i <= 9; i++) { 
       arr.push(i); // push i to arr
       backtrack(i + 1, arr, sum + i); // only start looking from the next index, i + 1
       arr.pop(); // backtrack: pop it back out
@@ -28,6 +28,6 @@ var combinationSum3 = function(k, n) {
   }  
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(combinationSum3(3, 7)) // [[1,2,4]]
 console.log(combinationSum3(3, 9)) // [[1,2,6],[1,3,5],[2,3,4]]

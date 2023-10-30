@@ -19,7 +19,7 @@ var cleanRoom = function(robot) {
   function backtrack(row, col, dir) {
     seen.add(`${row},${col}`); // mark as visited
     robot.clean(); 
-    for (var i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       let newDir = (dir + i) % 4;
       let newX = row + directions[newDir][0], newY = col + directions[newDir][1];
       if (!seen.has(`${newX},${newY}`) && robot.move()) { // if we haven't visited the cell yet and the cell is not an obstacle
@@ -29,6 +29,7 @@ var cleanRoom = function(robot) {
       robot.turnRight(); // turn right
     }
   }
+  
   function goBack() { // face backwards, move, face forwards.
     robot.turnRight();
     robot.turnRight();

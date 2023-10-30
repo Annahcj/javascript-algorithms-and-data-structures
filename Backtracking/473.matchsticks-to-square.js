@@ -46,7 +46,7 @@ var makesquare = function(matchsticks) {
   }
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(makesquare([1,1,2,2,2])) // true
 console.log(makesquare([3,3,3,3,4])) // false
 console.log(makesquare([1,2,3,4,5,6,7,8,9,10,5,4,3,2,1])) // false

@@ -25,7 +25,7 @@ var wordPatternMatch = function(pattern, s) {
     if (i === pattern.length) return j === s.length;
     if (j === s.length) return false;
     let currKey = pattern[i];
-    for (var idx = j; idx < s.length; idx++) {
+    for (let idx = j; idx < s.length; idx++) {
       let word = s.slice(j, idx + 1);
       if (keys.has(currKey) && keys.get(currKey) === word && words.get(word) === currKey) {
         if (backtrack(i + 1, idx + 1, keys, words)) return true;
@@ -41,7 +41,7 @@ var wordPatternMatch = function(pattern, s) {
   }  
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(wordPatternMatch("abba", "baab")) // true
 console.log(wordPatternMatch("abab", "redblueredblue")) // true
 console.log(wordPatternMatch("aaaa", "asdasdasdasd")) // true

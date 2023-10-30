@@ -19,7 +19,7 @@ var combine = function(n, k) {
       return;
     }
     // traverse all possibilities from start to n
-    for (var i = start; i <= n; i++) {
+    for (let i = start; i <= n; i++) {
       arr.push(i);
       backtrack(i + 1, arr);
       arr.pop();
@@ -27,7 +27,7 @@ var combine = function(n, k) {
   }  
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(combine(4, 2)) // [
 //   [2,4],
 //   [3,4],

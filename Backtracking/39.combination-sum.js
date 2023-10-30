@@ -11,6 +11,7 @@
 var combinationSum = function(candidates, target) {
   let res = [];
   backtrack([], 0, target);
+
   function backtrack(arr, idx, target) {
     if (target < 0) return;
     if (target === 0) res.push([...arr]);
@@ -23,7 +24,7 @@ var combinationSum = function(candidates, target) {
   return res;
 };
 
-// Five test cases to run function on
+// Five test cases
 console.log(combinationSum([2,3,6,7], 7)) // [[2,2,3],[7]]
 console.log(combinationSum([2,3,5], 8)) // [[2,2,2,2],[2,3,3],[3,5]]
 console.log(combinationSum([2], 1)) // []

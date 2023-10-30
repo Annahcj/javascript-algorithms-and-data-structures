@@ -27,20 +27,21 @@
 
 // Time Complexity: O(2^2n) (length of str will always be 2n, and we get two choices at each step) 68ms
 // Space Complexity: O(n) (call stack) 40MB
-  var generateParenthesis = function(n) {
-    let res = [];
-    backtrack(n, n, '');
-    function backtrack(l, r, str) {
-      if (str.length === n * 2) {
-        res.push(str);
-        return;
-      }
-      if (l > 0 && r >= l) backtrack(l - 1, r, str + '(');
-      if (r > 0) backtrack(l, r - 1, str + ')');
-    }
-    return res;
-  };
+var generateParenthesis = function(n) {
+  let res = [];
+  backtrack(n, n, '');
   
-  // Two test cases to run function on
-  console.log(generateParenthesis(3)) // ["((()))","(()())","(())()","()(())","()()()"]
-  console.log(generateParenthesis(1)) // ["()"]
+  function backtrack(l, r, str) {
+    if (str.length === n * 2) {
+      res.push(str);
+      return;
+    }
+    if (l > 0 && r >= l) backtrack(l - 1, r, str + '(');
+    if (r > 0) backtrack(l, r - 1, str + ')');
+  }
+  return res;
+};
+
+// Two test cases
+console.log(generateParenthesis(3)) // ["((()))","(()())","(())()","()(())","()()()"]
+console.log(generateParenthesis(1)) // ["()"]

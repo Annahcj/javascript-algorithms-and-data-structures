@@ -16,9 +16,8 @@
 // Space Complexity: O(n) 42.1MB
 var minMeetingRooms = function(intervals) {
   intervals.sort((a, b) => a[0] - b[0]);
-  let heap = new PriorityQueue();
-  let ans = 0;
-  for (var [start, end] of intervals) {
+  let heap = new Heap(), ans = 0;
+  for (let [start, end] of intervals) {
     if (heap.isEmpty() || heap.top() > start) ans++;
     else heap.remove();
     heap.add(end);
@@ -26,7 +25,7 @@ var minMeetingRooms = function(intervals) {
   return ans;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -77,6 +76,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(minMeetingRooms([[0,30],[5,10],[15,20]])) // 2
 console.log(minMeetingRooms([[7,10],[2,4]])) // 1

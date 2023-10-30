@@ -30,13 +30,14 @@ var combinationSum2 = function(candidates, target) {
   candidates = candidates.sort((a, b) => a - b);
   backtrack(0, [], 0);
   return res;
+  
   function backtrack(idx, arr, sum) {
     if (sum > target) return;
     if (sum === target) {
       res.push([...arr]);
       return;
     }
-    for (var i = idx; i < n; i++) {
+    for (let i = idx; i < n; i++) {
       if (candidates[i] === candidates[i - 1] && i > idx) continue;
       arr.push(candidates[i]);
       backtrack(i + 1, arr, sum + candidates[i]);
@@ -45,7 +46,7 @@ var combinationSum2 = function(candidates, target) {
   }  
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(combinationSum2([10,1,2,7,6,1,5], 8)) // [
 // [1,1,6],
 // [1,2,5],

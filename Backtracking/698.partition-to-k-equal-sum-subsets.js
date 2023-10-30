@@ -32,7 +32,7 @@ var canPartitionKSubsets = function(nums, k) {
     if (currSum === target) {
       return backtrack(0, 0, numSubsets + 1, target, taken);
     }
-    for (var i = index; i < nums.length; i++) {
+    for (let i = index; i < nums.length; i++) {
       if (!taken[i]) {
         taken[i] = true;
         if (backtrack(i + 1, currSum + nums[i], numSubsets, target, taken)) return true;
@@ -43,7 +43,7 @@ var canPartitionKSubsets = function(nums, k) {
   }  
 
   let sum = 0;
-  for (var num of nums) sum += num;
+  for (let num of nums) sum += num;
   if (k === 1) return true;
   if (nums.length < k) return false;
   if (sum % k !== 0) return false;
@@ -52,7 +52,7 @@ var canPartitionKSubsets = function(nums, k) {
   return backtrack(0, 0, 0, sum / k, {});
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(canPartitionKSubsets([2,2,2,2,3,4,5], 4)) // false
 console.log(canPartitionKSubsets([4,3,2,3,5,2,1], 4)) // true
 console.log(canPartitionKSubsets([1,2,3,4], 3)) // false

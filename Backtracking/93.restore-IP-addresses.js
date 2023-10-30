@@ -21,7 +21,7 @@ var restoreIpAddresses = function(s) {
       res.push(address.join("."));
       return;
     }
-    for (var i = start; i < s.length; i++) {
+    for (let i = start; i < s.length; i++) {
       let str = s.slice(start, i + 1), num = +str;
       if (num > 255 || (str.length > 1 && str[0] === '0')) break; // break if number is larger than 255 or has leading zeroes
       address.push(str);
@@ -31,7 +31,7 @@ var restoreIpAddresses = function(s) {
   }  
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(restoreIpAddresses("25525511135")) // ["255.255.11.135","255.255.111.35"]
 console.log(restoreIpAddresses("0000")) // ["0.0.0.0"]
 console.log(restoreIpAddresses("101023")) // ["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]

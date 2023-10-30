@@ -15,7 +15,7 @@ var subsets = function(nums) {
   function recurse(idx, arr) {
     // create deep copy of arr
     res.push([...arr]);
-    for (var i = idx; i < nums.length; i++) {
+    for (let i = idx; i < nums.length; i++) {
       // push 
       arr.push(nums[i]);
       recurse(i + 1, arr);
@@ -25,6 +25,6 @@ var subsets = function(nums) {
   }  
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(subsets([1,2,3])) // [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 console.log(subsets([0])) // [[],[0]]

@@ -30,7 +30,7 @@ var partition = function(s) {
       res.push([...arr]);
       return;
     }
-    for (var i = idx; i < s.length; i++) {
+    for (let i = idx; i < s.length; i++) {
       if (isPalindrome(idx, i)) {
         arr.push(s.slice(idx, i + 1));
         backtrack(i + 1, arr);
@@ -38,6 +38,7 @@ var partition = function(s) {
       }
     }
   }
+
   function isPalindrome(start, end) {
     while (start < end) {
       if (s[start] === s[end]) start++, end--;
@@ -47,6 +48,6 @@ var partition = function(s) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(partition("aab")) // [["a","a","b"],["aa","b"]]
 console.log(partition("a")) // [["a"]]

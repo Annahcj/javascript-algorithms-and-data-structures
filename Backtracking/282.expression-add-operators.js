@@ -42,13 +42,14 @@ var addOperators = function(num, target) {
   let res = [];
   backtrack(0, "", 0, 0);
   return res;
+
   function backtrack(i, str, total, prev) {
     if (i === num.length) {
       if (total === target) res.push(str);
       return;
     }
     let tempNum = 0, numStr = '';
-    for (var j = i; j < num.length; j++) {
+    for (let j = i; j < num.length; j++) {
       if (j > i && num[i] === '0') break; 
       tempNum = tempNum * 10 + +num[j];
       numStr += num[j];
@@ -64,7 +65,7 @@ var addOperators = function(num, target) {
   }
 };
 
-// Five test cases to run function on
+// Five test cases
 console.log(addOperators("123", 6)) // ["1*2*3","1+2+3"]
 console.log(addOperators("232", 8)) // ["2*3+2","2+3*2"]
 console.log(addOperators("105", 5)) // ["1*0+5","10-5"]

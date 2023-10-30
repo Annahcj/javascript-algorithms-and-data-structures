@@ -36,6 +36,6 @@ var findSubsequences = function(nums) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(findSubsequences([4,6,7,7])) // [[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
 console.log(findSubsequences([4,4,3,2,1])) // [[4,4]]

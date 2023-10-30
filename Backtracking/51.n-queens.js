@@ -18,18 +18,19 @@
 // Space Complexity: O(n^2) 41.1MB
 var solveNQueens = function(n) {
   let board = Array(n), res = [];
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     board[i] = Array(n).fill('.');
   }  
   backtrack(0, {}, {}, {});
   return res;
+
   function backtrack(row, cols, lrDiag, rlDiag) {
     // base case -> call saveBoard to create deep copy and push into result
     if (row === n) {
       saveBoard(board);
       return;
     }
-    for (var col = 0; col < n; col++) {
+    for (let col = 0; col < n; col++) {
       let currLRDiag = row + col;
       let currRLDiag = row - col;
       if (cols[col] || lrDiag[currLRDiag] || rlDiag[currRLDiag]) {
@@ -46,15 +47,16 @@ var solveNQueens = function(n) {
       board[row][col] = '.';
     }
   }
+
   function saveBoard(board) {
     let copy = Array(n);
-    for (var i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {
       copy[i] = board[i].join("");
     }
     res.push(copy);
   } 
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(solveNQueens(4)) // [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
 console.log(solveNQueens(1)) // [["Q"]]

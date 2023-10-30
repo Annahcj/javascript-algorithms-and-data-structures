@@ -33,30 +33,31 @@
 
 // Time Complexity: O(n * 3^l) n = cells in board, l = length of word. 364ms
 // Space Complexity: O(l) 39.2MB
-  var exist = function(board, word) {
-    const length = board.length, width = board[0].length;
-    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-    for (var i = 0; i < length; i++) {
-      for (var j = 0; j < width; j++) {
-        if (board[i][j] === word[0]) {
-          if (backtrack(i, j, 0)) return true;
-        }
+var exist = function(board, word) {
+  const length = board.length, width = board[0].length;
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+  for (let i = 0; i < length; i++) {
+    for (let j = 0; j < width; j++) {
+      if (board[i][j] === word[0]) {
+        if (backtrack(i, j, 0)) return true;
       }
     }
+  }
+  return false;
+
+  function backtrack(i, j, k) {
+    if (i < 0 || i >= length || j < 0 || j >= width || board[i][j] !== word[k]) return;
+    if (k === word.length - 1) return true;
+    board[i][j] = '.';
+    for (let l = 0; l < directions.length; l++) {
+      if (backtrack(i + directions[l][0], j + directions[l][1], k + 1)) return true;
+    }
+    board[i][j] = word[k];
     return false;
-    function backtrack(i, j, k) {
-      if (i < 0 || i >= length || j < 0 || j >= width || board[i][j] !== word[k]) return;
-      if (k === word.length - 1) return true;
-      board[i][j] = '.';
-      for (var l = 0; l < directions.length; l++) {
-        if (backtrack(i + directions[l][0], j + directions[l][1], k + 1)) return true;
-      }
-      board[i][j] = word[k];
-      return false;
-    }
-  };
-  
-  // Three test cases to run function on
-  console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED")) // true
-  console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "SEE")) // true
-  console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCB")) // false
+  }
+};
+
+// Three test cases
+console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCCED")) // true
+console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "SEE")) // true
+console.log(exist([["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "ABCB")) // false
