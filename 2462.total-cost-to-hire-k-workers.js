@@ -23,8 +23,8 @@
 // Space Complexity: O(m) 97.7MB
 var totalCost = function(costs, k, candidates) {
   let n = costs.length;
-  let left = new PriorityQueue((a, b) => a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]); // [index, cost]  
-  let right = new PriorityQueue((a, b) => a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]); // [index, cost]
+  let left = new Heap((a, b) => a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]); // [index, cost]  
+  let right = new Heap((a, b) => a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]); // [index, cost]
   let l, r;
   for (l = 0; l < Math.min(n, candidates); l++) {
     left.add([l, costs[l]]);
@@ -51,7 +51,7 @@ var totalCost = function(costs, k, candidates) {
   return totalCost;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;

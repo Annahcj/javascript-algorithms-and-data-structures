@@ -23,19 +23,19 @@
 // Space Complexity: O(E) 81.3MB
 var reachableNodes = function(edges, maxMoves, n) {
   let graph = {};
-  for (var i = 0; i < n; i++) graph[i] = [];
-  for (var [x, y, nodes] of edges) {
+  for (let i = 0; i < n; i++) graph[i] = [];
+  for (let [x, y, nodes] of edges) {
     graph[x].push([y, nodes]);
     graph[y].push([x, nodes]);
   }
-  let pq = new PriorityQueue((a, b) => b[1] - a[1]), seen = new Map();
+  let pq = new Heap((a, b) => b[1] - a[1]), seen = new Map();
   pq.add([0, maxMoves]);
   
   while (!pq.isEmpty()) {
     let [node, moves] = pq.remove();
     if (seen.has(node)) continue;
     seen.set(node, moves);
-    for (var [nei, nodes] of graph[node]) {
+    for (let [nei, nodes] of graph[node]) {
       let movesLeft = moves - nodes - 1;
       if (!seen.has(nei) && movesLeft >= 0) {
         pq.add([nei, movesLeft]);
@@ -43,7 +43,7 @@ var reachableNodes = function(edges, maxMoves, n) {
     }
   }
   let res = seen.size;
-  for (var [x, y, nodes] of edges) {
+  for (let [x, y, nodes] of edges) {
     let xNodes = seen.get(x) || 0;
     let yNodes = seen.get(y) || 0;
     res += Math.min(xNodes + yNodes, nodes);
@@ -51,7 +51,7 @@ var reachableNodes = function(edges, maxMoves, n) {
   return res;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -102,7 +102,7 @@ class PriorityQueue {
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(reachableNodes([[0,1,10],[0,2,1],[1,2,2]], 6, 3)) // 13
 console.log(reachableNodes([[0,1,4],[1,2,6],[0,2,8],[1,3,1]], 10, 4)) // 23
 console.log(reachableNodes([[1,2,4],[1,4,5],[1,3,1],[2,3,4],[3,4,5]], 17, 5)) // 1

@@ -17,8 +17,8 @@
 var mergeKLists = function(lists) {
   let head = new ListNode(0); // dummy head
   let node = head;
-  let heap = new PriorityQueue((a, b) => a.val - b.val); // min heap by the values of the nodes
-  for (var list of lists) {
+  let heap = new Heap((a, b) => a.val - b.val); // min heap by the values of the nodes
+  for (let list of lists) {
     if (list) { // if the heads are not null, add them to the heap
       heap.add(list);
     }
@@ -33,7 +33,7 @@ var mergeKLists = function(lists) {
 };
 
 // Priority Queue with a comparator 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;

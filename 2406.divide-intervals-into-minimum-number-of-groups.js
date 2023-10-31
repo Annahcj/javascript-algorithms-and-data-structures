@@ -17,7 +17,7 @@
 // Space Complexity: O(n) 93MB
 var minGroups = function(intervals) {
   intervals.sort((a, b) => a[0] === b[0] ? a[1] - b[1] : a[0] - b[0]);  
-  let heap = new PriorityQueue((a, b) => a - b), groups = 0;
+  let heap = new Heap((a, b) => a - b), groups = 0;
   for (let [left, right] of intervals) {
     if (!heap.isEmpty() && heap.top() <= left) {
       heap.remove();
@@ -29,7 +29,7 @@ var minGroups = function(intervals) {
   return groups;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -80,6 +80,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(minGroups([[5,10],[6,8],[1,5],[2,3],[1,10]])) // 3
 console.log(minGroups([[1,3],[5,6],[8,10],[11,13]])) // 1

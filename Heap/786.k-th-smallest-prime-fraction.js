@@ -15,7 +15,7 @@
 // To compare two fractions, use the formula a[0] * b[1] - b[0] * a[1] to avoid using division.
 
 var kthSmallestPrimeFraction = function(arr, k) {
-  let n = arr.length, heap = new PriorityQueue((a, b) => arr[a[0]] * arr[b[1]] - arr[b[0]] * arr[a[1]]);
+  let n = arr.length, heap = new Heap((a, b) => arr[a[0]] * arr[b[1]] - arr[b[0]] * arr[a[1]]);
   for (let i = 0; i < n - 1; i++) {
     heap.add([i, n - 1]);
   }
@@ -29,7 +29,7 @@ var kthSmallestPrimeFraction = function(arr, k) {
   return [arr[top], arr[bottom]];
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -80,6 +80,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(kthSmallestPrimeFraction([1,2,3,5], 3)) // [2,5]
 console.log(kthSmallestPrimeFraction([1,7], 1)) // [1,7]

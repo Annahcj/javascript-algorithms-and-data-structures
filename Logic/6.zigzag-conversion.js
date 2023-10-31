@@ -35,6 +35,6 @@ var convert = function(s, numRows) {
   return res;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(convert("PAYPALISHIRING", 3)) // "PAHNAPLSIIGYIR"
 console.log(convert("PAYPALISHIRING", 4)) // "PINALSIGYAHRPI"

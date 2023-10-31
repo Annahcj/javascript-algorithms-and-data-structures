@@ -20,7 +20,7 @@
 // Space Complexity: O(n) 50.7MB
 var leastInterval = function(tasks, n) {
   let freq = Array(26).fill(0);
-  let heap = new PriorityQueue((a, b) => b.freq - a.freq);
+  let heap = new Heap((a, b) => b.freq - a.freq);
   for (var task of tasks) freq[task.charCodeAt() - 65]++;
   for (var i = 0; i < 26; i++) {
     if (freq[i] > 0) {
@@ -46,7 +46,7 @@ var leastInterval = function(tasks, n) {
   return time;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;
@@ -94,7 +94,7 @@ class PriorityQueue {
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(leastInterval(["A","A","A","B","B","B"], 2)) // 8
 console.log(leastInterval(["A","A","A","B","B","B"], 0)) // 6
 console.log(leastInterval(["A","A","A","A","A","A","B","C","D","E","F","G"], 2)) // 16

@@ -16,7 +16,7 @@ var shortestDistance = function(maze, start, destination) {
   let m = maze.length, n = maze[0].length;
   const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
   let dist = Array(m).fill(0).map(() => Array(n).fill(Infinity));
-  let heap = new PriorityQueue((a, b) => a[2] - b[2]);
+  let heap = new Heap((a, b) => a[2] - b[2]);
   heap.add([start[0], start[1], 0]);
   dist[start[0]][start[1]] = 0;
 
@@ -39,7 +39,7 @@ var shortestDistance = function(maze, start, destination) {
   return dist[destination[0]][destination[1]] === Infinity ? -1 : dist[destination[0]][destination[1]];
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;
@@ -84,7 +84,7 @@ class PriorityQueue {
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(shortestDistance([[0,0,1,0,0],[0,0,0,0,0],[0,0,0,1,0],[1,1,0,1,1],[0,0,0,0,0]], [0,4], [4,4])) // 12
 console.log(shortestDistance([[0,0,1,0,0],[0,0,0,0,0],[0,0,0,1,0],[1,1,0,1,1],[0,0,0,0,0]], [0,4], [3,2])) // -1
 console.log(shortestDistance([[0,0,0,0,0],[1,1,0,0,1],[0,0,0,0,0],[0,1,0,0,1],[0,1,0,0,0]], [4,3], [0,1])) // -1

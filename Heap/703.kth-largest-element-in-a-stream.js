@@ -27,7 +27,7 @@
 
 var KthLargest = function(k, nums) {
   this.k = k;
-  this.heap = new PriorityQueue((a, b) => a - b);
+  this.heap = new Heap((a, b) => a - b);
   for (var num of nums) {
     this.heap.add(num);
     if (this.heap.size() > k) this.heap.remove();
@@ -40,7 +40,7 @@ KthLargest.prototype.add = function(val) {
   return this.heap.values[0];
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;
@@ -88,7 +88,7 @@ class PriorityQueue {
   }
 }
 
-// A few test cases to run function on
+// A few test cases
 let kthLargest = new KthLargest(3, [4, 5, 8, 2]);
 console.log(kthLargest.add(3));   // return 4
 console.log(kthLargest.add(5));   // return 5

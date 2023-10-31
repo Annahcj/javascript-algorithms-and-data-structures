@@ -37,7 +37,7 @@ var plusOne = function(digits) {
   return digits;
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(plusOne([1,2,3])) // [1,2,4]
 console.log(plusOne([4,3,2,1])) // [4,3,2,2]
 console.log(plusOne([0])) // [1]

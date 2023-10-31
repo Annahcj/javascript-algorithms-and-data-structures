@@ -44,7 +44,7 @@ Twitter.prototype.postTweet = function(userId, tweetId) {
 };
 
 Twitter.prototype.getNewsFeed = function(userId) {
-  let heap = new PriorityQueue((a, b) => a[1] - b[1]); // sort by time
+  let heap = new Heap((a, b) => a[1] - b[1]); // sort by time
   let userTweets = this.tweets.get(userId)?.head.next;
   while (userTweets) { 
     heap.add(userTweets.val); // add user's tweets
@@ -110,7 +110,7 @@ class Node {
 }
 
 // Priority Queue
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;

@@ -18,7 +18,7 @@
 // Time Complexity: O(n log(k)) 236ms
 // Space Complexity: O(k) 56.7MB
 var smallestRange = function(nums) {
-  let heap = new PriorityQueue((a, b) => a[2] - b[2]);
+  let heap = new Heap((a, b) => a[2] - b[2]);
   let k = nums.length, max = -Infinity;
   for (var i = 0; i < k; i++) { // add first element from each list
     heap.add([i, 0, nums[i][0]]);
@@ -40,7 +40,7 @@ var smallestRange = function(nums) {
 };
 
 // Heap with Comparator
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -91,6 +91,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(smallestRange([[4,10,15,24,26],[0,9,12,20],[5,18,22,30]])) // [20,24]
 console.log(smallestRange([[1,2,3],[1,2,3],[1,2,3]])) // [1,1]

@@ -12,15 +12,17 @@
 // 1: we can jump 1 step, we can either jump 1 step, 2 steps from prev, or 3 steps from prev prev, all reach the same point. max is 1.
 // 0: this is the furthest point we can reach and we can't go forward at all, so since possible steps are 0 and we are not at the last index, return false.
 
+// Time Complexity: O(n)
+// Space Complexity: O(1)
 var canJump = function(nums) {
   let max = -Infinity, n = nums.length;
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     max = Math.max(max - 1, nums[i]);
     if (max < 1 && i !== n - 1) return false;
   }  
   return true;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(canJump([2,3,1,1,4])) // true
 console.log(canJump([3,2,1,0,4])) // false

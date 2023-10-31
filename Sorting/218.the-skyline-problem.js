@@ -67,7 +67,7 @@ var getSkyline = function(buildings) {
   points.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : b[1] - a[1]);
   
   let skyline = [[0, 0]]; // [x, height]
-  let heap = new PriorityQueue((a, b) => b[0] - a[0]); // [height, end]
+  let heap = new Heap((a, b) => b[0] - a[0]); // [height, end]
   heap.add([0, Infinity]);
   for (let [start, height, end] of points) {
     while (heap.top()[1] <= start) heap.remove(); // remove expired
@@ -79,7 +79,7 @@ var getSkyline = function(buildings) {
   return skyline.slice(1);
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;

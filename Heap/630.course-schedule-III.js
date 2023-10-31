@@ -19,7 +19,7 @@
 // Space Complexity: O(n) 60.5MB
 var scheduleCourse = function(courses) {
   courses.sort((a, b) => a[1] - b[1]);
-  let heap = new PriorityQueue((a, b) => b - a);
+  let heap = new Heap((a, b) => b - a);
   let lastTime = 0;
   for (let [duration, lastDay] of courses) {
     heap.add(duration);
@@ -31,7 +31,7 @@ var scheduleCourse = function(courses) {
   return heap.size;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -82,7 +82,7 @@ class PriorityQueue {
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(scheduleCourse([[100,200],[200,1300],[1000,1250],[2000,3200]])) // 3
 console.log(scheduleCourse([[1,2]])) // 1
 console.log(scheduleCourse([[3,2],[4,3]])) // 0

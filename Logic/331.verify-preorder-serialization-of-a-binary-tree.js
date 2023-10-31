@@ -18,7 +18,7 @@
 var isValidSerialization = function(preorder) {
   let balance = 1;
   preorder = preorder.split(",");
-  for (var n of preorder) {
+  for (let n of preorder) {
     if (balance === 0) return false;
     balance--;
     if (n !== '#') balance += 2;
@@ -26,7 +26,7 @@ var isValidSerialization = function(preorder) {
   return balance === 0;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(isValidSerialization("9,3,4,#,#,1,#,#,2,#,6,#,#")) // true
 console.log(isValidSerialization("1,#")) // false
 console.log(isValidSerialization("9,#,#,1")) // false

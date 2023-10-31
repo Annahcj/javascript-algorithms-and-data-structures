@@ -19,7 +19,7 @@ var findShortestWay = function(maze, ball, hole) {
     }
   }
   dp[ball[0]][ball[1]].dist = 0;
-  let heap = new PriorityQueue((a, b) => {
+  let heap = new Heap((a, b) => {
     if (a[2] === b[2]) return a[3].localeCompare(b[3]);
     return a[2] - b[2];
   });
@@ -50,7 +50,7 @@ var findShortestWay = function(maze, ball, hole) {
   return dp[hole[0]][hole[1]].dist === Infinity ? "impossible" : dp[hole[0]][hole[1]].path;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;
@@ -95,7 +95,7 @@ class PriorityQueue {
   }
 }
 
-// Four test cases to run function on
+// Four test cases
 console.log(findShortestWay([[0,1,0,0,1,0,0,1,0,0],[0,0,1,0,0,1,0,0,1,0],[0,0,0,0,0,0,1,0,0,1],[0,0,0,0,0,0,1,0,0,1],[0,1,0,0,1,0,0,1,0,0],[0,0,1,0,0,1,0,0,0,0],[0,0,0,0,0,0,1,0,0,0],[1,0,0,1,0,0,0,0,0,1],[0,1,0,0,1,0,0,1,0,0],[0,0,0,0,0,1,0,0,1,0]], [2,4], [7,6])) // "drdrdrdldl"
 console.log(findShortestWay([[0,0,0,0,0],[1,1,0,0,1],[0,0,0,0,0],[0,1,0,0,1],[0,1,0,0,0]], [4,3], [0,1])) // "lul"
 console.log(findShortestWay([[0,0,0,0,0],[1,1,0,0,1],[0,0,0,0,0],[0,1,0,0,1],[0,1,0,0,0]], [4,3], [3,0])) // "impossible"

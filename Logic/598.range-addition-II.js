@@ -12,7 +12,7 @@
 // Time Complexity: O(n) 
 // Space Complexity: O(1)
 var maxCount = function(m, n, ops) {
-  for (var [a, b] of ops) {
+  for (let [a, b] of ops) {
     m = Math.min(m, a);
     n = Math.min(n, b);
   }

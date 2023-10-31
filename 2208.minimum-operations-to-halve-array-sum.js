@@ -12,7 +12,7 @@
   // the worst case is O(n log(n)) since it is guaranteed we can always half the sum by halving every single number (n operations).
 // Space Complexity: O(n) 77.8MB
 var halveArray = function(nums) {
-  let heap = new PriorityQueue((a, b) => b - a), totalSum = 0, count = 0;
+  let heap = new Heap((a, b) => b - a), totalSum = 0, count = 0;
   for (let num of nums) {
     heap.add(num);
     totalSum += num;
@@ -28,7 +28,7 @@ var halveArray = function(nums) {
   return count;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -79,6 +79,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(halveArray([5,19,8,1])) // 3
 console.log(halveArray([3,8,10])) // 3

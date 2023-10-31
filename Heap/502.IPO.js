@@ -23,7 +23,7 @@ var findMaximizedCapital = function(k, w, profits, capital) {
   }
   projects.sort((a, b) => a[1] - b[1]);
   
-  let heap = new PriorityQueue((a, b) => b - a);
+  let heap = new Heap((a, b) => b - a);
   let i = 0;
   while (k > 0) {
     while (i < n && projects[i][1] <= w) heap.add(projects[i++][0]);
@@ -35,7 +35,7 @@ var findMaximizedCapital = function(k, w, profits, capital) {
   return w;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -86,6 +86,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(findMaximizedCapital(2, 0, [1,2,3], [0,1,1])) // 4
 console.log(findMaximizedCapital(3, 0, [1,2,3], [0,1,2])) // 6

@@ -38,6 +38,6 @@ var numberOfArithmeticSlices = function(nums) {
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(numberOfArithmeticSlices([1,2,3,4])) // 3
 console.log(numberOfArithmeticSlices([1])) // 0

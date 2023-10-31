@@ -12,9 +12,9 @@
 // Space Complexity: O(1) (O(26) = O(1))
 var rearrangeString = function(s, k) {
   let freq = Array(26).fill(0);
-  for (var char of s) freq[char.charCodeAt() - 97]++;
-  let pq = new PriorityQueue((a, b) => b.freq - a.freq);
-  for (var i = 0; i < 26; i++) {
+  for (let char of s) freq[char.charCodeAt() - 97]++;
+  let pq = new Heap((a, b) => b.freq - a.freq);
+  for (let i = 0; i < 26; i++) {
     if (freq[i] > 0) pq.add({char: String.fromCharCode(i + 97), freq: freq[i]});
   }
   let waitQueue = [], res = "";
@@ -31,7 +31,7 @@ var rearrangeString = function(s, k) {
   return res.length === s.length ? res : "";
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = (a, b) => a - b) {
     this.values = [];
     this.comparator = comparator;
@@ -79,7 +79,7 @@ class PriorityQueue {
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(rearrangeString("aabbcc", 3)) // "abcabc"
 console.log(rearrangeString("aaabc", 3)) // ""
 console.log(rearrangeString("aaadbbcc", 2)) // "abacabcd"

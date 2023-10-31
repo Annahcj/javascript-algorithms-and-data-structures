@@ -28,8 +28,8 @@
 // Time Complexity: O(m log(m) + m log(n)) 505ms
 // Space Complexity: O(n) 75.8MB
 var mostBooked = function(n, meetings) {
-  let available = new PriorityQueue((a, b) => a[0] - b[0]); // [room index, next available time]
-  let occupied = new PriorityQueue((a, b) => a[1] - b[1]);
+  let available = new Heap((a, b) => a[0] - b[0]); // [room index, next available time]
+  let occupied = new Heap((a, b) => a[1] - b[1]);
   for (let i = 0; i < n; i++) {
     available.add([i, 0]);
   }
@@ -61,7 +61,7 @@ var mostBooked = function(n, meetings) {
   return ans;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -112,6 +112,6 @@ class PriorityQueue {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(mostBooked(2, [[0,10],[1,5],[2,7],[3,4]])) // 0
 console.log(mostBooked(3, [[1,20],[2,10],[3,5],[4,9],[6,8]])) // 1

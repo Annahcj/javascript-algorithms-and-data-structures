@@ -35,10 +35,10 @@
 // Space Complexity: O(n) 101.3MB
 var SORTracker = function() {
   this.k = 1;
-  this.minHeap = new PriorityQueue((a, b) => {
+  this.minHeap = new Heap((a, b) => {
     return a[1] === b[1] ? b[0].localeCompare(a[0]) : a[1] - b[1];
   });
-  this.maxHeap = new PriorityQueue((a, b) => {
+  this.maxHeap = new Heap((a, b) => {
     return a[1] === b[1] ? a[0].localeCompare(b[0]) : b[1] - a[1];
   });
 };
@@ -59,7 +59,7 @@ SORTracker.prototype.get = function() {
   return location;
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -110,7 +110,7 @@ class PriorityQueue {
   }
 }
 
-// A few test cases to run function on
+// A few test cases
 let tracker = new SORTracker(); // Initialize the tracker system.
 tracker.add("bradford", 2); // Add location with name="bradford" and score=2 to the system.
 tracker.add("branford", 3); // Add location with name="branford" and score=3 to the system.

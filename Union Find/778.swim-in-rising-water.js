@@ -18,7 +18,7 @@
 var swimInWater = function(grid) {
   let n = grid.length, seen = Array(n).fill(0).map(() => Array(n).fill(0));
   const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-  let minHeap = new PriorityQueue((a, b) => grid[a[1]][a[2]] - grid[b[1]][b[2]]);
+  let minHeap = new Heap((a, b) => grid[a[1]][a[2]] - grid[b[1]][b[2]]);
   minHeap.add([grid[0][0], 0, 0]);
   
   while (!minHeap.isEmpty()) {
@@ -33,7 +33,7 @@ var swimInWater = function(grid) {
   }
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
@@ -150,6 +150,6 @@ class UnionFind {
   }
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(swimInWater([[0,2],[1,3]])) // 3
 console.log(swimInWater([[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]])) // 16

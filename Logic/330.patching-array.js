@@ -4,6 +4,7 @@
 
 
 // Solution:
+
 // e.g: nums = [1, 5, 10], n = 20
 // The logic is to check each missed number from 1 to n, starting from 1.
 // miss = 1, i = 0: since nums[i] (1) is equal to miss, increment miss by nums[i], and increment i by one. The range we cover is [1..1]
@@ -39,7 +40,7 @@ var minPatches = function(nums, n) {
   return patches;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(minPatches([1,3], 6)) // 1
 console.log(minPatches([1,5,10], 20)) // 2
 console.log(minPatches([1,2,2], 5)) // 0

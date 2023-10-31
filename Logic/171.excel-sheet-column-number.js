@@ -21,7 +21,7 @@ var titleToNumber = function(columnTitle) {
   return ans;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(titleToNumber("A")) // 1
 console.log(titleToNumber("AB")) // 28
 console.log(titleToNumber("AAB")) // 704

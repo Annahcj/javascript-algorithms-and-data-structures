@@ -11,7 +11,7 @@
 // Time Complexity: O(n log(k)) 140ms
 // Space Complexity: O(n) 50.3MB
 var closestKValues = function(root, target, k) {
-  let heap = new PriorityQueue((a, b) => Math.abs(b - target) - Math.abs(a - target));
+  let heap = new Heap((a, b) => Math.abs(b - target) - Math.abs(a - target));
   dfs(root);
   return heap.values;
   
@@ -24,7 +24,7 @@ var closestKValues = function(root, target, k) {
   }
 };
 
-class PriorityQueue {
+class Heap {
   constructor(comparator = ((a, b) => a - b)) {
     this.values = [];
     this.comparator = comparator;
