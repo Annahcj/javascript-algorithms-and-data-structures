@@ -13,17 +13,16 @@
 
 // Time Complexity: O(n) 72ms
 // Space Complexity: O(n) 40.5MB
+var twoSum = function(nums, target) {
+  let idxs = {};
+  for (let i = 0; i < nums.length; i++) {
+    let num = nums[i];
+    if (idxs[target - num] >= 0) return [idxs[target - num], i];
+    idxs[num] = i;
+  }
+};
 
-  var twoSum = function(nums, target) {
-    let idxs = {};
-    for (var i = 0; i < nums.length; i++) {
-      let num = nums[i];
-      if (idxs[target - num] >= 0) return [idxs[target - num], i];
-      idxs[num] = i;
-    }
-  };
-  
-  // Three test cases to run function on
-  console.log(twoSum([2,7,11,15], 9)) // [0,1]
-  console.log(twoSum([3,2,4], 6)) // [1,2]
-  console.log(twoSum([3,3], 6)) // [0,1]
+// Three test cases
+console.log(twoSum([2,7,11,15], 9)) // [0,1]
+console.log(twoSum([3,2,4], 6)) // [1,2]
+console.log(twoSum([3,3], 6)) // [0,1]
