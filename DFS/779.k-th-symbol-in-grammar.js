@@ -25,7 +25,7 @@
 // Space Complexity: O(n) 41.6MB
 var kthGrammar = function(n, k) {
   if (n === 1) return 0;
-  
+
   let parentValue = kthGrammar(n - 1, Math.ceil(k / 2));
   if (k % 2 === 1) {
     return parentValue;
