@@ -5,25 +5,25 @@
   // A subtree of root is a tree consisting of root and all of its descendants.
 
 
-// Solution: Recursive DFS
+// Solution: Post-order DFS
 
-// Recursively DFS the tree.
-// dfs(node) returns [sum, number of nodes] of the subtree rooted at node.
+// Use post-order DFS to find the sum of values and number of nodes in each subtree.
 
-// Time Complexity: O(n) 88ms
-// Space Complexity: O(n) 47.1MB
+// Time Complexity: O(n) 67ms
+// Space Complexity: O(n) 46.9MB
 var averageOfSubtree = function(root) {
-  let res = 0;
+  let count = 0;
   dfs(root);
-  return res;
+  return count;
   
   function dfs(node) {
-    if (!node) return [0, 0]; // [sum, n]
-    
-    let [leftSum, leftN] = dfs(node.left), [rightSum, rightN] = dfs(node.right);
-    let n = leftN + rightN + 1;
-    let sum = leftSum + rightSum + node.val;
-    if (node.val === Math.floor(sum / n)) res++;
-    return [sum, n];
+    if (!node) return [0, 0];
+    let [leftSum, leftCount] = dfs(node.left);
+    let [rightSum, rightCount] = dfs(node.right);
+    let totalSum = leftSum + rightSum + node.val;
+    let totalCount = leftCount + rightCount + 1;
+    let avg = Math.floor(totalSum / totalCount);
+    if (node.val === avg) count++;
+    return [totalSum, totalCount];
   }  
 };
