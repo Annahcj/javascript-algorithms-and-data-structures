@@ -50,6 +50,6 @@ function getCount(word) {
   return count;
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(wordSubsets(["amazon","apple","facebook","google","leetcode"], ["e","o"])) // ["facebook","google","leetcode"]
 console.log(wordSubsets(["amazon","apple","facebook","google","leetcode"], ["l","e"])) // ["apple","google","leetcode"]

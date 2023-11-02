@@ -3,7 +3,7 @@
 // Substrings that occur multiple times are counted the number of times they occur.
 
 
-// Solution 1: One Pass
+// Solution: One Pass
 
 // Thoughts:
 // In a string '00011', the maximum number of consecutive substrings with the same number of 0's and 1's is two, -> (01, 0011)
@@ -22,19 +22,19 @@
 
 // Time Complexity: O(n) 80ms
 // Space Complexity: O(1) 42.7MB
-  var countBinarySubstrings = function(s) {
-    let count = 0, curr = 1, prev = 0;
-    for (var i = 1; i < s.length; i++) {
-      if (s[i] === s[i - 1]) curr++;
-      else {
-        count += Math.min(curr, prev);
-        prev = curr;
-        curr = 1;
-      }
+var countBinarySubstrings = function(s) {
+  let count = 0, curr = 1, prev = 0;
+  for (let i = 1; i < s.length; i++) {
+    if (s[i] === s[i - 1]) curr++;
+    else {
+      count += Math.min(curr, prev);
+      prev = curr;
+      curr = 1;
     }
-    return count += Math.min(curr, prev);
-  };
-  
-  // Two test cases to run function on
-  console.log(countBinarySubstrings("00110011")) // 6
-  console.log(countBinarySubstrings("10101")) // 4
+  }
+  return count += Math.min(curr, prev);
+};
+
+// Two test cases
+console.log(countBinarySubstrings("00110011")) // 6
+console.log(countBinarySubstrings("10101")) // 4

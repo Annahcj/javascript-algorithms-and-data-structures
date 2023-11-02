@@ -42,6 +42,6 @@ function getDist(p1, p2) {
   return Math.sqrt(calc1 + calc2);
 }
 
-// Two test cases to run function on
+// Two test cases
 console.log(countLatticePoints([[2,2,1]])) // 5
 console.log(countLatticePoints([[2,2,2],[3,4,1]])) // 16

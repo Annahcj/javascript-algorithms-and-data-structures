@@ -46,7 +46,7 @@ var canChange = function(start, target) {
   return true;  
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(canChange("_L__R__R_", "L______RR")) // true
 console.log(canChange("R_L_", "__LR")) // false
 console.log(canChange("_R", "R_")) // false

@@ -10,16 +10,15 @@
 
 // Time Complexity: O(n·klogk) 156ms
 // Space Complexity: O(nk) 51MB
-
-  var groupAnagrams = function(strs) {
-    let result = {};
-    for (var i = 0; i < strs.length; i++) {
-      let sorted = strs[i].split("").sort();
-      if (!result[sorted]) result[sorted] = [];
-      result[sorted].push(strs[i]);
-    }
-    return Object.values(result);
-  };
+var groupAnagrams = function(strs) {
+  let result = {};
+  for (let i = 0; i < strs.length; i++) {
+    let sorted = strs[i].split("").sort();
+    if (!result[sorted]) result[sorted] = [];
+    result[sorted].push(strs[i]);
+  }
+  return Object.values(result);
+};
 
 
 // Solution 2: Categorize by character count
@@ -30,21 +29,20 @@
 
 // Time Complexity: O(nk) 164ms
 // Space Complexity: O(nk) 50.5MB
-
 var groupAnagrams = function(strs) {
-  let result = {};
-  for (var str of strs) {
-    let charCount = Array(26).fill(0);
-    for (var char of str) {
-      charCount[char.charCodeAt() - 97]++;
-    }
-    if (!result[charCount]) result[charCount] = [str];
-    else result[charCount].push(str);
+let result = {};
+for (let str of strs) {
+  let charCount = Array(26).fill(0);
+  for (let char of str) {
+    charCount[char.charCodeAt() - 97]++;
   }
-  return Object.values(result);
+  if (!result[charCount]) result[charCount] = [str];
+  else result[charCount].push(str);
+}
+return Object.values(result);
 };
 
-  // Three test cases to run function on
-  console.log(groupAnagrams(["eat","tea","tan","ate","nat","bat"])) // [["bat"],["nat","tan"],["ate","eat","tea"]]
-  console.log(groupAnagrams(["a"])) // ["a"]]
-  console.log(groupAnagrams([""])) // [[""]]
+// Three test cases
+console.log(groupAnagrams(["eat","tea","tan","ate","nat","bat"])) // [["bat"],["nat","tan"],["ate","eat","tea"]]
+console.log(groupAnagrams(["a"])) // ["a"]]
+console.log(groupAnagrams([""])) // [[""]]

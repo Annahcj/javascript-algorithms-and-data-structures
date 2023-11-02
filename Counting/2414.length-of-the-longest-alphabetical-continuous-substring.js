@@ -23,6 +23,6 @@ var longestContinuousSubstring = function(s) {
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(longestContinuousSubstring("abacaba")) // 2
 console.log(longestContinuousSubstring("abcde")) // 5

@@ -26,6 +26,6 @@ var checkDistances = function(s, distance) {
   return true;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(checkDistances("abaccb", [1,3,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])) // true
 console.log(checkDistances("aa", [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])) // false

@@ -29,6 +29,6 @@ var countDistinct = function(nums, k, p) {
   return unique.size;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(countDistinct([2,3,3,2,2], 2, 2)) // 11
 console.log(countDistinct([1,2,3,4], 4, 1)) // 10

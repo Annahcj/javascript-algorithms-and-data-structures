@@ -17,7 +17,6 @@
 // Space Complexity: O(1) 44.3MB
 var largestGoodInteger = function(num) {
   let max = -Infinity, res = "";
-  
   for (let i = 0; i < num.length - 2; i++) {
     let str = num.slice(i, i + 3);
     if (num[i] === num[i + 1] && num[i + 1] === num[i + 2]) {
@@ -30,7 +29,7 @@ var largestGoodInteger = function(num) {
   return res;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(largestGoodInteger("6777133339")) // "777"
 console.log(largestGoodInteger("2300019")) // "000"
 console.log(largestGoodInteger("42352338")) // ""

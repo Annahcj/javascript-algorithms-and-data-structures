@@ -41,7 +41,7 @@ var appealSum = function(s) {
   return ans;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(appealSum("aaaaaa")) // 21
 console.log(appealSum("abbca")) // 28
 console.log(appealSum("code")) // 20

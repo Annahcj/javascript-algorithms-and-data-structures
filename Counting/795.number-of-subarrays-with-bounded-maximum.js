@@ -32,6 +32,6 @@ var numSubarrayBoundedMax = function(nums, left, right) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(numSubarrayBoundedMax([2,1,4,3], 2, 3)) // 3
 console.log(numSubarrayBoundedMax([2,9,2,5,6], 2, 8)) // 7

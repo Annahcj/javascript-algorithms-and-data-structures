@@ -5,7 +5,7 @@
 // Return the minimum number of operations required to make nums1 equal to nums2. If it is impossible to make them equal, return -1.
 
 
-// Solution: Logic
+// Solution: Math
 
 // Count the difference of each nums1[i] - nums2[i].
 // If the difference is not divisible by k, it is impossible to make it equal to nums2[i], so we return -1.

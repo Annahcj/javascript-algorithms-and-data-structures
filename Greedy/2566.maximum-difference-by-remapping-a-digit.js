@@ -3,7 +3,7 @@
 // Return the difference between the maximum and minimum values Danny can make by remapping exactly one digit in num.
 
 
-// Solution:
+// Solution: Greedy
 
 // Max number: Change the first non-9 digit at the most significant place (leftmost) to 9. 
 // Min number: Change the first digit (leftmost) to 0.

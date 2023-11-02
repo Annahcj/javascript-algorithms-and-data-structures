@@ -23,6 +23,6 @@ var findKDistantIndices = function(nums, key, k) {
   return res;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(findKDistantIndices([3,4,9,1,3,9,5], 9, 1)) // [1,2,3,4,5,6]
 console.log(findKDistantIndices([2,2,2,2,2], 2, 2)) // [0,1,2,3,4]

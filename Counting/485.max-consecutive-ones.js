@@ -13,7 +13,7 @@
 // Space Complexity: O(1) 42.1MB
 var findMaxConsecutiveOnes = function(nums) {
   let max = 0, temp = 0;
-  for (var num of nums) {
+  for (let num of nums) {
     if (num === 1) temp++;
     else {
       max = Math.max(max, temp);
@@ -24,6 +24,6 @@ var findMaxConsecutiveOnes = function(nums) {
   return max;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(findMaxConsecutiveOnes([1,1,0,1,1,1])) // 3
 console.log(findMaxConsecutiveOnes([1,0,1,1,0,1])) // 2

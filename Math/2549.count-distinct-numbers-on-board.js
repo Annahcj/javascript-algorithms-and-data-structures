@@ -8,7 +8,7 @@
   // % stands for the modulo operation. For example, 14 % 3 is 2.
 
 
-// Solution: Logic
+// Solution: Math
 
 // i % (i-1) = 1 while i >= 3
 // At worst, if we don't worry about other numbers and only focus on i % (i-1), we can gain one extra number per day by getting i - 1 until we reach i = 3.

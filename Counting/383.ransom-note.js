@@ -23,7 +23,7 @@ var canConstruct = function(ransomNote, magazine) {
   return true;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(canConstruct("a", "b")) // false
 console.log(canConstruct("aa", "ab")) // false
 console.log(canConstruct("aa", "aab")) // true

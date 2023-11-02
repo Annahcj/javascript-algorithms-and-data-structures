@@ -39,7 +39,7 @@ var reorderedPowerOf2 = function(n) {
   }
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(reorderedPowerOf2(1)) // true
 console.log(reorderedPowerOf2(10)) // false
 console.log(reorderedPowerOf2(23)) // true

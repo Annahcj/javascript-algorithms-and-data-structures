@@ -7,7 +7,7 @@
 // Return the maximum score you can achieve after performing the operation exactly k times.
 
 
-// Solution: Logic
+// Solution: Math
 
 // It's optimal to get the maximum element and increase it k times.
 // Formula = max * k + ((k-1) + (k-2) + (k-3)...) 

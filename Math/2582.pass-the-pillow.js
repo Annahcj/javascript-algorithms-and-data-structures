@@ -4,7 +4,7 @@
 // Given the two positive integers n and time, return the index of the person holding the pillow after time seconds.
 
 
-// Solution: Logic
+// Solution: Math
 
 // Get number of rounds: Math.floor(time / n-1).
   // If the number of rounds is even, then the direction of the last round was left-to-right.

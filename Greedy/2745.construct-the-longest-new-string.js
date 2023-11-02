@@ -5,7 +5,7 @@
 // A substring is a contiguous non-empty sequence of characters within a string.
 
 
-// Solution: Logic
+// Solution: Greedy Logic
 
 // "AB" can be put in three situations:
   // 1. In front of "AA" ("ABAA")

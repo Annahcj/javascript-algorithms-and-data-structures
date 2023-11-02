@@ -16,18 +16,18 @@
 // Space Complexity: O(n) 96.4MB
 var rearrangeArray = function(nums) {
   let pos = [], neg = [];
-  for (var num of nums) {
+  for (let num of nums) {
     if (num > 0) pos.push(num);
     else neg.push(num);
   }  
   let res = [];
-  for (var i = 0; i < pos.length; i++) {
+  for (let i = 0; i < pos.length; i++) {
     res.push(pos[i]);
     res.push(neg[i]);
   }
   return res;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(rearrangeArray([3,1,-2,-5,2,-4])) // [3,-2,1,-5,2,-4]
 console.log(rearrangeArray([-1,1])) // [3,-2,1,-5,2,-4]

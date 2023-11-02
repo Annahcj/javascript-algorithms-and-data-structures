@@ -27,6 +27,6 @@ var calculateTax = function(brackets, income) {
   return ans;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(calculateTax([[3,50],[7,10],[12,25]], 10)) // 2.65
 console.log(calculateTax([[1,0],[4,25],[5,50]], 2)) // 0.25

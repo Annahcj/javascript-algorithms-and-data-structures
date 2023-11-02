@@ -17,7 +17,7 @@
 // Space Complexity: O(1) 40.3MB
 var detectCapitalUse = function(word) {
   let uppercase = 0, lowercase = 0;
-  for (var char of word) {
+  for (let char of word) {
     if (char >= 'a' && char <= 'z') lowercase++;
     else uppercase++;
   }
@@ -26,6 +26,6 @@ var detectCapitalUse = function(word) {
   return false;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(detectCapitalUse("USA")) // true
 console.log(detectCapitalUse("FlaG")) // false

@@ -19,7 +19,7 @@
 var originalDigits = function(s) {
   let freq = Array(26).fill(0);
   // count frequency of each character in s
-  for (var char of s) freq[char.charCodeAt() - 97]++;
+  for (let char of s) freq[char.charCodeAt() - 97]++;
   // array of numbers
   let nums = Array(10).fill(0);
 
@@ -41,12 +41,12 @@ var originalDigits = function(s) {
   
   // build up final string
   let res = '';
-  for (var i = 0; i < 10; i++) {
+  for (let i = 0; i < 10; i++) {
     if (nums[i]) res += i.toString().repeat(nums[i]);
   }
   return res;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(originalDigits("owoztneoer")) // "012"
 console.log(originalDigits("fviefuro")) // "45"
