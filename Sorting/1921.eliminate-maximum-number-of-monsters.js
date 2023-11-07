@@ -2,7 +2,33 @@
 // Return the maximum number of monsters that you can eliminate before you lose, or n if you can eliminate all the monsters before they reach the city.
 
 
-// Solution: Min Heap
+// Solution 1: Sorting
+
+// We need to know the arrival time at which each monster will reach the city: Math.ceil(dist[i] / speed[i])
+// Sort the arrival times in asc order and iterate through them. 
+// Keep track of the current time, and increment the time once we use the weapon on a monster.
+// If the monster's arrival time <= the current time, then we lose.
+
+// Time Complexity: O(n log(n)) 144ms
+// Space Complexity: O(n) 58.4MB
+var eliminateMaximum = function(dist, speed) {
+  let n = dist.length, arrivalTimes = [];
+  for (let i = 0; i < n; i++) {
+    arrivalTimes.push(Math.ceil(dist[i] / speed[i]));
+  }
+  arrivalTimes.sort((a, b) => a - b);
+
+  let currTime = 0, eliminated = 0;
+  for (let arrivalTime of arrivalTimes) {
+    if (arrivalTime <= currTime) return eliminated;
+    eliminated++;
+    currTime++;
+  }
+  return eliminated;
+};
+
+
+// Solution 2: Min Heap
 
 // Formula to calculate monster's dist: Math.ceil(dist[i] / speed[i]);
 // Add each distance (using the above formula) in dist/speed to a minHeap
