@@ -4,29 +4,21 @@
 // A substring is a contiguous sequence of characters within a string.
 
 
-// Solution: Two Pointers
+// Solution: Counting
 
-// Use two pointers to track consecutive characters.
-// For each index, count the number of substrings ending at that index.
+// For each s[i], the number of homogenous substrings ending at s[i] is equal to the count of consecutively same characters up to s[i].
 
-// e.g: "ccc"
-  // "c": +1 substring ("c")
-  // "cc": +2 substrings ("_c", "cc")
-  // "ccc": +3 substrings ("__c", "_cc", "ccc")
-// (The underscores indicate that the character isn't included in the substring)
-
-// Time Complexity: O(n) 151ms
-// Space Complexity: O(1) 45.9MB
+// Time Complexity: O(n) 65ms
+// Space Complexity: O(1) 45.3MB
 var countHomogenous = function(s) {
-  let i = 0, ans = 0, mod = 10 ** 9 + 7;
-  while (i < s.length) {
-    let char = s[i], start = i;
-    while (s[i] === char) {
-      ans = (ans + i - start + 1) % mod;
-      i++;
-    }
+  let n = s.length, count = 0;
+  let homogenous = 0, MOD = 10 ** 9 + 7;
+  for (let i = 0; i < n; i++) {
+    if (i === 0 || s[i] !== s[i - 1]) count = 1;
+    else count++;
+    homogenous = (homogenous + count) % MOD;
   }
-  return ans;
+  return homogenous;
 };
 
 // Three test cases
