@@ -13,16 +13,17 @@
 // Check each length 3 substring.
 // If all three digits are equal, compare it with the max.
 
-// Time Complexity: O(n) 72ms
-// Space Complexity: O(1) 44.3MB
+// Time Complexity: O(n) 52ms
+// Space Complexity: O(1) 45MB
 var largestGoodInteger = function(num) {
   let max = -Infinity, res = "";
   for (let i = 0; i < num.length - 2; i++) {
-    let str = num.slice(i, i + 3);
+    let substr = num.slice(i, i + 3);
+    let int = Number(substr);
     if (num[i] === num[i + 1] && num[i + 1] === num[i + 2]) {
-      if (+str > max) {
-        res = str;
-        max = +str;
+      if (int > max) {
+        res = substr;
+        max = int;
       }
     }
   }  
