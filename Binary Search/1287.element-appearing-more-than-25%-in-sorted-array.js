@@ -2,7 +2,7 @@
 // Given an integer array sorted in non-decreasing order, there is exactly one integer in the array that occurs more than 25% of the time, return that integer.
 
 
-// Solution: Sliding Window Approach
+// Solution 1: Sliding Window Approach
 
 // Thoughts:
 // 25% means the length of the arr divided by 4.
@@ -27,6 +27,45 @@ var findSpecialInteger = function(arr) {
   }
   return -1;
 };
+
+
+// Solution 2: Binary Search in each Quarter
+
+// The integer appearing more than 25% of the time is bound to appear at least once in each "quarter" segment of the arr.
+// Go through each four quarters of the array and use binary search to find the leftmost and rightmost indices of arr[i] (arr[i] = start of the quarter).
+
+// Time Complexity: O(4log(n)) 60ms
+// Space Complexity: O(1) 42.7MB
+var findSpecialInteger = function(arr) {
+  let n = arr.length, quarter = Math.floor(n / 4) + 1;
+  for (let i = 0; i < n; i += quarter) {
+    let leftBound = bisect_left(arr, arr[i]);
+    let rightBound = bisect_right(arr, arr[i]);
+    if (rightBound - leftBound + 1 >= quarter) return arr[i];
+  }
+};
+
+// Find leftmost index of val
+function bisect_left(arr, val) {
+  let low = 0, high = arr.length - 1;
+  while (low < high) {
+    let mid = Math.floor((low + high) / 2);
+    if (arr[mid] >= val) high = mid;
+    else low = mid + 1;
+  }
+  return low;
+}
+
+// Find rightmost index of val
+function bisect_right(arr, val) {
+  let low = 0, high = arr.length - 1;
+  while (low < high) {
+    let mid = Math.ceil((low + high) / 2);
+    if (arr[mid] <= val) low = mid;
+    else high = mid - 1;
+  }
+  return low;
+}
 
 // Two test cases
 console.log(findSpecialInteger([1,2,2,6,6,6,6,7,10])) // 6
