@@ -6,7 +6,7 @@
 // Note: The field is surrounded by two horizontal fences from the coordinates (1, 1) to (1, n) and (m, 1) to (m, n) and two vertical fences from the coordinates (1, 1) to (m, 1) and (1, n) to (m, n). These fences cannot be removed.
 
 
-// Solution: Hashsets on Fence Diffs
+// Solution: Hashset on Fence Diffs
 
 // Use a hashset to store the differences between each pair of horizontal fences.
 // Find any common fence differences between the horizontal and vertical fences, and record the maximum such difference.
