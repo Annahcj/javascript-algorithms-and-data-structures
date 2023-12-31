@@ -5,7 +5,7 @@
 // Return the minimum difficulty of a job schedule. If you cannot find a schedule for the jobs return -1.
 
 
-// Solution: Top Down DP - Recursion w/ Memoization
+// Solution 1: Top Down DP - Recursion w/ Memoization
 
 // Try all combinations of splitting the jobs into d days.
 // Use memoization to avoid recomputing repeated subproblems.
@@ -31,6 +31,37 @@ var minDifficulty = function(jobDifficulty, d) {
     }
     return memo[i][days] = ans;
   }
+};
+
+
+// Solution 2: Bottom Up Iterative DP - O(n) space
+
+// Notice that we only need to reference results saved from the previous row (d - 1).
+// We only need to keep track of the results of the previous row, and the current row.
+// Each dp[i] = the minimum cost to finish jobs 0 to jobs i for the current day.
+
+// For each dp[i], 
+  // Go through each index j <= i to try each segment of jobs.
+  // Record the maximum maxDifficulty + dp[j].
+
+// n = length of jobDifficulty
+// Time Complexity: O(n^2 * d) 109ms
+// Space Complexity: O(n) 43.9MB
+var minDifficulty = function(jobDifficulty, d) {
+  let n = jobDifficulty.length, prev = Array(n + 1).fill(Infinity);
+  prev[0] = 0;
+  for (let k = 0; k < d; k++) {
+    let curr = Array(n + 1).fill(Infinity);
+    for (let i = 0; i < n; i++) {
+      let maxDifficulty = 0;
+      for (let j = i; j >= 0; j--) {
+        maxDifficulty = Math.max(maxDifficulty, jobDifficulty[j]);
+        curr[i + 1] = Math.min(curr[i + 1], maxDifficulty + prev[j]);
+      }
+    }
+    prev = curr;
+  }
+  return prev[n] === Infinity ? -1 : prev[n];
 };
 
 // Two test cases 
