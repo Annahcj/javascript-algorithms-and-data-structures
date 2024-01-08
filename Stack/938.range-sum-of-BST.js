@@ -38,3 +38,27 @@ var rangeSumBST = function(root, low, high) {
   }
   return sum;
 };
+
+// Solution 3: DFS w/ Pruning
+
+// The properties of a BST:
+  // Left subtree only contains smaller values.
+  // Right subtree only contains larger values.
+
+// We can make use of these properties and stop traversing further when the subtree doesn't contain any values in the range (low, high).
+// If the root's value is larger than low, the left subtree has the potential to contain values within the range (low, high).
+// If the root's value is smaller than high, the right subtree has the potential to contain values within the range (low, high).
+
+// Time Complexity: O(n) 128ms
+// Space Complexity: O(n) 97.4MB
+var rangeSumBST = function(root, low, high) {
+  if (!root) return 0;
+  let sum = root.val >= low && root.val <= high ? root.val : 0;
+  if (root.val > low) {
+    sum += rangeSumBST(root.left, low, high);
+  } 
+  if (root.val < high) {
+    sum += rangeSumBST(root.right, low, high);
+  }
+  return sum;
+};
