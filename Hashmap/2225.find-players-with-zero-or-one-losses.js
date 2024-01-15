@@ -14,20 +14,23 @@
 // Get the players with count 0 and the players with count 1.
 // Note: In JavaScript, the object keeps keys in ascending order, so we don't need to sort before returning.
 
-// Time Complexity: O(n) 556ms
-// Space Complexity: O(n) 116.8MB
+// Time Complexity: O(n) 307ms
+// Space Complexity: O(n) 116.3MB
 var findWinners = function(matches) {
   let lost = {};
   for (let [winner, loser] of matches) {
-    lost[winner] = (lost[winner] || 0);
     lost[loser] = (lost[loser] || 0) + 1;
+    lost[winner] = (lost[winner] || 0);
   }
-  let res = [[], []];
+  let neverLost = [], lostOne = [];
   for (let player in lost) {
-    if (lost[player] === 0) res[0].push(+player);
-    else if (lost[player] === 1) res[1].push(+player);
+    if (lost[player] === 0) {
+      neverLost.push(Number(player));
+    } else if (lost[player] === 1) {
+      lostOne.push(Number(player));
+    }
   }
-  return res;
+  return [neverLost, lostOne];
 };
 
 // Two test cases
