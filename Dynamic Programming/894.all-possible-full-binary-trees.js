@@ -57,31 +57,31 @@ var allPossibleFBT = function(n) {
 
 // The same as solution 1, except we memoize the results.
 
-// Time Complexity: O(n * 2^n) 224ms
-// Space Complexity: O(2^n) 48.9MB
+// Time Complexity: O(n * 2^n) 110ms
+// Space Complexity: O(n * 2^n) 52.8MB
 var allPossibleFBT = function(n) {
-  let memo = Array(n + 1);
-  return recurse(n);
-
-  function recurse(n) {
-    if (n === 0 || n % 2 === 0) return [];
-    if (n === 1) return [new TreeNode(0)];
-    if (memo[n] !== undefined) return memo[n];
-    let res = [];
-    n -= 1;
-    for (var i = 1; i < n; i+=2) {
-      let left = recurse(i);
-      let right = recurse(n - i);
-      for (var l of left) {
-        for (var r of right) {
-          let node = new TreeNode(0);
-          node.left = l;
-          node.right = r;
-          res.push(node);
+  let memo = Array(n + 1).fill(null);
+  return dp(n);
+  
+  function dp(n) {
+    if (n % 2 === 0) return [];
+    if (memo[n] !== null) return memo[n];
+    
+    let trees = n === 1 ? [new TreeNode(0)] : [];
+    n--;
+    for (let leftSize = 1; leftSize < n; leftSize++) {
+      let leftSubtrees = dp(leftSize);
+      let rightSubtrees = dp(n - leftSize);
+      for (let leftSubtree of leftSubtrees) {
+        for (let rightSubtree of rightSubtrees) {
+          let root = new TreeNode(0);
+          root.left = leftSubtree;
+          root.right = rightSubtree;
+          trees.push(root);
         }
       }
     }
-    return memo[n + 1] = res;
+    return memo[n + 1] = trees;
   }
 };
 
