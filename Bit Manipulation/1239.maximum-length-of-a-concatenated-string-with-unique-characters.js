@@ -83,6 +83,51 @@ var maxLength = function(arr) {
   }  
 };
 
+
+// Solution 3: Iterative 
+
+// Keep track of all valid bitmasks generated from previous concatenations.
+// Since the subsequence must contain unique characters, the number of 1-bits in a bitmask will represent the length of the sequence.
+// For each arr[i], 
+  // 1. Check whether it has duplicate characters. If it does, it can't be part of any sequence.
+  // 2. Go through each previous bitmask in dp, and try to concatenate it with the previous bitmask if there are no overlapping bits.
+    // Record the maximum length of the sequence (maximum number of 1-bits in a bitmask)
+
+// n = length of arr
+// Time Complexity: O(2^n) 68ms
+// Space Complexity: O(2^n) 55.3MB
+var maxLength = function(arr) {
+  let n = arr.length, dp = new Set([0]), maxLen = 0;
+  for (let i = 0; i < n; i++) {
+    let hasUniqueChars = true, mask = 0;
+    for (let char of arr[i]) {
+      let charcode = char.charCodeAt() - 97;
+      if (mask & (1 << charcode)) {
+        hasUniqueChars = false;
+        break;
+      }
+      mask |= (1 << charcode);
+    }
+    if (!hasUniqueChars) continue;
+    for (let prevMask of dp) {
+      if ((mask & prevMask) > 0) continue;
+      let newMask = mask | prevMask;
+      dp.add(newMask);
+      maxLen = Math.max(maxLen, countOneBits(newMask));
+    }
+  }
+  return maxLen;
+};
+
+function countOneBits(mask) {
+  let oneBits = 0;
+  while (mask > 0) {
+    oneBits += (mask & 1);
+    mask >>= 1;
+  }
+  return oneBits;
+}
+
 // Three test cases 
 console.log(maxLength(["un","iq","ue"])) // 4
 console.log(maxLength(["cha","r","act","ers"])) // 6
