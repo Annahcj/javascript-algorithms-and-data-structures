@@ -3,37 +3,37 @@
 // Given the five integers m, n, maxMove, startRow, startColumn, return the number of paths to move the ball out of the grid boundary. Since the answer can be very large, return it modulo 109 + 7.
 
 
-// Solution: Recursion w/ Memoization
+// Solution: DP
 
-// Memoize result at specific row, column, and number of moves left.
+// Memoize each dp(i, j, k), where
+  // i = the current row
+  // j = the current column
+  // k = the number of moves remaining
 
-// m = number of rows, n = number of columns, k = maxMove
-// Time Complexity: O(nmk) 128ms
-// Space Complexity: O(nmk) 49MB
+// For each dp(i, j, k), try to move to the four adjacent cells and count the number of paths that end up crossing the boundary.
+
+// Time Complexity: O(4mnk) 77ms
+// Space Complexity: O(mnk) 52.7MB
 var findPaths = function(m, n, maxMove, startRow, startColumn) {
-  let memo = new Map();
-  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-  return dfs(startRow, startColumn, maxMove);
-
-  function dfs(row, col, moves) {
-    // if out of bounds, return 1
-    if (row < 0 || row >= m || col < 0 || col >= n) return 1;
-    // if memo already contains row, col, moves, -> return what is saved in memo
-    if (memo.has(`${row},${col},${moves}`)) return memo.get(`${row},${col},${moves}`);
-    // if we run out of moves, return 0
-    if (moves === 0) return 0;
-    let ans = 0;
-    // traverse all four directions, mod by 10^9 + 7
-    for (var [x, y] of directions) {
-      let newX = row + x, newY = col + y;
-      ans = (ans + dfs(newX, newY, moves - 1)) % 1000000007;
+  const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+  let memo = Array(m).fill(0).map(() => Array(n).fill(0).map(() => Array(maxMove + 1).fill(-1)));
+  let MOD = 1000000007;
+  return dp(startRow, startColumn, maxMove);
+  
+  function dp(i, j, k) {
+    if (i < 0 || j < 0 || i === m || j === n) return 1;
+    if (k === 0) return 0;
+    if (memo[i][j][k] !== -1) return memo[i][j][k];
+    
+    let ways = 0;
+    for (let [x, y] of directions) {
+      let newRow = i + x, newCol = j + y;
+      ways = (ways + dp(newRow, newCol, k - 1)) % MOD;
     }
-    // save ans in memo at current state and return for earlier calls
-    memo.set(`${row},${col},${moves}`, ans);
-    return ans;
-  }  
+    return memo[i][j][k] = ways;
+  }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(findPaths(2, 2, 2, 0, 0)) // 6
 console.log(findPaths(1, 3, 3, 0, 1)) // 12
