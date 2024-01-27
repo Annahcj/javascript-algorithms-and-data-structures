@@ -12,6 +12,16 @@
   // The next state becomes dp(i - 1, k - j).
   // At the next state, we only need to worry about the next numbers (from 1 to i - 1) because greater numbers on the right are disregarded (will not be a pair).
 
+// e.g. n = 5, k = 3
+  // Number 5: 
+    // Position 4: [_,_,_,_,5]. This generates 0 inverse pairs.
+    // Position 3: [_,_,_,5,_]. This generates 1 inverse pair.
+    // Position 2: [_,_,5,_,_]. This generates 2 inverse pairs.
+    // Position 1: [_,5,_,_,_]. This generates 3 inverse pairs.
+    // Position 0: [5,_,_,_,_]. This generates 4 inverse pairs.
+    // No matter which numbers are put after the 5, it will generate an inverse pair because all coming numbers are smaller.
+    // We already counted the inverse pairs generated when placing the 5, so from now on all next states will only need to worry about 4 positions now, disregarding the number 5 because it's larger than all coming numbers.
+  
 // Time Complexity: O(nk * min(n, k)) 7284ms
 // Space Complexity: O(nk) 58.8MB
 var kInversePairs = function(n, k) {
@@ -32,6 +42,6 @@ var kInversePairs = function(n, k) {
   }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(kInversePairs(3, 0)) // 1
 console.log(kInversePairs(3, 1)) // 2
