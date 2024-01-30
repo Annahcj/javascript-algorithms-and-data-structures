@@ -1,4 +1,4 @@
-// 10036. Minimum Moves to Capture The Queen
+// 3001. Minimum Moves to Capture The Queen
 // There is a 1-indexed 8 x 8 chessboard containing 3 pieces.
 // You are given 6 integers a, b, c, d, e, and f where:
   // (a, b) denotes the position of the white rook.
