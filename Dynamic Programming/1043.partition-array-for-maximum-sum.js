@@ -3,28 +3,50 @@
 // Return the largest sum of the given array after partitioning. Test cases are generated so that the answer fits in a 32-bit integer.
 
 
-// Solution: Recursion w/ Memoization
+// Solution 1: DP - Recursion w/ Memoization
 
-// memo[i] = maximum sum between [i, ..., arr.length] 
+// Memoize each dp(i), where dp(i) = maximum sum for the suffix from index i to index n - 1.
+// For each dp(i), try each partition index j, where i <= j, while keeping track of the current maximum value so far.
+// Record the maximum total sum out of each possible partition.
 
-// Time Complexity: O(nk) 84ms
-// Space Complexity: O(n) 40.1MB
+// n = length of arr
+// Time Complexity: O(nk) 67ms
+// Space Complexity: O(n) 49.5MB
 var maxSumAfterPartitioning = function(arr, k) {
-  let n = arr.length, memo = Array(n);
-  return dfs(0);
+  let n = arr.length, memo = Array(n).fill(-1);
+  return dp(0);
   
-  function dfs(start) {
-    if (start === arr.length) return 0;
-    if (memo[start] !== undefined) return memo[start];
+  function dp(i) {
+    if (i === n) return 0;
+    if (memo[i] !== -1) return memo[i];
     
-    let max = 0, ans = 0;
-    for (let i = start; i < Math.min(start + k, n); i++) { // try out all window sizes from 1 to k
-      max = Math.max(max, arr[i]); 
-      let len = i - start + 1, sum = max * len; // len = window size, sum is the sum of the new values
-      ans = Math.max(ans, sum + dfs(i + 1));
+    let maxSum = 0, currMax = 0;
+    for (let j = i; j < Math.min(n, i + k); j++) {
+      currMax = Math.max(currMax, arr[j]);
+      maxSum = Math.max(maxSum, (j - i + 1) * currMax + dp(j + 1));
     }
-    return memo[start] = ans;
-  }  
+    return memo[i] = maxSum;
+  }
+};
+
+
+// Solution 2: DP - Bottom Up & Iterative
+
+// Iterative, bottom-up DP.
+// Each dp[i] = maximum sum for (arr[0], ..., arr[i]).
+
+// Time Complexity: O(nk) 64ms
+// Space Complexity: O(n) 48.3MB
+var maxSumAfterPartitioning = function(arr, k) {
+  let n = arr.length, dp = Array(n + 1).fill(0);  
+  for (let i = 0; i < n; i++) {
+    let currMax = 0;
+    for (let j = i; j >= Math.max(0, i - k + 1); j--) {
+      currMax = Math.max(currMax, arr[j]);
+      dp[i + 1] = Math.max(dp[i + 1], (i - j + 1) * currMax + dp[j]);
+    }
+  }
+  return dp[n];
 };
 
 // Three test cases 
