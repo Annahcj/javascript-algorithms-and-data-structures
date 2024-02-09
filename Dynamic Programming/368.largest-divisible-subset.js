@@ -5,41 +5,49 @@
 // If there are multiple solutions, return any of them.
 
 
-// Solution: Dynamic Programming
+// Solution: DP
 
-// 1. Sort nums in asc order
-// 2. Use dynamic programming to record the longest subset lengths at each position.
-// 3. Find the longest subset backwards, then reverse.
+// Sort nums in asc order.
+// Build up the subset taking the numbers in sorted order.
+// When we take a new number, it must be a multiple of the last number (the largest number) in the subset so far.
+// Reasoning: Because every number is a multiple of the last, it will always be a multiple of all numbers in the subset so far.
 
-// Time Complexity: O(n^2 + n log(n)) 100ms
-// Space Complexity: O(n) 40.5MB
+// Use DP to find the longest subset ending at each nums[i], after sorting.
+// dp[i] = longest subset ending at nums[i], where nums[i] is the largest number in the subset.
+// For each dp[i], go through all possible previous numbers and take the dp[j] with the maximum length.
+
+// Since we need to return the numbers in the subset, additionally keep track of the previous index in the subset.
+// At the end, we can use the chain of previous indices to find the result array.
+
+// n = length of nums
+// Time Complexity: O(n^2) 74ms
+// Space Complexity: O(n) 51.4MB
 var largestDivisibleSubset = function(nums) {
-  let n = nums.length;
   nums.sort((a, b) => a - b);
-  let maxLen = 1;
-  let dp = Array(n).fill(1);
-  for (var i = 0; i < n; i++) {
-    for (var j = i - 1; j >= 0; j--) {
+  let n = nums.length, dp = Array(n).fill(1);
+  let resultIndex = 0, prev = Array(n).fill(-1);
+  for (let i = 1; i < n; i++) {
+    for (let j = 0; j < i; j++) {
       if (nums[i] % nums[j] === 0) {
-        dp[i] = Math.max(dp[i], dp[j] + 1);
-        // record max length
-        maxLen = Math.max(maxLen, dp[i]);
+        if (dp[j] + 1 > dp[i]) {
+          dp[i] = dp[j] + 1;
+          prev[i] = j;
+        }
       }
     }
-  }
-  let res = [];
-  for (var i = n - 1; i >= 0; i--) {
-    // if length is maxLen so far, and res is empty or last item is divisible by nums[i], push into res and decrement maxLen.
-    if (dp[i] === maxLen && (!res.length || res[res.length - 1] % nums[i] === 0)) {
-      res.push(nums[i]);
-      maxLen--;
+    if (dp[i] > dp[resultIndex]) {
+      resultIndex = i;
     }
-    if (maxLen === 0) break;
   }
-  return res.reverse();
+  let subset = [];
+  while (resultIndex !== -1) {
+    subset.push(nums[resultIndex]);
+    resultIndex = prev[resultIndex];
+  }
+  return subset.reverse();
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(largestDivisibleSubset([2,3,4,8])) // [2,4,8]
 console.log(largestDivisibleSubset([1,2,3])) // [1,2]
 console.log(largestDivisibleSubset([1,2,4,8])) // [1,2,4,8]
