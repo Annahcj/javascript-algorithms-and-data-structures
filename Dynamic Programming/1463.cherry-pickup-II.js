@@ -11,40 +11,37 @@
   // Both robots should reach the bottom row in grid.
 
 
-// Solution: DP - Recursion w/ Memoization
+// Solution: DP
 
-// In order to calculate the results correctly, we must simulate both robots moving at the same time.
-// When the two robots are on the same spot, we only add the cherries once.
+// Memoize each dp(row, col1, col2), where
+  // row = the current row
+  // col1 = the previous column of robot #1
+  // col2 = the previous column of robot #2
 
-// Each robot has 3 different locations they can move to: Left down, straight down, right down.
-// In total, that means that there are 9 different combinations of how the two robots can move.
+// For each dp(row, col1, col2), go through each possible combination of cells that the two robots can take from the current row.
+// There are at most 9 different combinations (three positions for robot #1, three positions for robot #2)
+// If both robots take the same cell, only count the cherries once.
 
-// Time Complexity: O(mn^2) 925ms
-// Space Complexity: O(mn^2) 67.5MB
+// m = number of rows, n = number of columns
+// Time Complexity: O(9mn^2) 109ms
+// Space Complexity: O(mn^2) 55.4MB
 var cherryPickup = function(grid) {
-  // they will be on the same row anyway
-  // so we just need to keep track of row, col1, col2
   let m = grid.length, n = grid[0].length;
-  let memo = {};
-  return recurse(0, 0, n - 1);
-
-  function recurse(row, col1, col2) {
-    if (row >= m || col1 < 0 || col1 >= n|| col2 < 0 || col2 >= n) return 0;
-    if (memo[`${row},${col1},${col2}`] !== undefined) return memo[`${row},${col1},${col2}`];
-
-    let ans = 0;
-    ans += grid[row][col1];
-    if (col1 !== col2) ans += grid[row][col2];
-
-    let max = 0;
-    for (let newCol1 = col1 - 1; newCol1 <= col1 + 1; newCol1++) {
-      for (let newCol2 = col2 - 1; newCol2 <= col2 + 1; newCol2++) {
-        max = Math.max(max, recurse(row + 1, newCol1, newCol2));
+  let memo = Array(m).fill(0).map(() => Array(n).fill(0).map(() => Array(n).fill(-1)));
+  return grid[0][0] + grid[0][n - 1] + dp(1, 0, n - 1);
+  
+  function dp(row, col1, col2) {
+    if (row === m) return 0;
+    if (memo[row][col1][col2] !== -1) return memo[row][col1][col2];
+    
+    let maxCherries = 0;
+    for (let nextCol1 = Math.max(0, col1 - 1); nextCol1 <= Math.min(n - 1, col1 + 1); nextCol1++) {
+      for (let nextCol2 = Math.max(0, col2 - 1); nextCol2 <= Math.min(n - 1, col2 + 1); nextCol2++) {
+        let cherries = nextCol1 === nextCol2 ? grid[row][nextCol1] : grid[row][nextCol1] + grid[row][nextCol2];
+        maxCherries = Math.max(maxCherries, cherries + dp(row + 1, nextCol1, nextCol2));
       }
     }
-    ans += max;
-    memo[`${row},${col1},${col2}`] = ans;
-    return ans;
+    return memo[row][col1][col2] = maxCherries;
   }
 };
 
