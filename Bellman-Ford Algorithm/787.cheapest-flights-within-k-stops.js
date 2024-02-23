@@ -5,40 +5,28 @@
 
 // Solution: Bellman-Ford Algorithm
 
-// Dynamic Programming Approach
-// Keep two arrays, prev and curr (Arrays with length of n)
-// Fill up prev and curr with Infinity
-// Set prev[src] to 0 (since we are already at the src)
-// Note: K stops means a maximum of k + 1 edges, so we can loop k times (since we have already calculated 0 edges ^^).
-// Loop from 1 to k + 1 *
-    // set curr[src] to 0 (since that is the origin)
-    // loop through each [source, dest, weight] in flights **
-        // if prev[source] is smaller than Infinity (valid path before)
-            // set curr[dest] to Math.min(curr[dest], prev[source] + weight)
-    // **
-    // set prev to deep copy of curr
-// *
-// If curr[dst] is Infinity (not found), return -1, otherwise return curr[dst]
+// Keep track of the minimum distance from src to each other city.
+// Initialize the distance from src -> src = 0.
 
-// e = edges, n = number of nodes
-// Time Complexity: O(k * e) 158ms
-// Space Complexity: O(n) 44.7MB
+// Iterate through flights k + 1 times, updating the minimum distances from src -> each node at each iteration.
+// This algorithm ensures that at each iteration i, we use at most i stops.
+
+// k = number of stops, m = number of flights
+// Time Complexity: O(k * (m + n)) 95ms
+// Space Complexity: O(n) 57.6MB
 var findCheapestPrice = function(n, flights, src, dst, k) {
-  let prev = Array(n).fill(Infinity);
-  prev[src] = 0;
-  let curr = Array(n).fill(Infinity);
-  curr[src] = 0;
-  for (var i = 0; i <= k; i++) {
-    for (var [source, targ, weight] of flights) {
-      if (prev[source] !== Infinity) {
-        curr[targ] = Math.min(curr[targ], prev[source] + weight);
-      }
+  let prevDist = Array(n).fill(Infinity);
+  prevDist[src] = 0; // src -> src = 0
+  for (let i = 0; i <= k; i++) {
+    let dist = [...prevDist];
+    for (let [from, to, price] of flights) {
+      dist[to] = Math.min(dist[to], prevDist[from] + price);
     }
-    prev = [...curr];
+    prevDist = dist;
   }
-  return curr[dst] === Infinity ? -1 : curr[dst];
+  return prevDist[dst] === Infinity ? -1 : prevDist[dst];
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(findCheapestPrice(3, [[0,1,100],[1,2,100],[0,2,500]], 0, 2, 1)) // 200
 console.log(findCheapestPrice(3, [[0,1,100],[1,2,100],[0,2,500]], 0, 2, 0)) // 500
