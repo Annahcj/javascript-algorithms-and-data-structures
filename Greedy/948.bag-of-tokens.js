@@ -17,23 +17,25 @@
 // Keep track of the current power and score we have.
 // When we run out of power, take tokens from the back until we have enough power to get a token from the front.
 
-// Time Complexity: O(n log(n)) 113ms
-// Space Complexity: O(log(n)) (space for sorting) 43.7MB
+// Time Complexity: O(n log(n)) 61ms
+// Space Complexity: O(log(n)) (space for sorting) 50.5MB
 var bagOfTokensScore = function(tokens, power) {
   tokens.sort((a, b) => a - b);
-  let i = 0, j = tokens.length - 1, score = 0;
-  while (i <= j) {
-    while (j > i && power < tokens[i] && score > 0) {
-      power += tokens[j--];
-      score--;
+  let left = 0, right = tokens.length - 1;
+  let score = 0;
+  while (left < right) {
+    if (power >= tokens[left]) {
+      power -= tokens[left];
+      left++, score++;
+    } else if (score > 0) {
+      power += tokens[right];
+      right--, score--;
+    } else {
+      break;
     }
-    if (power >= tokens[i]) {
-      power -= tokens[i];
-      score++;
-    }
-    i++;
   }
-  return score;
+  score += power >= tokens[left] ? 1 : 0;
+  return Math.max(0, score);
 };
 
 // Three test cases 
