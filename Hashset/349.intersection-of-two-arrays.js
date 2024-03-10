@@ -2,21 +2,24 @@
 // Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
 
 
-// Solution: Hashsets
+// Solution: Hashset
 
-// Hashsets keep the unique values only, so we can turn nums1 and nums2 into two hashsets.
-// Loop through set1 and get the values that are also present in set2.
+// 1. Add all numbers from nums1 into a hashset.
+// 2. Go through each number in nums2.
+  // If it exists in nums1Set, add the number to the answer and remove it from nums1Set to prevent duplicates in the answer.
 
-// n = nums1.length, m = nums2.length
-// Time Complexity: O(n + m) 91ms
-// Space Complexity: O(n + m) 39.7MB
+// n = length of nums1, m = length of nums2
+// Time Complexity: O(n + m) 49ms
+// Space Complexity: O(n) 50.4MB
 var intersection = function(nums1, nums2) {
-  let set1 = new Set(nums1), set2 = new Set(nums2);
-  let res = [];
-  for (var num of set1) {
-    if (set2.has(num)) res.push(num);
+  let nums1Set = new Set(nums1), intersection = [];
+  for (let num of nums2) {
+    if (nums1Set.has(num)) {
+      intersection.push(num);
+      nums1Set.delete(num);
+    }
   }
-  return res;
+  return intersection;
 };
 
 // Follow Up solution: Two Pointers for Sorted Arrays
@@ -42,6 +45,6 @@ var intersection = function(nums1, nums2) {
   return res;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(intersection([1,2,2,1], [2,2])) // [2]
 console.log(intersection([4,9,5], [9,4,9,8,4])) // [9,4]
