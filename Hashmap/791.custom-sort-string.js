@@ -4,26 +4,21 @@
 // Return any permutation of str (as a string) that satisfies this property.
 
 
-// Solution: Map Order and Count Occurances
+// Solution: Assign Order Index & Sort
 
-// Traverse order and map each letter into 'map'
-// Traverse str and add occurance of each character in 'map', if it's not in map, then add to unsorted string.
-// Loop through each key in map (since they will be in the order it was put in), and add each char the number of times it occurs in str to ans.
-// Return ans (sorted string) + rest (unsorting string).
+// 1. Assign an index for each lowercase character based on the order it appears in `order`. 
+  // Characters that don't appear in `order` will be given an index of -1.
+// 2. Sort s based on the order indexes.
 
-// Time Complexity: O(order.length + str.length) 64ms
-// Space Complexity: O(order.length) 39.3MB
-var customSortString = function(order, str) {
-  let map = {}, rest = '', ans = '';
-  for (var i = 0; i < order.length; i++) map[order[i]] = 1;
-  for (var j = 0; j < str.length; j++) {
-    if (map[str[j]]) map[str[j]]++;
-    else rest += str[j];
+// n = length of s
+// Time Complexity: O(n log(n)) 50ms
+// Space Complexity: O(n) 48.7MB
+var customSortString = function(order, s) {
+  let indexes = Array(26).fill(-1);
+  for (let i = 0; i < order.length; i++) {
+    indexes[order.charCodeAt(i) - 97] = i;
   }
-  for (var char in map) {
-    ans += char.repeat(map[char] - 1);
-  }
-  return ans + rest;
+  return s.split("").sort((a, b) => indexes[a.charCodeAt() - 97] - indexes[b.charCodeAt() - 97]).join("");
 };
 
 // Three test cases 
