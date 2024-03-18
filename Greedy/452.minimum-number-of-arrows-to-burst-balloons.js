@@ -4,34 +4,27 @@
 // Given the array points, return the minimum number of arrows that must be shot to burst all balloons.
 
 
-// Solution: Greedy Approach w/ Sorting
+// Solution: Greedy w/ Sorting
 
-// Thoughts:
-// Sort in asc order by end point
-// Set 'end' to the first end point.
-// Loop through each [currStart, currEnd] in points
-  // (greedily take as many balloons as you can based on the 'end')
-  // if currStart is bigger than end (not overlapping)
-    // increment ans by one (take another arrow)
-    // update end to currEnd
-// Return ans.
+// Sort the points by end, in asc order.
+// Use an arrow on the end coordinate when the previous arrow doesn't overlap with the current balloon.
+// Because the points are sorted by end, we are able to use the current arrow for other balloons on the right side, until we encounter a balloon it doesn't overlap with.
 
-// Time Complexity: O(n log(n)) 326ms
-// Space Complexity: O(log(n)) 67.4MB
+// Time Complexity: O(n log(n)) 218ms
+// Space Complexity: O(log(n)) (space for sorting) 73.2MB
 var findMinArrowShots = function(points) {
-  let ans = 1;
+  let prevArrow = -Infinity, arrows = 0;
   points.sort((a, b) => a[1] - b[1]);
-  let end = points[0][1];
-  for (var [currStart, currEnd] of points) {
-    if (currStart > end) {
-      ans++;
-      end = currEnd;
+  for (let [start, end] of points) {
+    if (start > prevArrow || end < prevArrow) {
+      prevArrow = end;
+      arrows++;
     }
   }
-  return ans;
+  return arrows;
 };
 
-// Three test cases to run function on
+// Three test cases
 console.log(findMinArrowShots([[10,16],[2,8],[1,6],[7,12]])) // 2
 console.log(findMinArrowShots([[1,2],[3,4],[5,6],[7,8]])) // 4
 console.log(findMinArrowShots([[1,2],[2,3],[3,4],[4,5]])) // 2
