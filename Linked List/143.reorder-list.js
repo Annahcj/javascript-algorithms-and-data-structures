@@ -1,65 +1,55 @@
 // 143. Reorder List
+// You are given the head of a singly linked-list. The list can be represented as:
+  // L0 → L1 → … → Ln - 1 → Ln
+// Reorder the list to be on the following form:
+  // L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+// You may not modify the values in the list's nodes. Only nodes themselves may be changed.
 
-// LeetCode provided ListNode
-function ListNode(val, next) {
-  this.val = (val===undefined ? 0 : val)
-  this.next = (next===undefined ? null : next)
-}
 
-// generates a linked list from an array (TESTING PURPOSES ONLY!)
-function makeLL(arr) {
-  let head = new ListNode(), node = head;
-  for (var num of arr) {
-    node.next = new ListNode(num);
-    node = node.next;
-  }
-  return head.next;
-}
+// Solution: Slow & Fast Pointers + Reverse List
 
-// Solution: Two Pointers, Reverse Second Half, Merge Together
+// 1. Use slow and fast pointers to find the middle of the list.
+  // Find the middle of the list: 
+    // Odd list: 1 -> __2__ -> 3 -> 4 -> 5
+    // Even list: 1 -> __2__ -> 3 -> 4
+  // Reverse and sever the list starting from the next node after the 'middle'.
+// 2. Reverse the second half of the list.
+// 3. Use the first half and reversed second half to build the final intertwined list.
 
-// This problem can be solved with a combination of three techniques.
-
-// 1. Find the mid-point (if length is even, the second node)
-  // Use slow & fast runner algorithm to find the mid-point
-// 2. Reverse the second-half
-// 3. Merge the two lists back together
-
-// Time Complexity: O(n) 112ms
-// Space Complexity: O(1) 46.9MB
+// n = number of nodes in the list
+// Time Complexity: O(n) 74ms
+// Space Complexity: O(1) 57.8MB
 var reorderList = function(head) {
-  // find mid-point (start of second half)
   let slow = head, fast = head;
-  while (fast && fast.next) {
+  while (fast.next && fast.next?.next) {
     slow = slow.next;
     fast = fast.next.next;
   }
-
-  // reverse second-half 
-  function reverse(node) {
-    let prev = null;
-    while (node) {
-      let next = node.next;
-      node.next = prev;
-      prev = node;
-      node = next;
-    }
-    return prev;
+  if (slow.next) {
+    let next = slow.next;
+    slow.next = null;
+    slow = next;
   }
-
-  let list2 = reverse(slow), list1 = head;
-  // merge back
-  while (list1.next && list2.next) {
-    let list1Next = list1.next;
-    let list2Next = list2.next;
-    list1.next = list2;
-    list2.next = list1Next;
-    list1 = list1Next;
-    list2 = list2Next;
+  let reversedSecondHalf = reverse(slow);
+  let node = head;
+  while (node && reversedSecondHalf) {
+    let next = node.next;
+    node.next = reversedSecondHalf;
+    let secondHalfNext = reversedSecondHalf.next;
+    reversedSecondHalf.next = next;
+    reversedSecondHalf = secondHalfNext;
+    node = next;
   }
-  return head;  
+  return head;
 };
 
-// Two test cases to run function on
-console.log(reorderList(makeLL([1,2,3,4]))) // [1,4,2,3]
-console.log(reorderList(makeLL([1,2,3,4,5]))) // [1,5,2,4,3]
+function reverse(head) {
+  let prev = null;
+  while (head) {
+    let next = head.next;
+    head.next = prev;
+    prev = head;
+    head = next;
+  }
+  return prev;
+}
