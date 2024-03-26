@@ -3,26 +3,53 @@
 // You must implement an algorithm that runs in O(n) time and uses constant extra space.
 
 
-// Solution: Swap~sort into Place
+// Solution 1: Mark Visited as Negative
 
-// Thoughts:
+// 1. First pass through nums to get the minimum positive number.
+// 2. Second pass through nums to turn all negative numbers to the minimum positive number (they are not positive, so we ignore them. we can't turn them into 0 or negative).
+// 3. Third pass through nums, marking each nums[nums[i]] as negative to indicate it is present in the array.
+// 4. Fourth pass through nums to find the first index with a positive value, indicating it is not present in the array.
+  // If all numbers are negative, then return nums.length + 1
+
+// Time Complexity: O(n) 83ms
+// Space Complexity: O(1) 58.9MB
+var firstMissingPositive = function(nums) {
+  let n = nums.length, min = Infinity;
+  for (let i = 0; i < n; i++) {
+    if (nums[i] > 0) {
+      min = Math.min(min, nums[i]);
+    }
+  }
+  if (min === Infinity) return 1;
+  for (let i = 0; i < n; i++) {
+    if (nums[i] <= 0) {
+      nums[i] = min;
+    }
+  }
+  for (let num of nums) {
+    let value = Math.abs(num) - 1;
+    if (nums[value] > 0) {
+      nums[value] = -nums[value];
+    }
+  }
+  for (let i = 0; i < n; i++) {
+    if (nums[i] > 0) {
+      return i + 1;
+    }
+  }
+  return n + 1;
+};
+
+
+// Solution 2: Swap~sort into Place
+
 // One thing to note is that our answer will always be within [1 to n+1] (n being the length of nums), so we can basically disregard anything smaller than 1 and bigger than the length of nums.
-// With that in mind, we could make use of the input array nums to store each number in nums at the index of itself. 
-// Because of the 0-index, we would store each number at itself - 1. 
-// After the have finished, we can simply loop through nums and find the first number which is not equal to its index + 1.
+// With that in mind, we can make use of the input array nums to store each number in nums at the index of itself.
+// Because of the 0-index, we store each number at nums[nums[i] - 1].
+// At the end, loop through nums and find the first number which is not equal to its index + 1.
 
-// Algorithm:
-// Loop through nums (pointer = i),
-  // Define index to be nums[i] - 1 
-  // If the number at index is not already nums[i], and nums[i] is bigger than 0, and smaller than or equal to the length of nums, 
-    // Swap nums[i] into the place of index (nums[i] - 1)
-    // Then decrement i to account for the new number we just swapped in
-// When iteration is done, loop through nums one more time (pointer = j)
-  // If nums[j] isn't the right number (not equal to j + 1), return j + 1.
-// If iteration is finished and we got through the entire array, return the length of nums + 1. (the worst case: the contents of nums was every individual number from 1 to n).
-
-// Time Complexity: O(n) (technically O(2n)) 108ms
-// Space Complexity: O(1) 57.5MB
+// Time Complexity: O(n) 74ms
+// Space Complexity: O(1) 55.3MB
 var firstMissingPositive = function(nums) {
   let n = nums.length;
   for (let i = 0; i < nums.length; i++) {
