@@ -5,29 +5,13 @@
 // A subarray is a contiguous part of an array.
 
 
-// Solution: Sliding Window w/ Hashmap
+// Solution 1: Sliding Window w/ Hashmap
 
 // Create a function 'subarrays', which counts the number of subarrays of any length with At MOST k distinct numbers
-// subarrays: (k)
-  // create a hashmap 'count' which records the frequency of each number
-  // set left to 0, ans (answer) to 0
-
-  // loop from 0 to n (pointer = right)
-    // if count[nums[right]] is equal to 0 or null (new to the subarray anyway), decrement k by one
-    // increment count[nums[right]] by one
-
-    // loop while k is smaller than 0
-      // decrement count[nums[left]] by one
-      // if count[nums[left]] is equal to 0 (whichever is fastest), increment k by one
-      // increment left pointer by one
-    
-    // add right - left + 1 to ans
-  // return ans
-
-// Return subarrays(k) - subarrays(k - 1) (this way, it returns the number of subsequences that contain exactly k distinct numbers)
+// Return subarrays(k) - subarrays(k - 1) (this way, it returns the number of subarrays that contain exactly k distinct numbers)
 
 // Time Complexity: O(n) 112ms
-// Space Complexity: O(k) 47.2MB
+// Space Complexity: O(n) 47.2MB
 var subarraysWithKDistinct = function(nums, k) {
   return subarrays(k) - subarrays(k - 1);
 
@@ -46,6 +30,43 @@ var subarraysWithKDistinct = function(nums, k) {
     }
     return ans;
   }  
+};
+
+
+// Solution 2: Sliding Window - One Pass
+
+// Maintain a sliding window (of minimum length) with exactly k distinct integers.
+// Two pointers to mark the start and end of the window.
+// The right pointer moves up incrementally.
+// When the window has k integers, move the left pointer up until the window no longer has k distinct integers. This is needed to count the number of subarrays starting at different indices but still contain k distinct integers.
+// Count the number of subarrays ending at each index j.
+
+// Time Complexity: O(n) 55ms
+// Space Complexity: O(n) 55.7MB
+var subarraysWithKDistinct = function(nums, k) {
+  let n = nums.length, count = {}, distinct = 0;
+  let leftSubarrays = 1, goodSubarrays = 0;
+  for (let j = 0, i = 0; j < n; j++) {
+    count[nums[j]] = (count[nums[j]] || 0) + 1;
+    if (count[nums[j]] === 1) distinct++;
+    if (distinct > k) {
+      while (distinct > k) {
+        count[nums[i]]--;
+        if (count[nums[i]] === 0) distinct--;
+        i++;
+      }
+      leftSubarrays = 1; // reset, this count is obsolete because the window has > k distinct integers
+    }
+    while (distinct === k && count[nums[i]] !== 1) {
+      count[nums[i]]--;
+      i++;
+      leftSubarrays++;
+    }
+    if (distinct === k) {
+      goodSubarrays += leftSubarrays;
+    }
+  }
+  return goodSubarrays;
 };
 
 // Two test cases
