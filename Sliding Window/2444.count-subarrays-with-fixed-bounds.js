@@ -9,21 +9,25 @@
 
 // Solution: Sliding Window & Logic 
 
-// Process each group consisting of numbers within (minK, ..., maxK).
+// Maintain a sliding window consisting of numbers in the range (minK, ..., maxK).
 // For each index j, count the number of valid subarrays ending at index j.
-  // Keep track of the start of the current group (index i).
-  // Keep track of the maximum index of an occurance of minK and the maximum index of an occurance of maxK.
+  // Keep track of the start of the current window (index i).
+  // Keep track of the rightmost index of an occurance of minK and the rightmost index of an occurance of maxK.
   // The number of valid subarrays ending at index j is (min(maxKIndex, minKIndex) - i + 1). This is because we need both minK and maxK present in the subarrays.
+    // The shortest subarray with both minK and maxK is (min(maxKIndex, minKIndex), ..., j).
+    // The number of subarrays within the window that extends the shortest subarray is: min(maxKIndex, minKIndex) - i + 1
 
-// Time Complexity: O(n) 146ms
-// Space Complexity: O(1) 50.1MB
+// Time Complexity: O(n) 78ms
+// Space Complexity: O(1) 60MB
 var countSubarrays = function(nums, minK, maxK) {
+  if (minK > maxK) return 0;
   let n = nums.length, ans = 0;
   let maxMinIndex = -1, maxMaxIndex = -1;
   for (let j = 0, i = 0; j < n; j++) {
     if (nums[j] === minK) maxMinIndex = j;
     if (nums[j] === maxK) maxMaxIndex = j;
     if (nums[j] < minK || nums[j] > maxK) {
+      // reset the window
       i = j + 1;
       maxMinIndex = -1, maxMaxIndex = -1;
     } else {
