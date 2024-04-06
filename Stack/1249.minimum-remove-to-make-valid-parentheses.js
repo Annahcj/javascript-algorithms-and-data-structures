@@ -3,45 +3,43 @@
 // Your task is to remove the minimum number of parentheses ( '(' or ')', in any positions ) so that the resulting parentheses string is valid and return any valid string.
 
 
-// Solution: Stack
+// Solution: Two Passes w/ Counter
 
-// Loop through s (pointer = i),
-  // If s[i] is a '(', push the index (i) into the stack
-  // Else if s[i] is a ')', 
-    // If stack is empty, that means s[i] is an invalid parenthesis, so we push i into a seperate array 'toRemove'.
-    // Else, pop the last item off stack.
-// When iteration is done, we now have the indexes of parentheses that we need to remove.
-// Loop through stack and push each index into 'toRemove'.
-// Loop through s (pointer = h), also keeping a pointer r to indicate where we are in toRemove.
-  // If h is equal to index in toRemove (toRemove[r]), increment r. 
-  // Else, add s[h] to result.
-// When iteration is done, return result.
+// Keep track of a counter which indicates the current balance of the parenthesis string.
+// From left-to-right, remove closing brackets which don't have a corresponding opening bracket (when balance is 0).
+// From right-to-left, remove opening brackets which don't have a corresponding closing bracket on the right (when balance is 0).
 
-// Time Complexity: O(n) 96ms
-// Space Complexity: O(n) 46.4MB
+// Time Complexity: O(n) 88ms
+// Space Complexity: O(n) 60.6MB
 var minRemoveToMakeValid = function(s) {
-  let stack = [], toRemove = [], result = '';
-  for (let i = 0; i < s.length; i++) {
+  let n = s.length, balance = 0, arr = [];
+  for (let i = 0; i < n; i++) {
+    arr.push(s[i]);
     if (s[i] === '(') {
-      stack.push(i);
+      balance++;
     } else if (s[i] === ')') {
-      if (!stack.length) {
-        toRemove.push(i);
-      } else {
-        stack.pop();
+      balance--;
+      if (balance < 0) {
+        balance = 0;
+        arr.pop();
+      }
+    } 
+  }
+  balance = 0;
+  let res = [];
+  for (let i = arr.length - 1; i >= 0; i--) {
+    res.push(arr[i]);
+    if (arr[i] === ')') {
+      balance++;
+    } else if (arr[i] === '(') {
+      balance--;
+      if (balance < 0) {
+        balance = 0;
+        res.pop();
       }
     }
   }
-  for (let j = 0; j < stack.length; j++) toRemove.push(stack[j]);
-  let r = 0;
-  for (let h = 0; h < s.length; h++) {
-    if (h === toRemove[r]) {
-      if (r < toRemove.length - 1) r++;
-    } else {
-      result += s[h];
-    }
-  }
-  return result;
+  return res.reverse().join("");
 };
 
 // Four test cases 
