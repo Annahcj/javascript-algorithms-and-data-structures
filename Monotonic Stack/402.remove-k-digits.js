@@ -5,40 +5,35 @@
 // Solution: Monotonic Increasing Stack
 
 // Maintain a monotonic increasing stack of digits.
-// While k is bigger than 0, make the smallest possible integer by popping off larger elements as early on as possible.
-// Removing larger digits earlier (on the left) is always better than later.
+// It's optimal to remove larger digits in the most significant positions (as left as possible).
+// If num[i] > num[i + 1], remove num[i].
 
-// Leading zeros case: The leading zeros will always override the digits in front of it, so we can treat it the same as other digits.
-  // After processing all the digits, ignore the leading zeros when generating the final string num.
-// When digits are already in increasing order or k is still bigger than 0 after processing: Pop off extra digits while k is still positive. 
+// Ignore leading zeros - don't push them onto the stack.
+// When digits are already in increasing order or k is still bigger than 0 after processing: Remove extra digits on the end while k is still positive. 
 
-// Time Complexity: O(n) 78ms
-// Space Complexity: O(n) 43.9MB
+// Time Complexity: O(n) 60ms
+// Space Complexity: O(n) 50MB
 var removeKdigits = function(num, k) {
-  let stack = [], n = num.length;
+  let n = num.length, stack = [];
   for (let i = 0; i < n; i++) {
-    let val = +num[i];
-    while (k > 0 && stack.length && stack[stack.length - 1] > val) {
-      k--;
+    while (stack.length && stack[stack.length - 1] > num[i] && k > 0) {
       stack.pop();
+      k--;
     }
-    stack.push(val);
+    if (!isLeadingZero(stack, num[i])) {
+      stack.push(num[i]); 
+    }
   }
-
-  while (k > 0) {
-    stack.pop();
-    k--;
-  }
-  
-  let res = '';
-  for (let digit of stack) {
-    if (!res.length && digit == 0) continue; // ignore leading zeros
-    res += digit;
-  }
-  return res.length === 0 ? '0' : res; // the default is 0 if res is empty
+  // If k > 0 at this point, the stack is in increasing order and we want to remove the last k characters from the stack
+  if (stack.length - k <= 0) return '0';
+  return stack.slice(0, stack.length - k).join("");
 };
 
-// Three test cases to run function on
+function isLeadingZero(stack, num) {
+  return stack.length === 0 && num === '0';
+}
+
+// Three test cases
 console.log(removeKdigits("1432219", 3)) // "1219"
 console.log(removeKdigits("10200", 1)) // "200"
 console.log(removeKdigits("10", 3)) // "0"
