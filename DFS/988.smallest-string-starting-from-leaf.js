@@ -8,29 +8,25 @@
 
 // Solution: DFS
 
-// Recursively DFS from root, keep track of the current string.
-// When we reach a leaf node, reverse the string and compare it against the current lexicographically smallest string.
+// Use DFS to traverse all paths from the root to a leaf, while keeping track of the current string.
+// Record and return the lexicographically smallest string.
 
-// Time Complexity: O(n^2) 170ms
-  // O(n^2) because appending to a string costs O(n)
-// Space Complexity: O(n) 50.4MB
+// n = number of nodes in the tree
+// Time Complexity: O(n^2) 67ms
+// Space Complexity: O(n^2) 55.1MB
 var smallestFromLeaf = function(root) {
-  let res = null;
+  let res = "";
   dfs(root, "");
   return res;
   
   function dfs(node, str) {
-    str += String.fromCharCode(node.val + 97);
+    if (!node) return;
+    str = String.fromCharCode(node.val + 97) + str;
     if (!node.left && !node.right) {
-      res = smaller(res, str.split("").reverse().join(""));
+      res = res === "" || res.localeCompare(str) > 0 ? str : res;
       return;
     }
-    if (node.left) dfs(node.left, str);
-    if (node.right) dfs(node.right, str);
+    dfs(node.left, str);
+    dfs(node.right, str);
   }
 };
-
-function smaller(a, b) {
-  if (a === null) return b;
-  return a.localeCompare(b) <= 0 ? a : b;
-}
