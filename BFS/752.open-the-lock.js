@@ -7,48 +7,47 @@
 
 // Solution: BFS
 
-// Use two queues to keep track of how many steps we have taken and also to avoid using the O(n) shift operation.
-// For each state, loop through the four digits and change each digit forwards and backwards.
-// Keep track of a dead (deadend) set and a seen set.
+// There are at most 10^4 states (10 choices for each wheel, 4 wheels).
+// Use BFS to find the minimum moves to reach each state.
+// Use a hashset to keep track of states we have seen, and don't revisit them.
 
-// n = number of digits, a = number of choices for each digit (0 to 9), d = deadends.length
-// Time Complexity: O(n^2 * a^n + d) 214ms
-// Space Complexity: O(a^n + d) 58.1MB
+// For each state, go through each wheel and move it either backwards or forwards by 1.
+// If we haven't seen the backward or forward states and they are not deadends, we can visit them.
+
+// Time Complexity: O(10^4 * 4^2 + deadends) 178ms
+// Space Complexity: O(10^4 + deadends) 62.7MB
 var openLock = function(deadends, target) {
-  let dead = new Set();
-  for (var deadend of deadends) dead.add(deadend);
-  let seen = new Set(['0000']);
-  let steps = 0;
-  let queue = ['0000'];
+  let deadendsSet = new Set(deadends);
+  if (deadendsSet.has('0000')) return -1;
+  let queue = ['0000'], seen = new Set(['0000']);
+  let moves = 0;
   while (queue.length) {
     let next = [];
     while (queue.length) {
       let state = queue.pop();
-      if (dead.has(state)) continue; // if it is a deadend, skip.
-      if (state === target) return steps; // if target is reached, return the number of steps.
-      for (var i = 0; i < 4; i++) {
-        let digit = +state[i];
-        let forward = (digit + 1) % 10; // move dial in clockwise direction
-        let backward = (digit + 9) % 10; // move dial in anti-clockwise direction
-        let forwardState = state.slice(0, i) + forward + state.slice(i + 1); 
-        let backwardState = state.slice(0, i) + backward + state.slice(i + 1);
-        if (!seen.has(forwardState)) {
-          next.push(forwardState);
-          seen.add(forwardState);
+      if (state === target) return moves;
+      for (let i = 0; i < 4; i++) {
+        let back = (((Number(state[i]) - 1) + 10) % 10).toString();
+        let forward = ((Number(state[i]) + 1) % 10).toString();
+        let backState = state.slice(0, i) + back + state.slice(i + 1);
+        let forwardState = state.slice(0, i) + forward + state.slice(i + 1);
+        if (!deadendsSet.has(backState) && !seen.has(backState)) {
+          seen.add(backState);
+          next.push(backState);
         }
-        if (!seen.has(backwardState)) {
-          next.push(backwardState);
-          seen.add(backwardState);
+        if (!deadendsSet.has(forwardState) && !seen.has(forwardState)) {
+          seen.add(forwardState);
+          next.push(forwardState);
         }
       }
     }
+    moves++;
     queue = next;
-    steps++;
   }
-  return -1; 
+  return -1;
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(openLock(["0201","0101","0102","1212","2002"], "0202")) // 6
 console.log(openLock(["8888"], "0009")) // 1
 console.log(openLock(["8887","8889","8878","8898","8788","8988","7888","9888"], "8888")) // -1
