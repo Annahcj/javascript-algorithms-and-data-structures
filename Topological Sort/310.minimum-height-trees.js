@@ -6,35 +6,48 @@
 
 // Solution: Topological Sort
 
-// Process each level of leaf nodes ->
-  // find the first batch of leaf nodes (nodes with only one edge)
-  // process the leaf nodes: decrement the indegree of the nodes they are connected to and get the next batch of leaf nodes until we are left with a group of one of two leaf nodes. 
-  // The final group is our answer.
+// Use topological sort to traverse the tree starting from leaf nodes, and work our way in level-by-level until we reach at most 2 middle nodes.
+// Topological sort traverses nodes in a breadth-first manner, meaning that by the time we reach the inner middle nodes, the leaf nodes will be the furthest away.
+// The inner nodes are always guaranteed to be the minimum height roots, because it's in the middle and not skewed such that one side is longer than the other.
 
-// Time Complexity: O(n) 100ms
-// Space Complexity: O(n) 46.6MB
+// Explanation of why there can be at most 2 root nodes:
+  // There can be at most 2 nodes in the middle.
+  // Because the tree cannot have cycles, the only situation with three nodes leftover is:
+    //   1
+    //  / \
+    // 2   3
+  // When there are three middle nodes, the root will ultimately be 1 middle node, as node 1 is the only node still with 2 dependencies, and nodes 2 and 3 are the leaf nodes here.
+
+// n = number of nodes, m = number of edges
+// Time Complexity: O(n + m) 158ms
+// Space Complexity: O(n + m) 71MB
 var findMinHeightTrees = function(n, edges) {
-  let graph = {}, indegrees = Array(n);
-  if (n === 1) return [0];
-  for (var i = 0; i < n; i++) graph[i] = [];
-  for (var [x, y] of edges) { // construct graph
-    graph[x].push(y);
-    graph[y].push(x);
-  } 
-  let queue = [];
-  for (i = 0; i < n; i++) { // get leaf nodes
-    indegrees[i] = graph[i].length;
-    if (indegrees[i] === 1) queue.push(i);
+  let graph = Array(n).fill(0).map(() => []);
+  let indegrees = Array(n).fill(0);
+  for (let [a, b] of edges) {
+    graph[a].push(b);
+    graph[b].push(a);
+    indegrees[a]++;
+    indegrees[b]++;
   }
-  while (n > 2) { // until there are only two nodes remaining
-    n -= queue.length; 
-    let next = []; // process level by level
-    let size = queue.length;
-    for (i = 0; i < size; i++) {
-      let node = queue[i];
-      for (var neighbor of graph[node]) {
-        indegrees[neighbor]--;
-        if (indegrees[neighbor] === 1) next.push(neighbor);
+  let queue = [];
+  for (let node = 0; node < n; node++) {
+    if (indegrees[node] <= 1) {
+      queue.push(node);
+    }
+  }
+  let remaining = n;
+  while (remaining > 2) {
+    let next = [];
+    while (queue.length) {
+      let node = queue.pop();
+      remaining--;
+      while (graph[node].length > 0) {
+        let nei = graph[node].pop();
+        indegrees[nei]--;
+        if (indegrees[nei] === 1) {
+          next.push(nei);
+        }
       }
     }
     queue = next;
@@ -42,7 +55,7 @@ var findMinHeightTrees = function(n, edges) {
   return queue;
 };
 
-// Five test cases to run function on
+// Five test cases
 console.log(findMinHeightTrees(4, [[1,0],[1,2],[1,3]])) // [1]
 console.log(findMinHeightTrees(6, [[3,0],[3,1],[3,2],[3,4],[5,4]])) // [3,4]
 console.log(findMinHeightTrees(1, [])) // [0]
