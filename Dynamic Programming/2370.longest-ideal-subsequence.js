@@ -9,21 +9,24 @@
 
 // Solution: DP
 
-// Populate dp, where dp[i] = longest subsequence ending with character i.
-// For each s[i], take the best result of putting it in front of each character j with an absolute difference <= k.
+// Keep track of the current longest subsequence ending at each lowercase character.
+  // maxLen[i] = longest subsequence ending with character i.
+// Go through each character in s and take the maximum sequence length ending at a character with absolute difference <= k, +1 for the current character.
 
-// Time Complexity: O(nk) 156ms
-// Space Complexity: O(1) 44.6MB
+// Time Complexity: O(nk) 121ms
+// Space Complexity: O(1) 51.5MB
 var longestIdealString = function(s, k) {
-  let n = s.length, dp = Array(26).fill(0);
+  let n = s.length, maxLen = Array(26).fill(0);
   for (let i = 0; i < n; i++) {
-    let charcode = s.charCodeAt(i) - 97, maxLen = 0;
-    for (let j = Math.max(0, charcode - k); j <= Math.min(25, charcode + k); j++) {
-      maxLen = Math.max(maxLen, dp[j] + 1);
+    let charcode = s.charCodeAt(i) - 97;
+    for (let j = charcode; j >= Math.max(0, charcode - k); j--) {
+      maxLen[charcode] = Math.max(maxLen[charcode], 1 + maxLen[j]);
     }
-    dp[charcode] = maxLen;
+    for (let j = charcode + 1; j <= Math.min(25, charcode + k); j++) {
+      maxLen[charcode] = Math.max(maxLen[charcode], 1 + maxLen[j]);
+    }
   }
-  return Math.max(...dp);
+  return Math.max(...maxLen);
 };
 
 // Two test cases
