@@ -3,42 +3,35 @@
 // A falling path with non-zero shifts is a choice of exactly one element from each row of grid such that no two elements chosen in adjacent rows are in the same column.
 
 
-// Solution: Dynamic Programming
+// Solution: DP
 
-// Calculate the minimum path sum for each cell starting from the last row to the first row.
-// For each cell, no matter which cell we are on for the current row, we should always take the same minimum sum path of the row below it.
-// The only path we aren't allowed to take is the one with the same column.
-// For this purpose, we can track two minimums. When the column is the same, take the second minimum. Otherwise we take the minimum.
+// Keep track of the minimum path sum and second minimum path sum from the last row.
+// Note: Store the column along with the sum, so that we can avoid taking a sum if the column is the same.
+// For each row, update the minimum path sum and second minimum path sum.
+// After going through all rows, return the minimum path sum.
 
-// Note that we are modifying the input grid to save space. We can always create a new grid if we want to avoid modifying the input.
-
-// Time Complexity: O(n^2) 98ms
-// Space Complexity: O(1) 44.8MB
+// n = number of rows, number of columns
+// Time Complexity: O(n^2) 62ms
+// Space Complexity: O(1) 52MB
 var minFallingPathSum = function(grid) {
-  let n = grid.length, min = -1, secondMin = -1;
-  for (let j = 0; j < n; j++) {
-    if (min === -1 || grid[n - 1][j] < grid[n - 1][min]) {
-      secondMin = min;
-      min = j;
-    } else if (secondMin === -1 || grid[n - 1][j] < grid[n - 1][secondMin]) {
-      secondMin = j;
-    }
-  }
-  
-  for (let i = n - 2; i >= 0; i--) {
-    let currMin = -1, currSecondMin = -1;
+  let n = grid.length;
+  let prevMin = {col: -1, sum: 0}, prevSecondMin = {col: -1, sum: 0};
+  for (let i = 0; i < n; i++) {
+    let min = {col: -1, sum: Infinity};
+    let secondMin = {col: -1, sum: Infinity};
     for (let j = 0; j < n; j++) {
-      grid[i][j] += min !== j ? grid[i + 1][min] : grid[i + 1][secondMin];
-      if (currMin === -1 || grid[i][j] < grid[i][currMin]) {
-        currSecondMin = currMin;
-        currMin = j;
-      } else if (currSecondMin === -1 || grid[i][j] < grid[i][currSecondMin]) {
-        currSecondMin = j;
+      let sum = prevMin.col === j ? prevSecondMin.sum + grid[i][j] : prevMin.sum + grid[i][j];
+      if (sum < min.sum) {
+        secondMin = min;
+        min = {col: j, sum};
+      } else if (sum < secondMin.sum) {
+        secondMin = {col: j, sum};
       }
     }
-    min = currMin, secondMin = currSecondMin;
+    prevMin = min;
+    prevSecondMin = secondMin;
   }
-  return Math.min(...grid[0]);
+  return prevMin.sum;
 };
 
 // Two test cases 
