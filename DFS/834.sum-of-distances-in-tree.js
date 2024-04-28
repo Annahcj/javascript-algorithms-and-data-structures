@@ -5,77 +5,53 @@
 // Return an array answer of length n where answer[i] is the sum of the distances between the ith node in the tree and all other nodes.
 
 
-// Solution: Two DFS calls
+// Solution: Two DFSs
 
-// Logic:
-// Create two seperate dfs functions, 
-  // 1. Post-order Traversal, counting number of nodes for each subtree and distances to each node in each subtree.
-  // 2. Pre-order Traversal, making use of arrays res and count to calculate distances for every other node apart from root (0).
+// Observe that when moving from a parent node to a child node, the sum of distances from the child node is the same, except that we are:
+  // One node closer to all nodes in the subtree of the child node (than when the parent node was the root).
+  // One node further to all nodes NOT in the subtree of the child node.
 
-// Create two arrays count and res both with a size of n, filled with 0's.
+// We need to find:
+  // 1. The total sum of distances from the root (0).
+  // 2. The count of nodes in each subtree.
 
-// DFS: (root, parent)
-  // Loop through each neighbor in graph[root] *
-    // If neighbor is equal to parent, continue. (skip it since we don't want to go backwards)
-    // call dfs(neighbor, root)
-    // increment count[root] by count[i] 
-    // increment res[root] by res[i] + count[i] 
-  // *
-  // increment count[root] by one (count itself)
+// Perform two DFSs over the tree.
+  // 1. Use post-order DFS to find the total sum of distances from the root, and the count of nodes in each subtree.
+  // 2. Use DFS to calculate the final sum of distances from every node, using the information already calculated from each parent node, starting from the root node.
 
-
-// After dfs is called, the values in res are the sum of the distances of each subtree. 
-// What I mean by subtree is each node as if it's separated from its parent.
-// The root (0) will already have a correct answer.
-
-// The values in count are the number of nodes in each subtree.
-
-
-// DFS2: (root, parent)
-  // Loop through each neighbor in graph[root] *
-    // If neighbor is equal to parent, continue.
-    // set res[neighbor] to res[root] - res[neighbor] + n - res[neighbor]
-    // (explaination of ^^: we have to calculate this value first before calling dfs2 since we need the correct sum of distance for the root)
-    // (for any node, going to a neighbor means getting 1 step closer to ALL nodes in the subtree of neighbor, and 1 step further from ALL nodes NOT in the subtree of neighbor)
-    // then, call dfs2(neighbor, root)
-
-// call dfs(0, -1)
-// call dfs2(0, -1)
-// return res.
-
-// Time Complexity: O(n) 396ms
-// Space Complexity: O(n) 70.6MB
+// Time Complexity: O(n) 327ms
+// Space Complexity: O(n) 89MB
 var sumOfDistancesInTree = function(n, edges) {
-  let graph = {};
-  for (let i = 0; i < n; i++) {
-    graph[i] = [];
-  }
+  let graph = Array(n).fill(0).map(() => []);
   for (let [a, b] of edges) {
     graph[a].push(b);
     graph[b].push(a);
   }
-  let count = Array(n).fill(0), res = Array(n).fill(0);
-  dfs(0, -1);
-  dfs2(0, -1);
-
-  function dfs(root, parent) {
-    for (let i of graph[root]) {
-      if (i === parent) continue;
-      dfs(i, root);
-      count[root] += count[i];
-      res[root] += res[i] + count[i];
+  let distSum = Array(n), count = Array(n);
+  populateDistAndCount(0, -1);
+  getActualDist(0, -1);
+  return distSum;
+  
+  function populateDistAndCount(node, parent) {
+    let currDistSum = 0, currCount = 1;
+    for (let nei of graph[node]) {
+      if (nei === parent) continue;
+      let [neiDist, neiCount] = populateDistAndCount(nei, node);
+      currDistSum += neiCount + neiDist;
+      currCount += neiCount;
     }
-    count[root]++;
+    distSum[node] = currDistSum;
+    count[node] = currCount;
+    return [currDistSum, currCount];
   }
-
-  function dfs2(root, parent) {
-    for (let i of graph[root]) {
-      if (i === parent) continue;
-      res[i] = res[root] - count[i] + n - count[i];
-      dfs2(i, root);
+  
+  function getActualDist(node, parent) {
+    for (let nei of graph[node]) {
+      if (nei === parent) continue;
+      distSum[nei] = distSum[node] - count[nei] + (n - count[nei]);
+      getActualDist(nei, node);
     }
   }
-  return res;
 };
 
 // Three test cases 
