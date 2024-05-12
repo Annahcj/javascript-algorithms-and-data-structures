@@ -4,29 +4,33 @@
 // Return the kth smallest fraction considered. Return your answer as an array of integers of size 2, where answer[0] == arr[i] and answer[1] == arr[j].
 
 
-// Solution: Priority Queue
+// Solution: Heap
 
-// Add each [i, n - 1] (arr[i] / arr[n - 1]) to a min heap.
-  // At this stage, we have access to the smallest prime fraction at the top of the heap.
-  // From here, increase the smallest fractions k-1 times to get the kth smallest fraction.
-  // To increase a fraction, decrement the index at fraction[1]. Since arr is sorted, the fraction will get bigger as we move the bottom pointer left.
-  // We use a heap so that we can update elements efficiently.
+// Add each smallest starting pair ([i, n - 1]) of fractions to a heap, sorted by fraction in asc order.
+// Repeat the following k times:
+  // 1. Remove the smallest fraction from the heap.
+  // 2. Move the right index of the fraction down by 1, to create the next largest fraction for this starting index.
+// This works because the heap always removes the smallest fractions first, and add back the next largest fraction for the starting index.
+// (It is almost comparable to how Dijkstra's algorithm works).
 
-// To compare two fractions, use the formula a[0] * b[1] - b[0] * a[1] to avoid using division.
-
+// n = length of arr
+// Time Complexity: O((k + n) log(n)) 498ms
+// Space Complexity: O(n) 61.1MB
 var kthSmallestPrimeFraction = function(arr, k) {
-  let n = arr.length, heap = new Heap((a, b) => arr[a[0]] * arr[b[1]] - arr[b[0]] * arr[a[1]]);
+  let n = arr.length, heap = new Heap((a, b) => (arr[a[0]] / arr[a[1]]) - (arr[b[0]] / arr[b[1]])); // sorted by fraction
   for (let i = 0; i < n - 1; i++) {
-    heap.add([i, n - 1]);
+    heap.add([i, n - 1]); // [left index in arr, right index in arr]
   }
-  for (let i = 0; i < k - 1; i++) {
-    let [top, bottom] = heap.remove();
-    if (top < bottom + 1) {
-      heap.add([top, bottom - 1]);
+  let fractions = 0;
+  while (fractions < k) {
+    let [i, j] = heap.remove();
+    fractions++;
+    if (fractions === k) return [arr[i], arr[j]];
+    
+    if (j - 1 > i) {
+      heap.add([i, j - 1]);
     }
   }
-  let [top, bottom] = heap.remove();
-  return [arr[top], arr[bottom]];
 };
 
 class Heap {
