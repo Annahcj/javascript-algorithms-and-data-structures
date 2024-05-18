@@ -10,25 +10,25 @@
 // Positive amount: Coins needed to be passed up to the parent and distributed.
 // Negative amount: Coins needed to be passed down from the parent.
 
-// Explanations:
+// Use post-order DFS to traverse the tree and count the number of moves required for each subtree (sum of absolute difference between subtree sums and subtree sizes).
+// Each dfs(node) returns the sum of node values, along with the count of nodes in the subtree.
+// For each subtree, look at the sum of node values compared with the count of nodes to determine whether we need to use moves to either "pass up" the values to the parent, or values to be "passed down" to this subtree.
 
-// res += Math.abs(left) + Math.abs(right)
-  // Regardless of whether coins need to be passed up or down, they still count as moves, so need to take the absolute value.
-
-// return node.val + left + right - 1
-  // We subtract 1 because each node needs one coin.
-
-// Time Complexity: O(n) 100ms
-// Space Complexity: O(n) 44.1MB
+// n = number of nodes, h = height of the tree
+// Time Complexity: O(n) 57ms
+// Space Complexity: O(h) 51.8MB
 var distributeCoins = function(root) {
-  let res = 0;
+  let moves = 0;
   dfs(root);
-  return res;
+  return moves;
   
-  function dfs(node) {
-    if (!node) return 0;
-    let left = dfs(node.left), right = dfs(node.right);
-    res += Math.abs(left) + Math.abs(right);
-    return node.val + left + right - 1;
-  }
+  function dfs(node) { // [sum, count of nodes]
+    if (!node) return [0, 0];
+    let [sumLeft, countLeft] = dfs(node.left);
+    let [sumRight, countRight] = dfs(node.right);
+    let sum = sumLeft + sumRight + node.val;
+    let count = countLeft + countRight + 1;
+    moves += Math.abs(sum - count);
+    return [sum, count];
+  }  
 };
