@@ -3,42 +3,41 @@
 // Note that the same word in the dictionary may be reused multiple times in the segmentation.
 
 
-// Solution: Trie w/ DFS
+// Solution: Backtracking & Trie
 
-// Use a trie to store all the words.
-// Backtrack/dfs over all the possibilities of words.
-  // When a word matches, there are two situations:
-    // 1. Take the word: add the word to the array, reset the current trie node back to the root.
-    // 2. Don't take the word: keep going
+// Use backtracking to traverse every combination of segmentations.
+// For every backtrack(i, words), go through each possible substring starting from index i.
+// Store the words from the dictionary in a trie, so that we can early return if the current substring doesn't match any words in the trie.
 
-// n = length of s, m = length of all words in wordDict
-// Time Complexity: O(m + 2^n) 76ms
-// Space Complexity: O(m) 38.8MB
+// n = length of s, m = number of characters from all words in wordDict
+// Time Complexity: O(2^n + m) 40ms
+// Space Complexity: O(2^n + m) 48.4MB
 var wordBreak = function(s, wordDict) {
-  let trie = new Trie(), res = [];
-  for (var word of wordDict) {
-    trie.addWord(word);
+  let n = s.length, trie = new Trie();
+  for (let word of wordDict) {
+    trie.add(word);
   }
-  dfs(trie.root, 0, "", [], 0);
-  return res;
-
-  function dfs(node, idx, currWord, words, totalLen) {
-    if (idx === s.length && totalLen === s.length) {
-      res.push(words.join(" "));
+  let sentences = [];
+  backtrack(0, []);
+  return sentences;
+  
+  function backtrack(i, words) {
+    if (i === n) {
+      sentences.push(words.join(" "));
       return;
     }
-    node = node.children;
-    if (!node[s[idx]]) return;
-    node = node[s[idx]];
-    currWord += s[idx];
-
-    if (node.isWordEnd) {
-      words.push(currWord);
-      dfs(trie.root, idx + 1, "", words, totalLen + currWord.length);
-      words.pop();
+    
+    let node = trie.root;
+    for (let j = i; j < n; j++) {
+      node = node.children;
+      if (!node[s[j]]) return; // no words in the dictionary match the current substring, so there is no point in continuing
+      node = node[s[j]];
+      if (node.isWordEnd) {
+        words.push(node.word);
+        backtrack(j + 1, words);
+        words.pop();
+      }
     }
-
-    dfs(node, idx + 1, currWord, words, totalLen);
   }
 };
 
@@ -46,6 +45,7 @@ class TrieNode {
   constructor() {
     this.children = {};
     this.isWordEnd = false;
+    this.word = null;
   }
 }
 
@@ -53,18 +53,19 @@ class Trie {
   constructor() {
     this.root = new TrieNode();
   }
-  addWord(word) {
+  add(word) {
     let node = this.root;
-    for (var char of word) {
+    for (let char of word) {
       node = node.children;
       if (!node[char]) node[char] = new TrieNode();
       node = node[char];
     }
     node.isWordEnd = true;
+    node.word = word;
   }
 }
 
-// Three test cases to run function on
+// Three test cases
 console.log(wordBreak("catsanddog", ["cat","cats","and","sand","dog"])) // ["cats and dog","cat sand dog"]
 console.log(wordBreak("pineapplepenapple", ["apple","pen","applepen","pine","pineapple"])) // ["pine apple pen apple","pineapple pen apple","pine applepen apple"]
 console.log(wordBreak("catsandog", ["cats","dog","sand","and","cat"])) // []
