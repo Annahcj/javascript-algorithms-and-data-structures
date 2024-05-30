@@ -8,7 +8,7 @@
 // Return the number of triplets (i, j and k) Where a == b.
 
 
-// Solution: Brute Force
+// Solution 1: Brute Force
 
 // Go through each i, j, and k in a way that we can build on the xor sum from previous loop iterations.
 // Go through each possible i,
@@ -28,6 +28,34 @@ var countTriplets = function(arr) {
         b ^= arr[k];
         if (a === b) triplets++;
       }
+    }
+  }
+  return triplets;
+};
+
+
+// Solution 2: Anchor in the Middle & Hashmap
+
+// Anchor the middle index (j), and traverse the left and right side of index j.
+  // left: Traverse from index j - 1 to index 0, while storing the count of each running XOR value in a hashmap.
+  // right: Traverse from index j to index n - 1, and use the count in the hashmap to get the number of matching XOR values. 
+
+// Return the total sum of matching XOR values.
+
+// Time Complexity: O(n^2) 74ms
+// Space Complexity: O(n) 55.7MB
+var countTriplets = function(arr) {
+  let n = arr.length, triplets = 0;
+  for (let j = 1; j < n; j++) {
+    let count = {}, xor = 0;
+    for (let i = j - 1; i >= 0; i--) {
+      xor ^= arr[i];
+      count[xor] = (count[xor] || 0) + 1;
+    }
+    xor = 0;
+    for (let k = j; k < n; k++) {
+      xor ^= arr[k];
+      triplets += (count[xor] || 0);
     }
   }
   return triplets;
