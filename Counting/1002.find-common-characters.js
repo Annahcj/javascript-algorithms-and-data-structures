@@ -2,29 +2,36 @@
 // Given a string array words, return an array of all characters that show up in all strings within the words (including duplicates). You may return the answer in any order.
 
 
-// Solution: Two Frequency Arrays
+// Solution: Counting
 
-// Use an array of length 26 to store the frequencies of the characters in a word.
-// Keep a global frequency array initially set the the frequencies of the first word.
-  // Go through each other word from 1 onwards and take the minimum frequency of a character.
+// Keep track of a global count of each character from a-z.
+// For each word, 
+  // Count the occurances of each character.
+  // Then, compare these counts with the global counts and take the minimum for each character.
 
-// Time Complexity: O(n) 81ms
-// Space Complexity: O(26) = O(1) 45.3MB
+// At the end, use the final global counts to build up the array of common characters.
+
+// n = number of words, m = max(words[i].length)
+// Time Complexity: O(nm) 59ms
+// Space Complexity: O(1) (excluding output) 52.2MB
 var commonChars = function(words) {
-  let freq = Array(26).fill(0);
-  for (let char of words[0]) freq[char.charCodeAt() - 97]++;
-  
-  for (let i = 1; i < words.length; i++) {
-    let freq2 = Array(26).fill(0);
-    for (let char of words[i]) freq2[char.charCodeAt() - 97]++;
-    for (let j = 0; j < 26; j++) freq[j] = Math.min(freq[j], freq2[j]);
+  let count = Array(26).fill(Infinity);
+  for (let word of words) {
+    let currCount = Array(26).fill(0);
+    for (let char of word) {
+      currCount[char.charCodeAt() - 97]++;
+    }
+    for (let i = 0; i < 26; i++) {
+      count[i] = Math.min(count[i], currCount[i]);
+    }
   }
-  
-  let res = [];
+  let common = [];
   for (let i = 0; i < 26; i++) {
-    for (let j = 0; j < freq[i]; j++) res.push(String.fromCharCode(i + 97));
+    for (let j = 0; j < count[i]; j++) {
+      common.push(String.fromCharCode(i + 97));
+    }
   }
-  return res;
+  return common;
 };
 
 // Two test cases 
