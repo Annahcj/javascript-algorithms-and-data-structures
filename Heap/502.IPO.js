@@ -6,33 +6,31 @@
 // The answer is guaranteed to fit in a 32-bit signed integer.
 
 
-// Solution: Sorting & Priority Queue
+// Solution: Sorting & Max Heap
 
-// 1. Collect each [profits[i], capital[i]] into an array and sort by capital[i].
-// 2. Use a priority queue that keeps each profit where the capital is <= the current w.
-  // a. Add each profit where the capital <= the current w.
-  // b. Get the maximum profit from the priority queue.
-  // c. Add the profit to w.
+// As long as we have enough capital, it's optimal to take the projects with the biggest profit.
+// Sort projects by capital in asc order, then use a max heap to get the projects with the maximum profit.
+// Do this to get the k maximum projects.
 
-// Time Complexity: O(n log(n)) 317ms
-// Space Complexity: O(n) 92.4MB
+// n = number of projects
+// Time Complexity: O(n log(n)) 259ms
+// Space Complexity: O(n) 82.6MB
 var findMaximizedCapital = function(k, w, profits, capital) {
-  let projects = [], n = profits.length;
+  let n = profits.length, projects = [];
   for (let i = 0; i < n; i++) {
     projects.push([profits[i], capital[i]]);
   }
   projects.sort((a, b) => a[1] - b[1]);
-  
   let heap = new Heap((a, b) => b - a);
-  let i = 0;
-  while (k > 0) {
-    while (i < n && projects[i][1] <= w) heap.add(projects[i++][0]);
-    if (heap.isEmpty()) break;
-    let profit = heap.remove();
-    w += profit;
-    k--;
+  let currCapital = w, j = 0;
+  for (let i = 0; i < k; i++) {
+    while (j < n && projects[j][1] <= currCapital) {
+      heap.add(projects[j][0]);
+      j++;
+    }
+    currCapital += heap.size > 0 ? heap.remove() : 0;
   }
-  return w;
+  return currCapital;
 };
 
 class Heap {
