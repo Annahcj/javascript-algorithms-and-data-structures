@@ -9,34 +9,33 @@
 
 // Solution: Sorting & Two Pointers
 
-// 1. Group each difficulty[i] and profit[i] together in an array 'jobs'.
-// 2. Sort jobs and worker based on difficulty.
-// 3. Use two pointers to find the job with the maximum profit for each worker.
-  // Keep track of the max profit for jobs whose difficulty is less than or equal to worker[j].
+// 1. Sort jobs by difficulty and workers by ability.
+// 2. Use two pointers to iterate through workers and jobs.
+  // Anchor the first pointer through workers, and move the job pointer up while the job difficulty <= worker's ability.
+  // Keep track of the running maximum profit.
+  // Always assign the job with the maximum profit.
 
-// Time Complexity: O(n log(n) + m log(m)) 154ms
-// Space Complexity: O(n) 50.5MB
+// n = number of jobs, m = number of workers
+// Time Complexity: O(n log(n) + m log(m)) 101ms
+// Space Complexity: O(n) 56.8MB
 var maxProfitAssignment = function(difficulty, profit, worker) {
   let jobs = [], n = difficulty.length, m = worker.length;
   for (let i = 0; i < n; i++) {
     jobs.push([difficulty[i], profit[i]]);
   }
-  // sort jobs and worker based on difficulty
   jobs.sort((a, b) => a[0] - b[0]);
   worker.sort((a, b) => a - b);
-  
-  // two pointers to find maximum profit of valid jobs
-  let i = 0, max = 0, ans = 0;
-  for (let j = 0; j < m; j++) {
-    while (i < n && jobs[i][0] <= worker[j]) { // find max profit for jobs whose difficulty is <= worker[j]
-      max = Math.max(max, jobs[i][1]);
-      i++;
+  let totalProfit = 0, maxProfit = 0;
+  for (let i = 0, j = 0; i < m; i++) {
+    while (j < n && jobs[j][0] <= worker[i]) {
+      maxProfit = Math.max(maxProfit, jobs[j][1]);
+      j++;
     }
-    ans += max;
+    totalProfit += maxProfit;
   }
-  return ans;
+  return totalProfit;
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(maxProfitAssignment([2,4,6,8,10], [10,20,30,40,50], [4,5,6,7])) // 100
 console.log(maxProfitAssignment([85,47,57], [24,66,99], [40,25,25])) // 0
