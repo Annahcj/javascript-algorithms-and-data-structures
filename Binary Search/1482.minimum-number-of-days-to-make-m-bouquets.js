@@ -5,38 +5,43 @@
 // Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
 
 
-// Solution: Binary Search 
+// Solution: Binary Search
 
 // Binary search for the minimum number of days.
-// Find the minimum day where there are at least m subarrays of size k consisting only of numbers <= day.
 
-// m = maximum bloomDay[i]
-// Time Complexity: O(n log(m)) 151ms
-// Space Complexity: O(1) 51.9MB
+// To check whether days `d` is enough, keep a running count of consecutive flowers where bloomDay[i] <= d. 
+// When the consecutive count reaches k, we can make a bouquet. 
+// Days `d` is enough if we can make m bouquets in this manner.
+
+// n = length of bloomDay, max = max(bloomDay[i])
+// Time Complexity: O(n log(max)) 87ms
+// Space Complexity: O(1) 60.2MB
 var minDays = function(bloomDay, m, k) {
-  let n = bloomDay.length;
-  if (m * k > n) return -1;
-  let low = 0, high = Math.max(...bloomDay);
+  let low = 1, high = Math.max(...bloomDay);
   while (low < high) {
     let mid = Math.floor((low + high) / 2);
-    if (isValid(mid)) high = mid;
+    if (enoughBouquets(bloomDay, mid, m, k)) high = mid;
     else low = mid + 1;
   }
-  return low;
-  
-  function isValid(maxDay) {
-    let bouquets = 0, adjacent = 0;
-    for (let i = 0; i < n; i++) {
-      if (bloomDay[i] > maxDay) adjacent = 0;
-      else adjacent++;
-      if (adjacent === k) {
-        adjacent = 0;
-        bouquets++;
-      }
-    }
-    return bouquets >= m;
-  }
+  return enoughBouquets(bloomDay, low, m, k) ? low : -1;
 };
+
+function enoughBouquets(bloomDay, day, m, k) {
+  let n = bloomDay.length, consec = 0;
+  let bouquets = 0;
+  for (let i = 0; i < n && bouquets < m; i++) {
+    if (bloomDay[i] <= day) {
+      consec++;
+    } else {
+      consec = 0;
+    }
+    if (consec === k) {
+      bouquets++;
+      consec = 0;
+    }
+  }
+  return bouquets === m;
+}
 
 // Three test cases 
 console.log(minDays([1,10,3,10,2], 3, 1)) // 3
