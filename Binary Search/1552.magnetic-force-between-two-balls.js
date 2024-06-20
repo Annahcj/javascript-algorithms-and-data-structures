@@ -4,40 +4,37 @@
 // Given the integer array position and the integer m. Return the required force.
 
 
-// Solution: Binary Search & Sorting
+// Solution: Binary Search & Greedy
 
-// First, sort position.
+// Binary search for the maximum minimum difference between baskets to place balls.
+// To check whether a difference `dist` is achievable, 
+  // Greedily take baskets if the distance between the current position and previously taken position >= dist.
+  // If we can place m balls in this manner, `dist` is achieveable.
 
-// Thought process:
-// We're finding the maximum force, so we pick the mid point with Math.ceil((low + high) / 2).
-// Binary search for the maximum force.
-  // isEnough: returns true if the force/gap given is possible for the positions we have.
-    // Greedily fits as many balls as possible with the minimum gap being equal to the gap given.
-
-// Time Complexity: O(n log(10^9)) 267ms
-// Space Complexity: O(log(n)) (space for sorting) 53.1MB
+// n = length of position, k = position[n - 1] - position[0]
+// Time Complexity: O(n log(k)) 206ms
+// Space Complexity: O(1) 61.3MB
 var maxDistance = function(position, m) {
   position.sort((a, b) => a - b);
-  
-  let low = 0, high = position[position.length - 1] - position[0];
+  let low = 1, high = position[position.length - 1] - position[0];
   while (low < high) {
     let mid = Math.ceil((low + high) / 2);
-    if (isEnough(mid)) low = mid;
+    if (isPossible(position, m, mid)) low = mid;
     else high = mid - 1;
   }
   return low;
-  
-  function isEnough(gap) {
-    let lastPos = position[0], balls = 1;
-    for (let i = 1; i < position.length; i++) {
-      if (position[i] - lastPos >= gap) {
-        lastPos = position[i];
-        balls++;
-      }
-    }
-    return balls >= m;
-  }
 };
+
+function isPossible(position, m, dist) {
+  let prevPos = -Infinity;
+  for (let i = 0; i < position.length && m > 0; i++) {
+    if (position[i] - prevPos >= dist) {
+      m--;
+      prevPos = position[i];
+    }
+  }
+  return m === 0;
+}
 
 // Two test cases
 console.log(maxDistance([1,2,3,4,7], 3)) // 3
