@@ -8,28 +8,29 @@
 
 // Solution: Sliding Window
 
-// Maintain a sliding window of size "minutes", where the owner is not grumpy within this window.
-// In a window, the customers we can satisfy are:
-  // All customers inside the window regardless of the owner's grumpiness.
-  // All customers outside the window where the owner is naturally not grumpy.
+// Maintain a sliding window of `minutes` consecutive minutes.
+// Keep track of the running sum of grumpy customers within the window - this is how much "extra" customers we will gain using the secret technique.
+// Also count the total sum of non-grumpy customers as these are "free" without using the secret technique.
+// At the end, return the non-grumpy customers plus the maximum grumpy customers within a window.
 
-// Time Complexity: O(n) 83ms
-// Space Complexity: O(1) 44.5MB
+// n = number of customers
+// Time Complexity: O(n) 60ms
+// Space Complexity: O(1) 51.4MB
 var maxSatisfied = function(customers, grumpy, minutes) {
-  let count = 0, n = customers.length;
+  let n = customers.length, nonGrumpySum = 0;
+  let grumpySum = 0, maxGrumpySum = 0;
   for (let i = 0; i < n; i++) {
-    if (grumpy[i] === 0) count += customers[i];
-  }
-
-  let ans = 0;
-  for (let i = 0; i < n; i++) {
-    if (grumpy[i]) count += customers[i];
-    if (i >= minutes) { // shift out the customers on the left
-      if (grumpy[i - minutes]) count -= customers[i - minutes];
+    if (grumpy[i] === 1) {
+      grumpySum += customers[i];
+    } else {
+      nonGrumpySum += customers[i];
     }
-    if (i >= minutes - 1) ans = Math.max(ans, count); 
+    if (i >= minutes) {
+      grumpySum -= grumpy[i - minutes] === 1 ? customers[i - minutes] : 0;
+    }
+    maxGrumpySum = Math.max(maxGrumpySum, grumpySum);
   }
-  return ans;
+  return maxGrumpySum + nonGrumpySum;
 };
 
 // Two test cases 
