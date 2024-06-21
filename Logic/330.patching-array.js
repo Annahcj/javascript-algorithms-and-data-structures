@@ -3,40 +3,38 @@
 // Return the minimum number of patches required.
 
 
-// Solution:
+// Solution: Greedy Logic
 
-// e.g: nums = [1, 5, 10], n = 20
-// The logic is to check each missed number from 1 to n, starting from 1.
-// miss = 1, i = 0: since nums[i] (1) is equal to miss, increment miss by nums[i], and increment i by one. The range we cover is [1..1]
-// miss = 2, i = 1: since nums[i] (5) is bigger than miss, 
-  // increment patches by one
-  // (this means we need to add a patch (add the number 2))
-  // increment miss by miss (or miss *= 2) (miss is now 4)
-  // (if we add a patch, that means now the range we cover is [1..3] (miss * 2 - 1))
-  // (this logic works because we have previously covered [1..1], so to get for e.g 3, we can simply add a number from the prev range with the newly added patch number)
-// miss = 4, i = 1: since nums[i] (5) is bigger than miss,
-  // increment patches by one
-  // increment miss by miss (miss is now 8)
-  // (by adding a new patch (4), we now cover the range [1..7], since we can add a num within our prev range [1..3] with the newly added number (4))
-// miss = 8, i = 1: since nums[i] (5) is smaller than miss, increment miss by nums[i] (5) (miss is now 13, because we can add prev range [1..7] with 5 to get any number below 13), increment i by one.
-// miss = 13, i = 2: since nums[i] (10) is smaller than miss, increment miss by nums[i] (10) (miss is now 23, because we can add prev range [1..12] with 10 to get any number below 23), increment i by one.
-// at this point, the loop stops because miss is bigger than n.
+// Keep track of the currently fully covered range of numbers, from 1 to `range`.
+// When we add a number nums[i] to a full covered range, we can now make any number between nums[i] to nums[i] + range.
 
-// we return patches (2).
+// Imagine a range [1,2,3].
+// When adding a number 5, the new range is:
+  // 1
+  // 2
+  // 3
+  // 5
+  // 6 (1 + 5)
+  // 7 (2 + 5)
+  // 8 (3 + 5)
 
-// l = length of nums
-// Time Complexity: O(l + log(n)) 98ms
-// Space Complexity: O(1) 40.2MB
+// If there is a gap between the current covered range and nums[i], we need to add in the missing number `range + 1`.
+// Otherwise, we can take nums[i] and extend our range to cover up to range + nums[i].
+
+// Time Complexity: O(n) 54ms
+// Space Complexity: O(1) 49.4MB
 var minPatches = function(nums, n) {
-  let miss = 1, i = 0, patches = 0;
-  while (miss <= n) {
-    if (i < nums.length && nums[i] <= miss) {
-      miss += nums[i++];
+  let range = 0, patches = 0, i = 0;
+  while (range < n) {
+    if (i < nums.length && nums[i] - range <= 1) {
+      range += nums[i];
+      i++;
     } else {
-      miss += miss;
+      // e.g. Range is 4, add 5 to get the new range 4 + 5 = 9, since 4 is already covered.
+      range += range + 1;
       patches++;
     }
-  } 
+  }
   return patches;
 };
 
