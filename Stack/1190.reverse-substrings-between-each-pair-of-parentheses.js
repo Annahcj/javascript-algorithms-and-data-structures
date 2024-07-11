@@ -6,27 +6,35 @@
 
 // Solution: Stack
 
-// Keep each character in a stack.
-// When we come across a ')', 
-  // 1. pop out each character up to the latest '('
-  // 2. add them back to the stack in reversed order
+// Store the non-parentheses characters in an array.
+// Use a stack to store the indices of the open brackets and when we encounter a closing bracket, we pop the last open bracket off the stack and reverse everything in between the two indices.
+// At the end, return the array converted into a string.
 
-// Time Complexity: O(n^2) 85ms
-// Space Complexity: O(n) 42MB
-var reverseParentheses = function(s) {
-  let stack = [];
-  for (let i = 0; i < s.length; i++) {
+// Time Complexity: O(n^2) 68ms
+// Space Complexity: O(n) 50.4MB
+function reverseParentheses(s) {
+  let chars = [], openBrackets = [];
+  let n = s.length;
+  for (let i = 0; i < n; i++) {
     if (s[i] === ')') {
-      let temp = [];
-      while (stack[stack.length - 1] !== '(') temp.push(stack.pop());
-      stack.pop(); // pop the (
-      for (let j = 0; j < temp.length; j++) stack.push(temp[j]); // add back in reversed order
+      // reverse all chars up to last open bracket
+      let lastOpenBracket = openBrackets.pop();
+      reverse(chars, lastOpenBracket, chars.length - 1);
+    } else if (s[i] === '(') {
+      openBrackets.push(chars.length);
     } else {
-      stack.push(s[i]);
+      chars.push(s[i]);
     }
   }
-  return stack.join("");
+  return chars.join('');
 };
+
+function reverse(arr, start, end) {
+  while (start < end) {
+    [arr[start], arr[end]] = [arr[end], arr[start]];
+    start++, end--;
+  }
+}
 
 // Three test cases 
 console.log(reverseParentheses("(abcd)")) // "dcba"
