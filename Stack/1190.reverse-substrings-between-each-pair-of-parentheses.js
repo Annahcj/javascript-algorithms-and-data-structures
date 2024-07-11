@@ -4,7 +4,7 @@
 // Your result should not contain any brackets.
 
 
-// Solution: Stack
+// Solution 1: Stack
 
 // Store the non-parentheses characters in an array.
 // Use a stack to store the indices of the open brackets and when we encounter a closing bracket, we pop the last open bracket off the stack and reverse everything in between the two indices.
@@ -35,6 +35,41 @@ function reverse(arr, start, end) {
     start++, end--;
   }
 }
+
+
+// Solution 2: Stack & Hashmap O(n)
+
+// Map every pair of matching parentheses together.
+// Keep track of the direction we are currently traversing.
+// When encountering a parentheses, we switch direction and traverse one past the matching parentheses (to avoid an infinite loop between a pair of parentheses).
+
+// Time Complexity: O(n) 54ms
+// Space Complexity: O(n) 50.2MB
+function reverseParentheses(s) {
+  let n = s.length, openBrackets = [];
+  let map = {};
+  for (let i = 0; i < n; i++) {
+    if (s[i] === '(') openBrackets.push(i);
+    else if (s[i] === ')') {
+      let matchingBracket = openBrackets.pop();
+      map[i] = matchingBracket;
+      map[matchingBracket] = i;
+    }
+  }
+  let chars = [], dir = 1;
+  let i = 0;
+  while (i >= 0 && i < n) {
+    if (s[i] === '(' || s[i] === ')') {
+      let matchingIndex = map[i];
+      dir = -dir;
+      i = matchingIndex + dir; // important to traverse one past the matching parentheses
+    } else {
+      chars.push(s[i]);
+      i += dir;
+    }
+  }
+  return chars.join("");
+};
 
 // Three test cases 
 console.log(reverseParentheses("(abcd)")) // "dcba"
