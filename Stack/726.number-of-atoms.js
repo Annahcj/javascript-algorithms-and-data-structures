@@ -2,7 +2,109 @@
 // Given a string formula representing a chemical formula, return the count of each atom.
 
 
-// Solution: Recursion & Stack
+// Solution 1: Iteration - Stack & Hashmaps
+
+// When encountering a normal character (an element), find the whole element and the count of that element.
+// Store the counts of all elements in a hashmap, and store these hashmaps in a stack.
+// When there are no parentheses in between elements, share the same hashmap.
+
+// When encountering parentheses, 
+  // 1. We first store the '('.
+  // 2. Process the formula in between.
+  // 3. Combine all count hashmaps in the stack up to the last '('.
+  // 4. Get the count x following the parentheses and multiply all counts by x.
+  // 5. Push this multiplied count hashmap back to the stack.
+
+// At the end, we will have a stack of hashmaps.
+// Combine these counts into one, then sort and concatenate to get the final string.
+
+// Time Complexity: O(n^2) 70ms
+// Space Complexity: O(n) 53.4MB
+function countOfAtoms(formula) {
+  let stack = [], i = 0;
+  let n = formula.length;
+  while (i < n) {
+    if (formula[i] === '(') {
+      stack.push('(');
+      i++;
+    } else if (formula[i] === ')') {
+      // combine all the count maps up to the matching open bracket and multiply by the following count
+      let {count, nextIndex} = getCount(formula, i + 1);
+      let totalCountMap = {};
+      while (stack[stack.length - 1] !== '(') {
+        let countMap = stack.pop();
+        totalCountMap = combine(totalCountMap, countMap);
+      }
+      totalCountMap = multiply(totalCountMap, count);
+      stack.pop(); // remove the (
+      stack.push(totalCountMap);
+      i = nextIndex;
+    } else {
+      // update element count
+      let {element, count, nextIndex} = getElement(formula, i);
+      if (!stack.length || !(typeof stack[stack.length - 1] === 'object')) {
+        stack.push({});
+      }
+      let countMap = stack[stack.length - 1];
+      countMap[element] = (countMap[element] || 0) + count;
+      i = nextIndex;
+    }
+  }
+  let counts = [], totalCountMap = {};
+  for (let countMap of stack) {
+    totalCountMap = combine(totalCountMap, countMap);
+  }
+  for (let el in totalCountMap) {
+    let count = totalCountMap[el];
+    counts.push([el, count]);
+  }
+  counts.sort((a, b) => a[0].localeCompare(b[0]));
+  return counts.map(([el, count]) => count === 1 ? el : `${el}${count}`).join("");
+};
+
+function getElement(formula, i) {
+  let element = formula[i];
+  let count = 0;
+  i++;
+  while (i < formula.length && !formula[i].match(/[A-Z\(\)]/)) {
+    if (isNaN(formula[i])) { // still part of the element
+      element += formula[i];
+    } else { // count part
+      count = (count * 10) + Number(formula[i]);
+    }
+    i++;
+  }
+  return {element, count: count || 1, nextIndex: i};
+}
+
+function getCount(formula, i) {
+  let count = 0;
+  while (i < formula.length && !isNaN(formula[i])) {
+    count = (count * 10) + Number(formula[i]);
+    i++;
+  }
+  return {count: count || 1, nextIndex: i};
+}
+
+// combine counts from the two maps
+function combine(totalCountMap, countMap) {
+  for (let el in countMap) {
+    let count = countMap[el];
+    totalCountMap[el] = (totalCountMap[el] || 0) + count;
+  }
+  return totalCountMap;
+}
+
+// multiply all counts by x
+function multiply(countMap, x) {
+  for (let el in countMap) {
+    countMap[el] = countMap[el] * x;
+  }
+  return countMap;
+}
+
+
+// Solution 2: Recursion - Stack
 
 // When we come across an uppercase letter: 
   // Get for the full element name (all lowercase letters directly after it). 
@@ -77,7 +179,7 @@ var countOfAtoms = function(formula) {
   }
 };
 
-// Four test cases to run function on
+// Four test cases
 console.log(countOfAtoms("((HHe28Be26He)9)34")) // "Be7956H306He8874"
 console.log(countOfAtoms("H2O")) // "H2O"
 console.log(countOfAtoms("Mg(OH)2")) // "H2MgO2"
