@@ -6,31 +6,35 @@
 // The test cases will be generated such that the binary tree is valid.
 
 
-// Solution: Map & Set
+// Solution: Hashmap & Set
 
-// Use a map 'nodes' to store the references to the tree nodes.
-// Use a set 'children' to store the values of all children nodes. 
-  // This is used to find the root, the root node is the only node that does not exist in the set.
+// Since nodes can appear multiple times in descriptions (as a parent or as a child), we only create a new node the first time we see it.
+// After the first encounter, we should store the node in a hashmap to reference later.
+// Use a hashset to store nodes who have a parent.
+// At the end, only the root will not have a parent node, so we return the tree rooted at that node.
 
-// Time Complexity: O(n) 510ms
-// Space Complexity: O(n) 88.8MB
-var createBinaryTree = function(descriptions) {
-  let nodes = new Map(), children = new Set();
+// n = length of descriptions
+// Time Complexity: O(n) 358ms
+// Space Complexity: O(n) 74.3MB
+function createBinaryTree(descriptions) {
+  let nodes = {}, hasParent = new Set();
   for (let [parent, child, isLeft] of descriptions) {
-    let parentNode = nodes.get(parent) || new TreeNode(parent);
-    if (!nodes.has(parent)) nodes.set(parent, parentNode);
+    let parentNode = nodes[parent] ?? new TreeNode(parent);
+    nodes[parent] = parentNode;
     
-    let childNode = nodes.get(child) || new TreeNode(child);
-    if (!nodes.has(child)) nodes.set(child, childNode);
-    
-    if (isLeft) parentNode.left = childNode;
-    else parentNode.right = childNode;
-    
-    children.add(child);
+    let childNode = nodes[child] ?? new TreeNode(child);
+    nodes[child] = childNode;
+    if (isLeft) {
+      parentNode.left = childNode;
+    } else {
+      parentNode.right = childNode;
+    }
+    hasParent.add(child);
   }
-
-  for (let [parent, _child, _isLeft] of descriptions) {
-    // a node with no parent is the root
-    if (!children.has(parent)) return nodes.get(parent);
+  for (let [parent] of descriptions) {
+    // node with no parent is the root
+    if (!hasParent.has(parent)) {
+      return nodes[parent];
+    }
   }
 };
