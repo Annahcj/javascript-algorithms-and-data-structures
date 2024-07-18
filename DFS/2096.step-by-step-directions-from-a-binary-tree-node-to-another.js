@@ -6,82 +6,68 @@
   // 'U' means to go from a node to its parent node.
 // Return the step-by-step directions of the shortest path from node s to node t.
 
-// LeetCode provided TreeNode
-function TreeNode(val, left, right) {
-  this.val = (val===undefined ? 0 : val)
-  this.left = (left===undefined ? null : left)
-  this.right = (right===undefined ? null : right)
+
+// Solution: LCA
+
+// Find the LCA of the start node and destination node.
+// From there, we can use DFS to find the directions from the start node to the LCA, and from the destination node to the LCA.
+
+// 1. Use DFS to find each parent node and store in a hashmap (we need this for finding the LCA).
+// 2. Traverse from the start node to the root and populate the depths of each node (this is to know the number of 'U' steps it takes to get from start node to LCA).
+// 3. Find the LCA of start and dest node by traversing up from the destination node until finding a node already visited from the start node's path.
+// 4. Build up the final path: 
+  // The path from start node to the LCA is 'U' directions repeated by the length of the path.
+  // The path from LCA to the destination node.
+
+// Time Complexity: O(n) 277ms
+// Space Complexity: O(n) 95.6MB
+function getDirections(root, startValue, destValue) {
+  let depth = {}, startNode = getNode(root, startValue);
+  let currDepth = 0, parentMap = getParentMap(root);
+  while (true) {
+    depth[startNode.val] = currDepth;
+    currDepth++;
+    if (startNode === root) break;
+    startNode = parentMap[startNode.val];
+  }
+  let destNode = getNode(root, destValue);
+  let destPath = [], lcaDepth = -1;
+  while (true) {
+    if (depth[destNode.val] !== undefined) {
+      lcaDepth = depth[destNode.val];
+      break;
+    }
+    let parent = parentMap[destNode.val];
+    let isLeft = parent.left === destNode;
+    destPath.push(isLeft ? 'L' : 'R');
+    destNode = parent;
+  }
+  return 'U'.repeat(lcaDepth) + destPath.reverse().join("");
+};
+
+function getNode(node, val) {
+  if (!node) return null;
+  if (node.val === val) return node;
+  return getNode(node.left, val) || getNode(node.right, val);
 }
 
-// Creates a binary tree out of an array - according to leetcode's order (testing purposes only!)
-function makeTree(arr) {
-  if (!arr.length) return null;
-  let root = new TreeNode(arr.shift());
-  let queue = [root];
-  while (queue.length) {
-    let node = queue.shift();
-    let left = arr.shift();
-    let right = arr.shift();
-    if (left) {
-      node.left = new TreeNode(left);
-      queue.push(node.left);
-    }
-    if (right) {
-      node.right = new TreeNode(right);
-      queue.push(node.right);
-    }
-  }
-  return root;
-}
-
-// Solution: Map Parents w/ DFS
-
-// 1. Build a parent map using dfs: { child: parent, child: parent, child: parent, ... }
-  // In addition to populating the parent map, also save the node that has a value of startValue.
-// 2. dfs from the startNode to find the first path that gets to a node with the destValue.
-
-// n = number of nodes in root
-// Time Complexity: O(n) 675ms
-// Space Complexity: O(n) 
-var getDirections = function(root, startValue, destValue) {
-  let parent = {}, startNode;
-  dfs(root); // populate the parent map
-  let res, found = false;
-  let visited = new Set(); // don't visit a node more than once
-  findPath(startNode, '');
-  return res;
-
-  function findPath(node, path) {
-    visited.add(node.val); // mark as visited
-    if (node.val === destValue) { // if we have reached the destination node, set res to path and set found to true
-      res = path;
-      found = true;
-    }
-    if (!found) { // only if we haven't already found a path.
-      if (node.left && !visited.has(node.left.val)) { // if we haven't visited the left child, visit the left child
-        findPath(node.left, path + 'L');
-      }
-      if (node.right && !visited.has(node.right.val)) { // if we haven't visited the right child, visit the right child
-        findPath(node.right, path + 'R');
-      }
-      if (parent[node.val] !== undefined && !visited.has(parent[node.val].val)) { // if we haven't visited the parent node, visit the parent node
-        findPath(parent[node.val], path + 'U');
-      }
-    }
-  }
-
+function getParentMap(root) {
+  let parentMap = {};
+  dfs(root);
+  return parentMap;
+  
   function dfs(node) {
-    if (node && node.val === startValue) startNode = node; // save the start node
-    if (node.left) { // save the parent of the left child
-      parent[node.left.val] = node;
+    if (!node) return;
+    if (node.left) {
+      parentMap[node.left.val] = node;
       dfs(node.left);
     }
-    if (node.right) { // save the parent of the right child
-      parent[node.right.val] = node;
+    if (node.right) {
+      parentMap[node.right.val] = node;
       dfs(node.right);
-    } 
-  }  
-};
+    }
+  }
+}
 
 // Two test cases
 console.log(getDirections(makeTree([5,1,2,3,null,6,4]), 3, 6)) // "UURL"
