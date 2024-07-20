@@ -7,7 +7,7 @@
 // Return the step-by-step directions of the shortest path from node s to node t.
 
 
-// Solution: LCA
+// Solution 1: LCA
 
 // Find the LCA of the start node and destination node.
 // From there, we can use DFS to find the directions from the start node to the LCA, and from the destination node to the LCA.
@@ -21,7 +21,7 @@
 
 // Time Complexity: O(n) 277ms
 // Space Complexity: O(n) 95.6MB
-function getDirections(root, startValue, destValue) {
+var getDirections = function(root, startValue, destValue) {
   let depth = {}, startNode = getNode(root, startValue);
   let currDepth = 0, parentMap = getParentMap(root);
   while (true) {
@@ -68,6 +68,40 @@ function getParentMap(root) {
     }
   }
 }
+
+
+// Solution 2: Post-Order DFS
+
+// 1. Get the path from the root to startValue using post-order DFS.
+// 2. Get the path from the root to destValue using post-order DFS.
+// 3. Build up the final path by removing the common prefix from both paths and changing the first path to be all 'U's.
+
+// Time Complexity: O(n) 198ms
+// Space Complexity: O(n) 96.9MB
+var getDirections = function(root, startValue, destValue) {
+  let startPath = [];
+  buildPath(root, startValue, startPath);
+  let destPath = [];
+  buildPath(root, destValue, destPath);
+  while (startPath.length && destPath.length && startPath[startPath.length - 1] === destPath[destPath.length - 1]) {
+    startPath.pop();
+    destPath.pop();
+  }
+  return 'U'.repeat(startPath.length) + destPath.reverse().join("");
+  
+  function buildPath(node, value, path) {
+    if (!node) return false;
+    if (node.val === value) return true;
+    if (buildPath(node.left, value, path)) { // value is in the left subtree
+      path.push('L');
+      return true;
+    } else if (buildPath(node.right, value, path)) { // value is in the right subtree
+      path.push('R');
+      return true;
+    }
+    return false;
+  }  
+};
 
 // Two test cases
 console.log(getDirections(makeTree([5,1,2,3,null,6,4]), 3, 6)) // "UURL"
