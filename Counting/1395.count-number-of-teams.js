@@ -100,6 +100,43 @@ class SegmentTree {
   }
 }
 
+
+// Solution 3: Segment Tree w/ Coordinate Compression
+
+// For each index j, calculate the smaller and greater ratings on the left and right of j.
+// We can find the number of greater or smaller elements using a segment tree.
+// Since the maximum rating can be as much as 10^5, we can use coordinate compression to keep the size of the tree down to n.
+
+// n = length of rating, m = max(rating[i])
+// Time Complexity: O(n log(n)) 81ms
+// Space Complexity: O(n) 54.4MB
+var numTeams = function(rating) {
+  let n = rating.length;
+  // coordinate compression
+  let sorted = [...rating].sort((a, b) => a - b);
+  let compressed = {};
+  for (let i = 0; i < n; i++) {
+    compressed[sorted[i]] = i;
+  }
+  let smallerRight = Array(n).fill(0);
+  let greaterRight = Array(n).fill(0);
+  let segTree = new SegmentTree(n);
+  for (let j = n - 1; j >= 0; j--) {
+    smallerRight[j] = segTree.sumRange(0, compressed[rating[j]] - 1);
+    greaterRight[j] = segTree.sumRange(compressed[rating[j]] + 1, n - 1);
+    segTree.update(compressed[rating[j]], 1);
+  }
+  segTree = new SegmentTree(n);
+  let teams = 0;
+  for (let j = 0; j < n; j++) {
+    let smallerLeft = segTree.sumRange(0, compressed[rating[j]] - 1);
+    let greaterLeft = segTree.sumRange(compressed[rating[j]] + 1, n - 1);
+    teams += smallerLeft * greaterRight[j] + greaterLeft * smallerRight[j];
+    segTree.update(compressed[rating[j]], 1);
+  }
+  return teams;
+};
+
 // Three test cases
 console.log(numTeams([2,5,3,4,1])) // 3
 console.log(numTeams([2,1,3])) // 0
