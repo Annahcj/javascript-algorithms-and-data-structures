@@ -4,7 +4,7 @@
 // Return the minimum number of deletions needed to make s balanced.
 
 
-// Solution: Dynamic Programming
+// Solution 1: Dynamic Programming
 
 // Find the best split position: the index where a's meet b's.
 // For each position, find:
@@ -30,6 +30,60 @@ var minimumDeletions = function(s) {
     left += s[i] === 'b' ? 1 : 0;
   }
   return ans;
+};
+
+
+// Solution 2: Counting - Two Passes
+
+// Try each index in s as the pivot index - all characters to the left must be 'a' and to the right must be 'b'.
+// Keep track of the running count of b's on the left and a's on the right.
+
+// Two passes:
+  // 1. Iterate over s to count the total a's.
+  // 2. Iterate over s for each pivot index and count the number of b's on the left. Update the count of a's as we iterate through s.
+
+// Record and return the minimum b's left + a's right.
+
+// Time Complexity: O(n) 106ms
+// Space Complexity: O(1) 57.3MB
+var minimumDeletions = function(s) {
+  let n = s.length, aRight = 0;
+  for (let i = 0; i < n; i++) {
+    if (s[i] === 'a') aRight++;
+  }
+  let bLeft = 0, minDeletions = n;
+  for (let i = 0; i < n; i++) {
+    if (s[i] === 'a') aRight--;
+    minDeletions = Math.min(minDeletions, bLeft + aRight);
+    if (s[i] === 'b') bLeft++;
+  }
+  return minDeletions;
+};
+
+
+// Solution 3: DP/Counting - One Pass
+
+// Count the current maximum balanced sequence length ending with 'a' and 'b'.
+// For each s[i], 
+  // If s[i] is 'a', we can only extend the sequence that ends with 'a'.
+  // If s[i] is 'b', we have two choices:
+    // 1. Append 'b' to the sequence ending with 'a'.
+    // 2. Extend the current sequence ending with 'b'.
+
+// At the end, return n - the maximum of length of the two sequences.
+
+// Time Complexity: O(n) 77ms
+// Space Complexity: O(1) 55.4MB
+var minimumDeletions = function(s) {
+  let n = s.length, endA = 0, endB = 0;
+  for (let i = 0; i < n; i++) {
+    if (s[i] === 'a') {
+      endA++;
+    } else {
+      endB = Math.max(endA + 1, endB + 1);
+    }
+  }
+  return n - Math.max(endA, endB);
 };
 
 // Two test cases
