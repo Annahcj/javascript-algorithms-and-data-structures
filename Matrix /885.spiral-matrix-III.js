@@ -6,32 +6,42 @@
  
 // Solution: Simulation
 
-// Simulate the walk.
-// The pattern is that the length to walk increases every two directions you move.
-// Before collecting each coordinate, check whether they are valid (in bounds).
+// Every two direction changes, the number of steps in a direction increases by 1.
+// i.e.
+  // Round 1: 
+    // Right: 1 step
+    // Down: 1 step
+    // Left: 2 steps
+    // Up: 2 steps
+  // Round 2:
+    // Right: 3 steps
+    // Down: 3 steps
+    // Left: 4 steps
+    // Up: 4 steps
+  // Round 3:
+    // ...
 
-// Time Complexity: O(mn) 156ms
-// Space Complexity: O(1) (not including output) 50.1MB
+// Simulate the walk.
+
+// Time Complexity: O(max(rows, col)^2) 83ms
+// Space Complexity: O(1) (excluding output) 57.9MB
 var spiralMatrixIII = function(rows, cols, rStart, cStart) {
-  let res = [], size = 1, dir = 0;
-  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]; // R, D, L, U
-  
   let row = rStart, col = cStart;
-  while (res.length < rows * cols) {
-    for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < size; j++) {
-        if (isValid(row, col)) res.push([row, col]);
-        row += directions[dir][0], col += directions[dir][1];
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]; // R, D, L, U
+  let steps = 1, coords = [[rStart, cStart]];
+  let dirIndex = 0;
+  while (coords.length < rows * cols) {
+    for (let i = 0; i < steps; i++) {
+      row += directions[dirIndex][0];
+      col += directions[dirIndex][1];
+      if (row >= 0 && row < rows && col >= 0 && col < cols) {
+        coords.push([row, col]); 
       }
-      dir = (dir + 1) % 4;
     }
-    size++;
+    if (dirIndex % 2 === 1) steps++;
+    dirIndex = (dirIndex + 1) % 4;
   }
-  return res;
-  
-  function isValid(row, col) {
-    return row >= 0 && row < rows && col >= 0 && col < cols;
-  }
+  return coords;
 };
 
 // Two test cases 
