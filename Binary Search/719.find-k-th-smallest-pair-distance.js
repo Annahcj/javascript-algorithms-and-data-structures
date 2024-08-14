@@ -3,27 +3,31 @@
 // Given an integer array nums and an integer k, return the kth smallest distance among all the pairs nums[i] and nums[j] where 0 <= i < j < nums.length.
 
 
-// Solution: Binary Search & Two Pointers
+// Solution: Binary Search w/ Two Pointeres
 
-// Binary search for the smallest distance such numPairs(distance) >= k. (numPairs(distance) = the number of pairs with distance within "distance")
-// To find the number of pairs within a certain distance, sort nums in asc order and use two pointers.
-  // Move i up while the distance between nums[i] and nums[j] is too big.
+// Binary search for the smallest distance `dist` where the number of pairs with distance <= dist is greater than or equal to k.
 
-// n = length of nums, m = max distance between pairs
-// Time Complexity: O(n log(n) + n log(m)) 104ms
-// Space Complexity: O(log(n)) (space for sorting) 44.4MB
-var smallestDistancePair = function(nums, k) {
+// To find the pairs for with distance <= dist, 
+  // Use two pointers i and j starting at (0, 0).
+  // j is the anchor, moving up incrementally.
+  // Move i up when nums[j] - nums[i] > dist.
+
+// n = length of nums, m = max(nums[i]) - min(nums[i])
+// Time Complexity: O(n log(n) + n log(m)) 53ms
+// Space Complexity: O(log(n)) (space for sorting) 50MB
+function smallestDistancePair(nums, k) {
   nums.sort((a, b) => a - b);
   let n = nums.length;
   let low = 0, high = nums[n - 1] - nums[0];
   while (low < high) {
     let mid = Math.floor((low + high) / 2);
-    if (numPairs(mid) >= k) high = mid;
+    if (countPairs(mid) >= k) high = mid;
     else low = mid + 1;
   }
   return low;
   
-  function numPairs(dist) {
+  // Find the number of pairs with distance <= dist
+  function countPairs(dist) {
     let pairs = 0;
     for (let j = 0, i = 0; j < n; j++) {
       // move i up while distance is too big
