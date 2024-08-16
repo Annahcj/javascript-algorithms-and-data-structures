@@ -4,27 +4,25 @@
 // Return the maximum distance.
 
 
-// Solution: Keep Min & Max
+// Solution: Min & Max
 
-// Keep track of the previous min and max numbers
-// (Since the arrays are sorted, we only have to take the first (min) and last (max) elements)
+// Get the minimum and maximum numbers from each individual array (first and last elements).
+// Keep track of the global minimum and maximum numbers from any one of the arrays we have already processed.
+// Compare the global min and max against the min and max from the current array we are processing, and return the max difference between global min and current max, or global max and current min.
 
-// Try to find the largest distance:
-  // 1. current last element - previous min
-  // 2. previous max - current first element
-// Then update the min and max is necessary
-
-// Time Complexity: O(n) 164ms
-// Space Complexity: O(1) 59MB
-var maxDistance = function(arrays) {
+// m = number of arrays, n = max length of arrays[i]
+// Time Complexity: O(mn) 126ms
+// Space Complexity: O(1) 67.9MB
+function maxDistance(arrays) {
   let min = arrays[0][0], max = arrays[0][arrays[0].length - 1];
-  let ans = 0;
+  let maxDist = 0;
   for (let i = 1; i < arrays.length; i++) {
-    ans = Math.max(ans, arrays[i][arrays[i].length - 1] - min, max - arrays[i][0]);
-    min = Math.min(min, arrays[i][0]);
-    max = Math.max(max, arrays[i][arrays[i].length - 1]);
-  }  
-  return ans;
+    let currMin = arrays[i][0], currMax = arrays[i][arrays[i].length - 1];
+    maxDist = Math.max(maxDist, Math.abs(max - currMin), Math.abs(currMax - min));
+    min = Math.min(min, currMin);
+    max = Math.max(max, currMax);
+  }
+  return maxDist;
 };
 
 // Four test cases
