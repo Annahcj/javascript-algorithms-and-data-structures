@@ -5,34 +5,34 @@
 // Given an integer n, return the minimum number of operations to get the character 'A' exactly n times on the screen.
 
 
-// Solution: Recursion w/ Memoization
+// Solution: DP - Recursion w/ Memoization
 
-// Keep track of the length of the current string, and the length of the copied string.
-// Start off with length: 1, copied length: 1 (operations: 1)
+// Memoize each dp(a, copied), where
+  // a = number of a's we have on the notepad
+  // copied = the number of a's we have copied
 
-// At each state, we have two choices
-  // 1. Paste what was copied : 1 operation
-  // 2. Copy current string, then paste it: 2 operations
-// Record and return the best choice out of the two
+// For each dp(a, copied), we have two choices:
+  // 1. Copy all and paste: 2 + dp(a + a, a)
+    // Note that we must paste once we copy, since there is no point doing the copy operation twice, not to mention it leads to an infinite loop.
+  // 2. Paste what we have: 1 + dp(a + copied, copied)
 
-// Time Complexity: O(n^2) 488ms
-// Space Complexity: O(n^2) 69.2MB
+// Memoize and return the minimum moves.
+
+// Time Complexity: O(n^2) 207ms
+// Space Complexity: O(n^2) 73.9MB
 var minSteps = function(n) {
-  let memo = Array(n + 1);
-  for (var i = 0; i <= n; i++) memo[i] = Array(n + 1);
-  if (n === 1) return 0;
-  return recurse(1, 1) + 1;
-
-  function recurse(len, copied) {
-    if (len === n) return 0;
-    if (len > n) return Infinity;
-    if (memo[len][copied] !== undefined) return memo[len][copied];
-    let ans = Math.min(recurse(len + copied, copied) + 1, recurse(len + len, len) + 2);
-    memo[len][copied] = ans;
-    return ans;
-  }  
+  let memo = Array(n).fill(0).map(() => Array(Math.floor(n / 2) + 1).fill(-1));
+  return n === 1 ? 0 : 1 + dp(1, 1);
+  
+  function dp(a, copied) {
+    if (a === n) return 0;
+    if (a > n || copied > Math.floor(n / 2)) return Infinity;
+    if (memo[a][copied] !== -1) return memo[a][copied];
+    
+    return memo[a][copied] = Math.min(2 + dp(a + a, a), 1 + dp(a + copied, copied));
+  }
 };
 
-// Two test cases to run function on
+// Two test cases
 console.log(minSteps(3)) // 3
 console.log(minSteps(1)) // 0
