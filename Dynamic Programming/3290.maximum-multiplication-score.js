@@ -4,7 +4,7 @@
 // Return the maximum score you can achieve.
 
 
-// Solution: DP
+// Solution 1: DP - Recursion w/ Memoization
 
 // Memoize each dp(i, taken), where
   // i = index in b
@@ -28,6 +28,27 @@ var maxScore = function(a, b) {
     let skip = dp(i + 1, taken);
     return memo[i][taken] = Math.max(take, skip);
   }
+};
+
+
+// Solution 2: Iterative DP w/ O(1) Space
+
+// We only need to know the previous state.
+// Rather than storing the entire array of length n, just keep track of the four maximum scores taking 0 indices, 1 index, 2 indices, and 3 indices.
+// For every b[i], we either take or skip it and update the four states.
+
+// Time Complexity: O(n) 91ms
+// Space Complexity: O(1) 64.3MB
+var maxScore = function(a, b) {
+  let n = b.length;
+  let one = -Infinity, two = -Infinity, three = -Infinity, four = -Infinity;
+  for (let i = 0; i < n; i++) {
+    four = Math.max(four, three + b[i] * a[3]);
+    three = Math.max(three, two + b[i] * a[2]);
+    two = Math.max(two, one + b[i] * a[1]);
+    one = Math.max(one, b[i] * a[0]);
+  }
+  return four;
 };
 
 // Two test cases
