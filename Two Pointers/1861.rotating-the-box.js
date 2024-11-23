@@ -17,11 +17,10 @@
 // Space Complexity: O(mn) 72.6MB
 var rotateTheBox = function(box) {
   let m = box.length, n = box[0].length;
-  let newBox = Array(n);
-  for (let i = 0; i < n; i++) newBox[i] = Array(m);
+  let newBox = Array(n).fill(0).map(() => Array(m));
 
   for (let i = 0; i < m; i++) {
-    for (var j = 0; j < n; j++) {
+    for (let j = 0; j < n; j++) {
       newBox[j][m - 1 - i] = box[i][j];
     }
   }
