@@ -6,7 +6,7 @@
 // Note that queries are independent from each other. That is, for every query you will remove the added edge before proceeding to the next query.
 
 
-// Solution: DFS w/ Rerooting
+// Solution 1: DFS w/ Rerooting
 
 // The node to connect to in the second tree should always be the same - the one with the maximum amount of odd-lengthed paths.
 
@@ -27,7 +27,7 @@
 
 // Time Complexity: O(n + m) 1385ms
 // Space Complexity: O(n + m) 191.3MB
-function maxTargetNodes(edges1, edges2) {
+var maxTargetNodes = function(edges1, edges2) {
   let n = edges1.length + 1, m = edges2.length + 1;
   let graph1 = Array(n).fill(0).map(() => []);
   for (let [a, b] of edges1) {
@@ -94,6 +94,52 @@ function maxTargetNodes(edges1, edges2) {
     }
   }
 };
+
+
+// Solution 2: Bipartite Graph w/ DFS
+
+// Find the parity of each node by doing a DFS from any arbitrary node.
+// Count the number of nodes with an even distance from the start node, and from the even count we can infer the count of nodes in the other partition.
+
+// Count number of nodes for each parity in the second tree, and take the maximum out of both partitions - if there are more nodes in the first partition, connect the first tree with a node in the second partition, otherwise the other way around (because parity will be flipped once we add one more edge).
+
+// At the end, get the query result from every node i: max(first partition size in tree2, second partition size in tree2) + count of nodes in node i's partition.
+
+// Time Complexity: O(n + m) 462ms
+// Space Complexity: O(n + m) 144.5MB
+var maxTargetNodes = function(edges1, edges2) {
+  const n = edges1.length + 1, m = edges2.length + 1;
+  const graph1 = Array(n).fill(0).map(() => []);
+  for (let [a, b] of edges1) {
+    graph1[a].push(b);
+    graph1[b].push(a);
+  }
+  const graph2 = Array(m).fill(0).map(() => []);
+  for (let [u, v] of edges2) {
+    graph2[u].push(v);
+    graph2[v].push(u);
+  }
+  const isEvenTree1 = Array(n);
+  const tree1EvenCount = getEvenPartition(graph1, 0, -1, true, isEvenTree1), tree1OddCount = n - tree1EvenCount;
+  const tree2EvenCount = getEvenPartition(graph2, 0, -1, true, null), tree2MaxPartition = Math.max(tree2EvenCount, m - tree2EvenCount);
+  const evenCount = Array(n);
+  for (let i = 0; i < n; i++) {
+    evenCount[i] = tree2MaxPartition + (isEvenTree1[i] ? tree1EvenCount : tree1OddCount);
+  }
+  return evenCount;
+};
+
+function getEvenPartition(graph, node, parent, isEven, isEvenTree1) {
+  if (isEvenTree1) {
+    isEvenTree1[node] = isEven;
+  }
+  let evenCount = isEven ? 1 : 0;
+  for (let nei of graph[node]) {
+    if (nei === parent) continue;
+    evenCount += getEvenPartition(graph, nei, node, !isEven, isEvenTree1);
+  }
+  return evenCount;
+}
 
 // Two test cases
 console.log(maxTargetNodes([[0,1],[0,2],[2,3],[2,4]], [[0,1],[0,2],[0,3],[2,7],[1,4],[4,5],[4,6]])) // [8,7,7,8,8]
