@@ -3,7 +3,7 @@
 // Return the maximum sum of a subarray of nums, such that the size of the subarray is divisible by k.
 
 
-// Solution: Hashmap
+// Solution: Prefix Sum & Hashmap
 
 // Keep track of a running prefix sum.
 // Store the minimum prefix sum for every modulo index: i % k.
