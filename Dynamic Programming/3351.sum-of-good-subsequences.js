@@ -20,18 +20,19 @@
     // nums[i] * count of subsequences: Add nums[i] to every new subsequence we're creating.
     // subsequenceSum[nums[i] + 1] + subsequenceSum[nums[i] - 1]: The sum of other elements from the new subsequences we're creating.
 
-// Time Complexity: O(n) 1012ms
-// Space Complexity: O(n) 81.82MB
+// Time Complexity: O(n) 518ms
+// Space Complexity: O(n) 76.47MB
 function sumOfGoodSubsequences(nums) {
-  const n = nums.length, MOD = 1000000007n;
-  const subsequenceCount = {}, subsequenceSum = {};
+  const MOD = 1000000007n;
+  const subsequenceCount = Array(100003).fill(0n);
+  const subsequenceSum = Array(100003).fill(0n);
   let ans = 0n;
-  for (let i = 0; i < n; i++) {
-    const subsequences = 1n + (subsequenceCount[nums[i] + 1] || 0n) + (subsequenceCount[nums[i] - 1] || 0n);
-    const sum = ((BigInt(nums[i]) * subsequences) + (subsequenceSum[nums[i] + 1] || 0n) + (subsequenceSum[nums[i] - 1] || 0n)) % MOD;
+  for (let num of nums) {
+    const subsequences = (1n + subsequenceCount[num] + subsequenceCount[num + 2]) % MOD;
+    const sum = ((BigInt(num) * subsequences) + subsequenceSum[num] + subsequenceSum[num + 2]) % MOD;
     ans = (ans + sum) % MOD;
-    subsequenceCount[nums[i]] = (subsequenceCount[nums[i]] || 0n) + subsequences;
-    subsequenceSum[nums[i]] = ((subsequenceSum[nums[i]] || 0n) + sum) % MOD; 
+    subsequenceCount[num + 1] = (subsequenceCount[num + 1] + subsequences) % MOD;
+    subsequenceSum[num + 1] = (subsequenceSum[num + 1] + sum) % MOD; 
   }
   return Number(ans);
 };
