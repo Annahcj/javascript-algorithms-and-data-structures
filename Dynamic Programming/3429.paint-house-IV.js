@@ -6,7 +6,7 @@
 // Return the minimum cost to paint the houses such that they look beautiful.
 
 
-// Solution: DP - Recursion w/ Memoization
+// Solution 1: DP - Recursion w/ Memoization
 
 // To satisfy the second condition, we need to choose the equidistant house colors at the same time.
 
@@ -46,6 +46,35 @@ const allowedColorsMap = {
   0: [1, 2],
   1: [0, 2],
   2: [0, 1]
+};
+
+
+// Solution 2: Bottom Up Iterative DP
+
+// We only need to store the results from the previous row to calculate the current row's results.
+// Compute curr for every index i, 
+// where curr[l][r] = minimum cost coloring houses up to index i, where the previous left color was l and previous right color was r.
+// For every combination of different colors, take the minimum cost + prev[prevLeft][prevRight], where prevLeft !== l and prevRight !== r.
+
+// Time Complexity: O(36n) 224ms
+// Space Complexity: O(1) 85MB
+var minCost = function(n, cost) {
+  let prev = Array(3).fill(0).map(() => Array(3).fill(0));
+  for (let i = 0; i < n / 2; i++) {
+    const curr = Array(3).fill(0).map(() => Array(3).fill(Infinity));
+    for (let l = 0; l < 3; l++) {
+      for (let r of allowedColorsMap[l]) {
+        const currCost = cost[i][l] + cost[n - i - 1][r];
+        for (let prevLeft of allowedColorsMap[l]) {
+          for (let prevRight of allowedColorsMap[r]) {
+            curr[l][r] = Math.min(curr[l][r], currCost + prev[prevLeft][prevRight]);
+          }
+        }
+      }
+    }
+    prev = curr;
+  }
+  return prev.reduce((min, row) => Math.min(min, row.reduce((rowMin, cost) => Math.min(rowMin, cost), Infinity)), Infinity);
 };
 
 // Two test cases
