@@ -4,7 +4,7 @@
 // Return the minimum number of operations required so that each element in target has at least one multiple in nums.
 
 
-// Solution: DP w/ Bitmasks
+// Solution 1: DP w/ Bitmasks - Recursion w/ Memoization
 
 // Memoize each dp(i, mask), where
   // i = index in nums
@@ -23,7 +23,6 @@
 // Space Complexity: O(n * 2^m) 80.92MB
 var minimumIncrements = function(nums, target) {
   const n = nums.length, m = target.length;
-  // precompute the lcm for every subset of target
   const lcm = Array(1 << m);
   for (let mask = 1; mask < (1 << m); mask++) {
     let currLCM = 1;
@@ -44,7 +43,7 @@ var minimumIncrements = function(nums, target) {
 
     let minCost = dp(i + 1, mask);
     for (let subset = 1; subset < (1 << m); subset++) {
-      // minimum cost to next bigger multiple of subset lcm
+      // minimum cost to next multiple of subset lcm
       const cost = nums[i] % lcm[subset] === 0 ? 0 : (lcm[subset] - (nums[i] % lcm[subset]));
       minCost = Math.min(minCost, cost + dp(i + 1, mask | subset));
     }
@@ -60,6 +59,46 @@ function gcd(a, b) {
   if (b === 0) return a;
   return gcd(b, a % b);
 }
+
+
+// Solution 2: Iterative DP - Bottom Up
+
+// Since we only need results from the previous nums[i], we only need to keep the previous and current row's results.
+// For every nums[i], go through every bitmask that represents a subset of target,
+  // Iterate through every possible previous mask.
+  // Calculate the cost to turn nums[i] into a multiple of the lcm of the subset.
+  // dp[newMask] = min(dp[newMask], cost + previous row dp[prevMask]).
+
+// Time Complexity: O(n * 2^m * 2^m) 87ms
+// Space Complexity: O(2^m) 59.05MB
+var minimumIncrements = function(nums, target) {
+  const n = nums.length, m = target.length;  
+  const lcm = Array(1 << m);
+  for (let mask = 1; mask < (1 << m); mask++) {
+    let currLCM = 1;
+    for (let i = 0; i < m; i++) {
+      if ((mask >> i) & 1) {
+        currLCM = getLCM(currLCM, target[i]);
+      }
+    }
+    lcm[mask] = currLCM;
+  }
+  let prev = Array(1 << m).fill(Infinity);
+  prev[0] = 0;
+  for (let i = 0; i < n; i++) {
+    const curr = [...prev];
+    for (let mask = 1; mask < (1 << m); mask++) {
+      const newCost = nums[i] % lcm[mask] === 0 ? 0 : lcm[mask] - (nums[i] % lcm[mask]);
+      for (let prevMask = 0; prevMask < (1 << m); prevMask++) {
+        if (prev[prevMask] === Infinity) continue;
+        const newMask = prevMask | mask;
+        curr[newMask] = Math.min(curr[newMask], newCost + prev[prevMask]);
+      }
+    }
+    prev = curr;
+  }
+  return prev[(1 << m) - 1];
+};
 
 // Three test cases
 console.log(minimumIncrements([1,2,3], [4])) // 1
