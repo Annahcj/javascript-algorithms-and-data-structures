@@ -7,7 +7,7 @@
 // Return nums after the rearrangement.
 
  
-// Solution: Three Arrays
+// Solution 1: Three Arrays
 
 // Collect the numbers in three separate arrays smaller, equal, and greater.
 // Combine and return them at the end.
@@ -26,4 +26,38 @@ var pivotArray = function(nums, pivot) {
     }
   }
   return [...smaller, ...equal, ...greater];
+};
+
+
+// Solution 2: Four Pointers
+
+// Split the array into three segments - smaller, equal, and larger.
+// Maintain four pointers:
+  // i: incrementally traverse through nums
+  // smallerIndex: index in the first segment
+  // equalIndex: index in the second segment
+  // largerIndex: index in the third segment
+// For every nums[i], add it to the correct segment and increment the corresponding index.
+
+// Time Complexity: O(n) 12ms
+// Space Complexity: O(n) 84.89MB
+var pivotArray = function(nums, pivot) {
+  const n = nums.length;
+  let smaller = 0, equal = 0;
+  for (let i = 0; i < n; i++) {
+    smaller += nums[i] < pivot ? 1 : 0;
+    equal += nums[i] === pivot ? 1 : 0;
+  }
+  const rearranged = Array(n);
+  let smallerIndex = 0, equalIndex = smaller, largerIndex = smaller + equal;
+  for (let i = 0; i < n; i++) {
+    if (nums[i] < pivot) {
+      rearranged[smallerIndex++] = nums[i];
+    } else if (nums[i] === pivot) {
+      rearranged[equalIndex++] = nums[i];
+    } else {
+      rearranged[largerIndex++] = nums[i];
+    }
+  }
+  return rearranged;
 };
