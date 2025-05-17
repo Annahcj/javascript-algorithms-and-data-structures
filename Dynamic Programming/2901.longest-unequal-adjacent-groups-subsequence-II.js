@@ -8,7 +8,7 @@
 // Note: strings in words may be unequal in length.
 
 
-// Solution: DP
+// Solution 1: DP
 
 // Use DP to find the longest valid subsequence ending at every index.
 // dp[i] = longest valid subsequence ending at index i.
@@ -24,7 +24,7 @@
 // n = length of words, m = max(words[i].length)
 // Time Complexity: O(n^2 * m) 122ms
 // Space Complexity: O(n) 58MB
-function getWordsInLongestSubsequence(words, groups) {
+var getWordsInLongestSubsequence = (words, groups) => {
   const n = words.length, dp = Array(n).fill(1);
   const prev = Array(n).fill(-1);
   let maxLen = 1, maxLastIndex = 0;
@@ -60,6 +60,62 @@ function hammingDistance(word1, word2) {
   }
   return dist;
 }
+
+
+// Solution 2: DP & Precomputing for Hamming Distance
+
+// For efficient lookup of words with hamming distance of 1,
+// for each words[i], precompute every possible words[i] replacing one character.
+// e.g. "abc" -> "#bc", "a#c", "ab#".
+// Store the indices for each replaced words[i].
+
+// Use DP to calculate the longest valid subsequence for each index.
+// For every i, go through each character k in words[i],
+// Generate the word without the character k, and go through the array of indices matching the generated word.
+// Set dp[i] = 1 + dp[j] if groups[i] is not equal to groups[j].
+
+// Use an array prev to store the previous index j for every result we are taking that is longest than the current maximum.
+// At the end, find the maximum dp[i] and backtrack the path using the prev array.
+
+// Note: The time complexity is the same as the other DP solution, but in the best case it can be much faster when there are not many matching words.
+// n = length of words, m = max(words[i].length)
+// Time Complexity: O(n^2 * m) 50ms
+// Space Complexity: O(nm) 65MB
+var getWordsInLongestSubsequence = (words, groups) => {
+  const n = words.length, dp = Array(n).fill(1);
+  const map = {}, prev = Array(n).fill(-1);
+  let maxLen = 1, maxLastIndex = 0;
+  for (let i = 0; i < n; i++) {
+    const replaced = [];
+    for (let k = 0; k < words[i].length; k++) {
+      const withoutK = `${words[i].slice(0, k)}#${words[i].slice(k + 1)}`;
+      replaced.push(withoutK);
+      const matching = map[withoutK] || [];
+      for (let j of matching) {
+        if (groups[i] === groups[j]) continue;
+        if (1 + dp[j] > dp[i]) {
+          dp[i] = 1 + dp[j];
+          prev[i] = j;
+        }
+        if (dp[i] > maxLen) {
+          maxLen = dp[i];
+          maxLastIndex = i;
+        }
+      }
+    }
+    for (let word of replaced) {
+      if (!map[word]) map[word] = [];
+      map[word].push(i);
+    }
+  }
+  const res = [];
+  let index = maxLastIndex;
+  while (index !== -1) {
+    res.push(words[index]);
+    index = prev[index];
+  }
+  return res.reverse();
+};
 
 // Two test cases
 console.log(getWordsInLongestSubsequence(["bab","dab","cab"], [1,2,2])) // ["bab","cab"]
