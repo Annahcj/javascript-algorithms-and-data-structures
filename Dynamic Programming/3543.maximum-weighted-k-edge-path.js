@@ -46,6 +46,35 @@ function maxWeight(n, edges, k, t) {
   }  
 };
 
+// Solution: Bottom-up DP (TLE)
+
+// Bottom-up version, which is slower because using recursion w/ memoization only traverses the possible paths.
+
+function maxWeight(n, edges, k, t) {
+  if (k === 0) return 0;
+  let prev = Array(n).fill(0).map(() => []);
+  for (let [u, v, w] of edges) {
+    if (w < t) {
+      prev[v].push(w);
+    }
+  }
+  for (let i = 1; i < k; i++) {
+    const curr = Array(n).fill(0).map(() => []);
+    for (let [u, v, w] of edges) {
+      for (let sum of prev[u]) {
+        if (sum + w >= t) continue;
+        curr[v].push(sum + w);
+      }
+    }
+    prev = curr;
+  }
+  let maxSum = -1;
+  for (let node = 0; node < n; node++) {
+    maxSum = Math.max(maxSum, Math.max(...prev[node]));
+  }
+  return maxSum;
+};
+
 // Two test cases
 console.log(maxWeight(3, [[0,1,1],[1,2,2]], 2, 4)) // 3
 console.log(maxWeight(3, [[0,1,2],[0,2,3]], 1, 3)) // 2
