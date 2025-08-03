@@ -17,10 +17,9 @@
 // Traverse neighbor nodes and only queue the neighbor if we have used all inbound edges.
 // Record the minimum cost to reach each node.
 
-// Note: This solution is TLE, passes 626/636 test cases.
 // n = number of nodes, m = max(edge cost), e = number of edges
-// Time Complexity: O((n + e) log(m))
-// Space Complexity: O(n + e)
+// Time Complexity: O((n + e) log(m)) 872ms
+// Space Complexity: O(n + e) 130MB
 function findMaxPathScore(edges, online, k) {
   const n = online.length, graph = Array(n).fill(0).map(() => []);
   const initialIndegrees = Array(n).fill(0);
@@ -32,42 +31,81 @@ function findMaxPathScore(edges, online, k) {
       maxCost = Math.max(maxCost, cost);
     }
   }
-  const initialQueue = [];
+  const initialQueue = new LinkedList();
   for (let i = 0; i < n; i++) {
     if (initialIndegrees[i] === 0) {
-      initialQueue.push(i);
+      initialQueue.add(i);
     }
   }
-  let low = 0, high = maxCost, res = -1;
+  let low = 0, high = maxCost;
   while (low < high) {
     const mid = Math.ceil((low + high) / 2);
     if (canReachTarget(mid)) {
       low = mid;
-      res = mid;
     } else {
       high = mid - 1;
     }
   }
-  return res;
+  return canReachTarget(low) ? low : -1;
 
   function canReachTarget(x) {
-    const queue = [...initialQueue], indegrees = [...initialIndegrees];
+    const queue = initialQueue.copy(), indegrees = [...initialIndegrees];
     const minCost = Array(n).fill(Infinity);
     minCost[0] = 0;
-    while (queue.length) {
-      let node = queue.shift();
+    while (queue.size) {
+      let node = queue.remove();
       for (let [nei, cost] of graph[node]) {
         if (cost >= x) {
           minCost[nei] = Math.min(minCost[nei], minCost[node] + cost);
         }
         if (--indegrees[nei] === 0) {
-          queue.push(nei);
+          queue.add(nei);
         }
       }
     }
     return minCost[n - 1] <= k;
   }
 };
+
+class LinkedList {
+  constructor() {
+    this.head = new Node(null);
+    this.tail = this.head;
+    this.size = 0;
+  }
+  add(val) {
+    const newNode = new Node(val);
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.size++;
+  }
+  remove() {
+    if (this.size === 0) return -1;
+    const head = this.head.next;
+    this.head.next = this.head.next.next;
+    if (head === this.tail) {
+      this.tail = this.head;
+    }
+    this.size--;
+    return head.val;
+  }
+  copy() {
+    const newQueue = new LinkedList();
+    let node = this.head.next;
+    while (node) {
+      newQueue.add(node.val);
+      node = node.next;
+    }
+    return newQueue;
+  }
+}
+
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
 
 // Two test cases
 console.log(findMaxPathScore([[0,1,5],[1,3,10],[0,2,3],[2,3,4]], [true,true,true,true], 10)) // 3
