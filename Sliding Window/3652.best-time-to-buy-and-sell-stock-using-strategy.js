@@ -14,7 +14,7 @@
 // Note: There are no constraints on budget or stock ownership, so all buy and sell operations are feasible regardless of past actions.
 
 
-// Solution: Sliding Window & Prefix Sum
+// Solution 1: Sliding Window & Prefix Sum
 
 // Maintain a sliding window of size k.
 // For each window, 
@@ -45,6 +45,45 @@ function maxProfit(prices, strategy, k) {
     sumOutsideWindow += strategy[i - k + 1] * prices[i - k + 1];
     if (i < n - 1) {
       sumOutsideWindow -= strategy[i + 1] * prices[i + 1];
+    }
+  }
+  return maxSum;
+};
+
+
+// Solution 2: Sliding Window
+
+// Maintain a sliding window of size k.
+// For each window, 
+  // The first half always has a sum of 0.
+  // The second half will have a sum equal to the sum of prices, since strategy will be 1.
+// Keeping a running sum of the second half of prices.
+
+// Keep track of the sum outside of the window, and record and return the maximum outside sum + sum of the second half of the window.
+
+// Time Complexity: O(n) 15ms
+// Space Complexity: O(1) 78MB
+function maxProfit(prices, strategy, k) {
+  const n = prices.length;
+  let originalSum = 0, sumOutsideWindow = 0;
+  let secondHalf = 0;
+  for (let i = 0; i < n; i++) {
+    originalSum += strategy[i] * prices[i];
+    if (i >= k) {
+      sumOutsideWindow += strategy[i] * prices[i];
+    }
+    if (i >= k / 2 && i < k) {
+      secondHalf += prices[i];
+    }
+  }
+  let maxSum = originalSum;
+  for (let i = k - 1; i < n; i++) {
+    maxSum = Math.max(maxSum, sumOutsideWindow + secondHalf);
+    sumOutsideWindow += strategy[i - k + 1] * prices[i - k + 1];
+    secondHalf -= prices[i - (k / 2) + 1];
+    if (i < n - 1) {
+      sumOutsideWindow -= strategy[i + 1] * prices[i + 1];
+      secondHalf += prices[i + 1];
     }
   }
   return maxSum;
