@@ -6,7 +6,7 @@
 // Return an integer denoting the sum of interaction costs over all unordered pairs (u, v) with u != v such that group[u] == group[v].
 
 
-// Solution: DFS w/ Rerooting
+// Solution 1: DFS w/ Rerooting - Recursive
 
 // 1. DFS from node 0 and calculate distances from 0 to every other node.
   // subtreeDist[i][j] = sum of distances from node i to every other descendent in the subtree, in the group j.
@@ -65,6 +65,80 @@ function interactionCosts(n, edges, group) {
         nodeCount[node][i] += nodeCount[nei][i];
       }
     }
+  }
+};
+
+
+// Solution 2: DFS w/ Rerooting - Iterative, Stack
+
+// 1. DFS from node 0 and calculate distances from 0 to every other node.
+  // subtreeDist[i][j] = sum of distances from node i to every other descendent in the subtree, in the group j.
+  // For every group, set subtreeDist[i][j] using the sum of child results.
+// 2. Reroot, try every other node as the new root.
+  // dist[i][j] = total distance from node i to every other node in group j.
+  // To reroot from parent to the current node, 
+    // Parent total sum - current node's subtree sum + number of nodes not in the current node's subtree (+1 distance for rerooting)
+    // + subtree distance for current node's subtree.
+
+// n = number of nodes, k = max(group[i])
+// Time Complexity: O(nk) 1667ms
+// Space Complexity: O(nk) 225MB
+function interactionCosts(n, edges, group) {
+  const graph = Array(n).fill(0).map(() => []);
+  const k = Math.max(...group);
+  for (let [u, v] of edges) {
+    graph[u].push(v);
+    graph[v].push(u);
+  }
+  const [subtreeDist, nodeCount] = dfsFrom0();
+  const dist = reroot();
+  return dist.reduce((acc, d, i) => acc + d[group[i]], 0) / 2;
+
+  function reroot() {
+    const dist = Array(n).fill(0).map(() => Array(k + 1).fill(0));
+    dist[0] = subtreeDist[0];
+    const stack = [{node: 0, parent: -1}];
+    while (stack.length) {
+      const {node, parent} = stack.pop();
+      for (let i = 1; i <= k; i++) {
+        for (let nei of graph[node]) {
+          if (nei === parent) continue;
+          // parent total - current subtree's total + 1 distance away switching to new root
+          const parentDistWithoutCurrent = dist[node][i] - (subtreeDist[nei][i] + nodeCount[nei][i]) + (nodeCount[0][i] - nodeCount[nei][i]);
+          dist[nei][i] = parentDistWithoutCurrent + subtreeDist[nei][i];
+          if (i === 1) stack.push({node: nei, parent: node});
+        }
+      }
+    }
+    return dist;
+  }
+
+  function dfsFrom0() {
+    const subtreeDist = Array(n).fill(0).map(() => Array(k + 1).fill(0));
+    const nodeCount = Array(n).fill(0).map(() => Array(k + 1).fill(0));
+    const stack = [{node: 0, parent: -1, visitedChildren: false}];
+    for (let i = 0; i < n; i++) {
+      nodeCount[i][group[i]] = 1;
+    }
+    while (stack.length) {
+      const {node, parent, visitedChildren} = stack.pop();
+      if (!visitedChildren) {
+        stack.push({node, parent, visitedChildren: true});
+        for (let nei of graph[node]) {
+          if (nei === parent) continue;
+          stack.push({node: nei, parent: node, visitedChildren: false});
+        }
+      } else {
+        for (let i = 1; i <= k; i++) {
+          for (let nei of graph[node]) {
+            if (nei === parent) continue;
+            subtreeDist[node][i] += subtreeDist[nei][i] + nodeCount[nei][i];
+            nodeCount[node][i] += nodeCount[nei][i];
+          }
+        }
+      }
+    }
+    return [subtreeDist, nodeCount];
   }
 };
 
