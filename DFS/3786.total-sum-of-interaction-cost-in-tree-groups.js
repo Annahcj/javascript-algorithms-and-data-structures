@@ -142,6 +142,56 @@ function interactionCosts(n, edges, group) {
   }
 };
 
+
+// Solution 3: Simpler DFS
+
+// Count how many pairs each edge contributes to.
+
+// Use postorder DFS to precompute the total count of nodes in each group for every subtree.
+// count[i][j] = count of nodes in the subtree rooted at i that belong to group j.
+
+// DFS from node 0 and calculate the contributions on the fly.
+
+// n = number of nodes, k = max(group[i])
+// Time Complexity: O(nk) 826ms
+// Space Complexity: O(nk) 180MB
+function interactionCosts(n, edges, group) {
+  const graph = Array(n).fill(0).map(() => []);
+  const k = Math.max(...group);
+  for (let [u, v] of edges) {
+    graph[u].push(v);
+    graph[v].push(u);
+  }
+  const count = Array(n).fill(0).map(() => Array(k + 1).fill(0));
+  precomputeCount(0, -1);
+  return countContributions(0, -1);
+  
+  function precomputeCount(node, parent) {
+    count[node][group[node]] = 1;
+    for (let nei of graph[node]) {
+      if (nei === parent) continue;
+      precomputeCount(nei, node);
+      for (let j = 1; j <= k; j++) {
+        count[node][j] += count[nei][j];
+      }
+    }
+  }
+
+  function countContributions(node, parent) {
+    let contributions = 0;
+    for (let nei of graph[node]) {
+      if (nei === parent) continue;
+      for (let j = 1; j <= k; j++) {
+        const countDown = count[nei][j]; // subtree rooted at nei
+        const countUp = count[0][j] - countDown; // the rest of the nodes on the other side of the edge
+        contributions += countDown * countUp;
+      }
+      contributions += countContributions(nei, node);
+    }
+    return contributions;
+  }
+};
+
 // Three test cases
 console.log(interactionCosts(3, [[0,1],[1,2]], [1,1,1])) // 4
 console.log(interactionCosts(3, [[0,1],[1,2]], [3,2,3])) // 2
